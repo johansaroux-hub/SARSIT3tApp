@@ -1,3 +1,4 @@
+*.db
 app_errors.log
 IT3(t)/
 venv/
