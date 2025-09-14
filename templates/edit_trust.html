@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit Trust</title>
+    <style>
+        body {
+          font-family: 'Segoe UI', Arial, sans-serif;
+          background: #f5f7fa;
+          margin: 0;
+          padding: 0;
+        }
+        .container {
+          max-width: 700px;
+          margin: 40px auto;
+          background: #fff;
+          border-radius: 12px;
+          box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+          padding: 32px 40px 24px 40px;
+        }
+        h2 {
+          text-align: center;
+          color: #2a4d69;
+          margin-bottom: 24px;
+        }
+        form label {
+          display: block;
+          margin-top: 18px;
+          font-weight: 500;
+          color: #2a4d69;
+        }
+        form input[type="text"],
+        form input[type="email"],
+        form select {
+          width: 100%;
+          padding: 10px 12px;
+          margin-top: 6px;
+          border: 1px solid #bfc9d1;
+          border-radius: 6px;
+          font-size: 1rem;
+          background: #f9fbfc;
+          transition: border 0.2s;
+        }
+        form input[type="text"]:focus,
+        form input[type="email"]:focus,
+        form select:focus {
+          border: 1.5px solid #4a90e2;
+          outline: none;
+          background: #fff;
+        }
+        fieldset {
+          border: 1px solid #e3e7ed;
+          border-radius: 8px;
+          margin-top: 18px;
+          padding: 16px 18px 10px 18px;
+          background: #f7fafd;
+        }
+        legend {
+          font-weight: 600;
+          color: #41729f;
+          padding: 0 8px;
+        }
+        .address-fields {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 12px 18px;
+        }
+        .address-fields input {
+          margin-top: 0;
+        }
+        .checkbox-row {
+          margin-top: 10px;
+          display: flex;
+          align-items: center;
+          gap: 8px;
+        }
+        button[type="submit"],
+        .cancel-btn {
+          width: 100%;
+          border: none;
+          border-radius: 6px;
+          padding: 14px 0;
+          font-size: 1.1rem;
+          font-weight: 600;
+          cursor: pointer;
+          transition: background 0.2s;
+        }
+        button[type="submit"] {
+          background: #41729f;
+          color: #fff;
+        }
+        button[type="submit"]:hover {
+          background: #2a4d69;
+        }
+        .cancel-btn {
+          background: #f8d7da;
+          color: #721c24;
+        }
+        .cancel-btn:hover {
+          background: #f5c6cb;
+        }
+        .required {
+          color: #e74c3c;
+          margin-left: 2px;
+        }
+        @media (max-width: 600px) {
+          .container { padding: 16px 6px; }
+          .address-fields { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h2>Edit Trust for IT3(t) Reporting</h2>
+    <form id="trustForm" method="post" novalidate autocomplete="off">
+
+        <!-- Trust Registration Number: Free text -->
+        <label for="TrustRegNumber">Trust Registration Number <span class="required">*</span></label>
+        <input type="text" id="TrustRegNumber" name="TrustRegNumber" maxlength="15"
+               placeholder="Free text" value="{{ trust['TrustRegNumber'] | none_to_blank}}" required oninput="toUpperCase(this)"/>
+
+        <label for="TrustName">Trust Name <span class="required">*</span></label>
+        <input type="text" id="TrustName" name="TrustName" maxlength="120" required
+               placeholder="Legal name of the trust" value="{{ trust['TrustName'] }}" oninput="toUpperCase(this)"/>
+
+        <label for="TaxNumber">Tax Number <span class="required">*</span></label>
+        <input type="text" id="TaxNumber" name="TaxNumber" required maxlength="10"
+               pattern="^[012379]\d{9}$"
+               placeholder="10 digits, starts with 0,1,2,3,7,9" value="{{ trust['TaxNumber'] | none_to_blank}}"/>
+
+        <label for="SubmissionTaxYear">Submission Tax Year (CCYY) <span class="required">*</span></label>
+        <input type="text" id="SubmissionTaxYear" name="SubmissionTaxYear" required maxlength="4" pattern="^\d{4}$"
+               placeholder="e.g. 2024" value="{{ trust['SubmissionTaxYear'] }}"/>
+
+        <label for="PeriodStartDate">Period Start Date <span class="required">*</span></label>
+        <input type="text" id="PeriodStartDate" name="PeriodStartDate" required pattern="^\d{4}-\d{2}-\d{2}$"
+               placeholder="YYYY-MM-DD" value="{{ trust['PeriodStartDate'] }}"/>
+
+        <label for="PeriodEndDate">Period End Date <span class="required">*</span></label>
+        <input type="text" id="PeriodEndDate" name="PeriodEndDate" required pattern="^\d{4}-\d{2}-\d{2}$"
+               placeholder="YYYY-MM-DD" value="{{ trust['PeriodEndDate'] }}"/>
+
+
+        <label for="NatureOfPerson">Nature of Person</label>
+        <select id="NatureOfPerson" name="NatureOfPerson" required>
+            <option value="">Select...</option>
+            <option value="INTERVIVOS_TRUST" {% if trust[
+            'NatureOfPerson'] == 'INTERVIVOS_TRUST' %}selected{% endif %}>INTERVIVOS_TRUST</option>
+            <option value="TESTAMENTARY_TRUST" {% if trust[
+            'NatureOfPerson'] == 'TESTAMENTARY_TRUST' %}selected{% endif %}>TESTAMENTARY_TRUST</option>
+            <option value="FOREIGN_TRUST" {% if trust[
+            'NatureOfPerson'] == 'FOREIGN_TRUST' %}selected{% endif %}>FOREIGN_TRUST</option>
+            <option value="TRUST_OTHER" {% if trust[
+            'NatureOfPerson'] == 'TRUST_OTHER' %}selected{% endif %}>TRUST_OTHER</option>
+        </select>
+
+        <label for="TrustType">Trust Type</label>
+        <select id="TrustType" name="TrustType" required>
+            <option value="">Select...</option>
+            <option value="NON RESIDENT" {% if trust[
+            'TrustType'] == 'NON RESIDENT' %}selected{% endif %}>NON RESIDENT</option>
+            <option value="EXEMPT INSTITUTION" {% if trust[
+            'TrustType'] == 'EXEMPT INSTITUTION' %}selected{% endif %}>EXEMPT INSTITUTION</option>
+            <option value="TESTAMENTARY" {% if trust[
+            'TrustType'] == 'TESTAMENTARY' %}selected{% endif %}>TESTAMENTARY</option>
+            <option value="INTER VIVOS" {% if trust[
+            'TrustType'] == 'INTER VIVOS' %}selected{% endif %}>INTER VIVOS</option>
+            <option value="SPECIAL TRUST A" {% if trust[
+            'TrustType'] == 'SPECIAL TRUST A' %}selected{% endif %}>SPECIAL TRUST A</option>
+            <option value="SPECIAL TRUST B" {% if trust[
+            'TrustType'] == 'SPECIAL TRUST B' %}selected{% endif %}>SPECIAL TRUST B</option>
+            <option value="PERSONAL SERVICE PROVIDER" {% if trust[
+            'TrustType'] == 'PERSONAL SERVICE PROVIDER' %}selected{% endif %}>PERSONAL SERVICE PROVIDER</option>
+
+        </select>
+
+        <label for="Residency">Residency (Country Code) <span class="required">*</span></label>
+        <input type="text" id="Residency" name="Residency" required pattern="^[A-Z]{2}$" maxlength="2"
+               placeholder="e.g. ZA" value="{{ trust['Residency'] | none_to_blank}}"/>
+
+        <label for="MastersOffice">Masters Office <span class="required">*</span></label>
+        <input type="text" id="MastersOffice" name="MastersOffice" required maxlength="50"
+               placeholder="e.g. PTA" value="{{ trust['MastersOffice'] | none_to_blank}}" oninput="toUpperCase(this)"/>
+
+
+        <label for="DateRegisteredMastersOffice">Date Registered Masters Office <span class="required">*</span></label>
+        <input type="text" id="DateRegisteredMastersOffice" name="DateRegisteredMastersOffice" required pattern="^\d{4}-\d{2}-\d{2}$"
+               placeholder="YYYY-MM-DD" value="{{ trust['DateRegisteredMastersOffice'] | none_to_blank}}"/>
+
+        <fieldset>
+            <legend>Physical Address</legend>
+            <div class="address-fields">
+                <input type="text" id="PhysicalUnitNumber" name="PhysicalUnitNumber" maxlength="8" placeholder="Unit"
+                       value="{{ trust['PhysicalUnitNumber'] | none_to_blank}}" autocomplete="off">
+                <input type="text" id="PhysicalComplex" name="PhysicalComplex" maxlength="27" placeholder="Complex"
+                       value="{{ trust['PhysicalComplex'] | none_to_blank}}" autocomplete="off">
+                <input type="text" id="PhysicalStreetNumber" name="PhysicalStreetNumber" maxlength="8"
+                       placeholder="Street No."
+                       value="{{ trust['PhysicalStreetNumber'] | none_to_blank}}" autocomplete="off">
+                <input type="text" id="PhysicalStreet" name="PhysicalStreet" maxlength="27" placeholder="Street"
+                       value="{{ trust['PhysicalStreet'] | none_to_blank}}" autocomplete="off">
+                <input type="text" id="PhysicalSuburb" name="PhysicalSuburb" maxlength="36" placeholder="Suburb"
+                       value="{{ trust['PhysicalSuburb'] | none_to_blank}}" autocomplete="off">
+                <input type="text" id="PhysicalCity" name="PhysicalCity" maxlength="36" placeholder="City"
+                       value="{{ trust['PhysicalCity'] | none_to_blank}}" autocomplete="off">
+                <input type="text" id="PhysicalPostalCode" name="PhysicalPostalCode" maxlength="10" pattern="^\d{4}$"
+                       placeholder="Postal Code (0000 if unknown)" value="{{ trust['PhysicalPostalCode'] | none_to_blank}}"
+                       autocomplete="off">
+            </div>
+        </fieldset>
+
+        <fieldset>
+            <legend>Postal Address</legend>
+            <div class="address-fields">
+                <input type="text" id="PostalAddressLine1" name="PostalAddressLine1" maxlength="100"
+                       placeholder="Line 1"
+                       value="{{ trust['PostalAddressLine1'] | none_to_blank}}" autocomplete="off">
+                <input type="text" id="PostalAddressLine2" name="PostalAddressLine2" maxlength="100"
+                       placeholder="Line 2"
+                       value="{{ trust['PostalAddressLine2'] | none_to_blank}}" autocomplete="off">
+                <input type="text" id="PostalAddressLine3" name="PostalAddressLine3" maxlength="100"
+                       placeholder="Line 3"
+                       value="{{ trust['PostalAddressLine3']| none_to_blank }}" autocomplete="off">
+                <input type="text" id="PostalAddressLine4" name="PostalAddressLine4" maxlength="100"
+                       placeholder="Line 4"
+                       value="{{ trust['PostalAddressLine4']| none_to_blank }}" autocomplete="off">
+                <input type="text" id="PostalCode" name="PostalCode" maxlength="10" pattern="^\d{4}$"
+                       placeholder="Postal Code (0000 if unknown)" value="{{ trust['PostalCode'] | none_to_blank}}" autocomplete="off">
+            </div>
+        </fieldset>
+
+        <div class="checkbox-row">
+            <input type="checkbox" id="PostalSameAsPhysical" name="PostalSameAsPhysical"
+                   {% if trust['PostalSameAsPhysical'] %}checked{% endif %}>
+            <label for="PostalSameAsPhysical" style="margin:0;">Postal same as physical</label>
+        </div>
+
+        <label for="ContactNumber">Contact Number</label>
+        <input type="text" id="ContactNumber" name="ContactNumber"
+               pattern="^(0|00)[0-9]{8,13}$" maxlength="15"
+               placeholder="e.g. 0123456789 or 0027123456789" value="{{ trust['ContactNumber'] | none_to_blank}}" autocomplete="off">
+
+        <label for="CellNumber">Cell Number <span class="required">*</span></label>
+        <input type="text" id="CellNumber" name="CellNumber" required
+               pattern="^(0|00)[0-9]{8,13}$" maxlength="15"
+               placeholder="999999999999999 if unknown" value="{{ trust['CellNumber'] | none_to_blank}}" autocomplete="off">
+
+        <label for="Email">Email <span class="required">*</span></label>
+        <input type="email" id="Email" name="Email" required maxlength="80"
+               pattern="^[^@]+@[^@]+\.[^@]+$"
+               placeholder="NO@EMAIL.COM if unknown" value="{{ trust['Email'] }}" autocomplete="off"/>
+
+        <div style="display: flex; justify-content: space-between; gap: 12px; margin-top: 28px;">
+            <button type="button" id="cancelButton" class="cancel-btn">Cancel</button>
+            <button type="submit">Submit</button>
+        </div>
+    </form>
+</div>
+<script>
+    function updatePeriodDates() {
+        const year = document.getElementById('SubmissionTaxYear').value.trim();
+        if (!/^\d{4}$/.test(year)) return;
+        const prevYear = parseInt(year) - 1;
+        const startDate = `${prevYear}-03-01`;
+        const isLeap = (parseInt(year) % 4 === 0 && (parseInt(year) % 100 !== 0 || parseInt(year) % 400 === 0));
+        const endDate = `${year}-02-${isLeap ? 29 : 28}`;
+        const startInput = document.getElementById('PeriodStartDate');
+        const endInput = document.getElementById('PeriodEndDate');
+        if (!startInput.value) startInput.value = startDate;
+        if (!endInput.value) endInput.value = endDate;
+    }
+    document.getElementById('SubmissionTaxYear').addEventListener('change', updatePeriodDates);
+    updatePeriodDates();
+
+    // Helper: Modulus 10 check for Tax Number
+    function isValidSarsTaxNumber(num) {
+        if (!/^[01239]\d{9}$/.test(num)) return false; // Updated to exclude '7'
+        let total = 0;
+        for (let i = 0; i < 9; i++) {
+            let digit = parseInt(num[i]);
+            total += (i % 2 === 0) ? digit * 2 : digit;
+            if (i % 2 === 0 && digit * 2 > 9) total += -9;
+        }
+        let checkDigit = (10 - (total % 10)) % 10;
+        return checkDigit === parseInt(num[9]);
+    }
+
+    document.getElementById('trustForm').addEventListener('submit', function(e) {
+        // Trust Registration Number: Mandatory, 1-15 characters
+        const regNum = document.getElementById('TrustRegNumber').value.trim();
+        if (regNum === '' || regNum.length < 1 || regNum.length > 15 ) {
+            alert('Trust Registration Number is required and must be 1-15 characters (alphanumeric with / allowed).');
+            e.preventDefault();
+            return;
+        }
+
+        // Trust Name: Mandatory, 1-78 characters
+        const trustName = document.getElementById('TrustName').value.trim();
+        if (trustName === '' || trustName.length < 1 || trustName.length > 78 || !/^[\w\s\W]{1,78}$/.test(trustName)) {
+            alert('Trust Name is required and must be 1-78 characters.');
+            e.preventDefault();
+            return;
+        }
+
+                // Tax Number: Mandatory, 10 digits, modulus 10 check
+        const taxNumber = document.getElementById('TaxNumber').value.trim();
+        if (!taxNumber || !isValidSarsTaxNumber(taxNumber)) {
+            alert('Tax Number is required and must be a valid 10-digit SARS number (modulus 10 check failed).');
+            e.preventDefault();
+            return;
+        }
+
+
+
+        const natureOfPerson = document.getElementById('NatureOfPerson').selectedIndex;
+        if (natureOfPerson === 0) {
+            alert('Please select a valid Nature of Person.');
+            event.preventDefault();
+            return false;
+        }
+
+        const trustType = document.getElementById('TrustType').selectedIndex;
+        if (trustType === 0) {
+            alert('Please select a valid Trust Type.');
+            event.preventDefault();
+            return false;
+        }
+
+        // Submission Tax Year: Mandatory, valid range
+        const year = document.getElementById('SubmissionTaxYear').value.trim();
+        const currentYear = new Date().getFullYear();
+        if (!year || !/^\d{4}$/.test(year) || parseInt(year) < 1900 || parseInt(year) > currentYear + 1) {
+            alert('Submission Tax Year is required and must be a valid year between 1900 and ' + (currentYear + 1) + '.');
+            e.preventDefault();
+            return;
+        }
+
+        // Period Start Date: Mandatory, compare with End Date
+        const start = new Date(document.getElementById('PeriodStartDate').value);
+        const end = new Date(document.getElementById('PeriodEndDate').value);
+        if (!start || isNaN(start.getTime())) {
+            alert('Period Start Date is required and must be a valid date.');
+            e.preventDefault();
+            return;
+        }
+        if (!end || isNaN(end.getTime())) {
+            alert('Period End Date is required and must be a valid date.');
+            e.preventDefault();
+            return;
+        }
+        if (start > end) {
+            alert('Period Start Date must be before or equal to Period End Date.');
+            e.preventDefault();
+            return;
+        }
+
+        const mastersOffice = document.getElementById('MastersOffice').value.trim();
+        if (mastersOffice.length < 1 || mastersOffice.length > 50) {
+            alert('Masters Office must be between 1 and 50 characters.');
+            e.preventDefault();
+            return;
+        }
+
+        // Date Registered Masters Office: Mandatory, not in future
+        const regDate = new Date(document.getElementById('DateRegisteredMastersOffice').value);
+        if (!regDate || isNaN(regDate.getTime()) || regDate > new Date()) {
+            alert('Date Registered Masters Office is required and must not be in the future.');
+            e.preventDefault();
+            return;
+        }
+
+        // Physical Address sub-fields: Check max lengths
+        const physicalUnitNumber = document.getElementById('PhysicalUnitNumber').value.trim();
+        const physicalComplex = document.getElementById('PhysicalComplex').value.trim();
+        const physicalStreetNumber = document.getElementById('PhysicalStreetNumber').value.trim();
+        const physicalStreet = document.getElementById('PhysicalStreet').value.trim();
+        const physicalSuburb = document.getElementById('PhysicalSuburb').value.trim();
+        const physicalCity = document.getElementById('PhysicalCity').value.trim();
+        const physicalPostalCode = document.getElementById('PhysicalPostalCode').value.trim();
+        if (physicalUnitNumber.length > 8 || !/^[a-zA-Z0-9]*$/.test(physicalUnitNumber)) {
+            alert('Physical Unit Number must not exceed 8 alphanumeric characters.');
+            e.preventDefault();
+            return;
+        }
+        if (physicalComplex.length > 27) {
+            alert('Physical Complex must not exceed 27 characters.');
+            e.preventDefault();
+            return;
+        }
+        if (physicalStreetNumber.length > 8 || !/^[a-zA-Z0-9]*$/.test(physicalStreetNumber)) {
+            alert('Physical Street Number must not exceed 8 alphanumeric characters.');
+            e.preventDefault();
+            return;
+        }
+        if (physicalStreet.length > 27) {
+            alert('Physical Street must not exceed 27 characters.');
+            e.preventDefault();
+            return;
+        }
+        if (physicalSuburb.length > 36) {
+            alert('Physical Suburb must not exceed 36 characters.');
+            e.preventDefault();
+            return;
+        }
+        if (physicalCity.length > 36) {
+            alert('Physical City must not exceed 36 characters.');
+            e.preventDefault();
+            return;
+        }
+        if (physicalPostalCode.length > 10) {
+            alert('Physical Postal Code must not exceed 10 characters.');
+            e.preventDefault();
+            return;
+        }
+
+        // Postal Address sub-fields: Check max lengths and Postal Code if Line1 provided
+        const postalLine1 = document.getElementById('PostalAddressLine1').value.trim();
+        const postalLine2 = document.getElementById('PostalAddressLine2').value.trim();
+        const postalLine3 = document.getElementById('PostalAddressLine3').value.trim();
+        const postalLine4 = document.getElementById('PostalAddressLine4').value.trim();
+        const postalCode = document.getElementById('PostalCode').value.trim();
+        if (postalLine1.length > 100) {
+            alert('Postal Address Line 1 must not exceed 100 characters.');
+            e.preventDefault();
+            return;
+        }
+        if (postalLine2.length > 100) {
+            alert('Postal Address Line 2 must not exceed 100 characters.');
+            e.preventDefault();
+            return;
+        }
+        if (postalLine3.length > 100) {
+            alert('Postal Address Line 3 must not exceed 100 characters.');
+            e.preventDefault();
+            return;
+        }
+        if (postalLine4.length > 100) {
+            alert('Postal Address Line 4 must not exceed 100 characters.');
+            e.preventDefault();
+            return;
+        }
+        if (postalLine1 && postalCode.length > 10) {
+            alert('Postal Code must not exceed 10 characters when Line 1 is provided.');
+            e.preventDefault();
+            return;
+        }
+
+        // Existing validations (Residency, Masters Office, Physical/Postal address check, Contact Number, Cell Number, Email, Confirmation)
+        const residency = document.getElementById('Residency').value.trim();
+        if (!/^[A-Z]{2}$/.test(residency)) {
+            alert('Residency must be a valid 2-letter country code (e.g. ZA).');
+            e.preventDefault();
+            return;
+        }
+
+        function isFilled(fields) {
+            return fields.some(id => document.getElementById(id).value.trim() !== '');
+        }
+        const physicalFields = [
+            'PhysicalUnitNumber', 'PhysicalComplex', 'PhysicalStreetNumber',
+            'PhysicalStreet', 'PhysicalSuburb', 'PhysicalCity', 'PhysicalPostalCode'
+        ];
+        const postalFields = [
+            'PostalAddressLine1', 'PostalAddressLine2', 'PostalAddressLine3',
+            'PostalAddressLine4', 'PostalCode'
+        ];
+        if (!isFilled(physicalFields) && !isFilled(postalFields)) {
+            alert('At least one address (physical or postal) must be completed.');
+            e.preventDefault();
+            return;
+        }
+
+        if (document.getElementById('PostalSameAsPhysical').checked) {
+            document.getElementById('PostalAddressLine1').value = document.getElementById('PhysicalStreet').value;
+            document.getElementById('PostalAddressLine2').value = document.getElementById('PhysicalSuburb').value;
+            document.getElementById('PostalAddressLine3').value = document.getElementById('PhysicalCity').value;
+            document.getElementById('PostalAddressLine4').value = '';
+            document.getElementById('PostalCode').value = document.getElementById('PhysicalPostalCode').value;
+        }
+
+        const contactNumber = document.getElementById('ContactNumber').value.trim();
+        if (contactNumber && !/^(0|00)[0-9]{8,13}$/.test(contactNumber)) {
+            alert('Contact Number must be numeric, start with 0 or 00, and be 9-15 digits.');
+            e.preventDefault();
+            return;
+        }
+
+        const cellNumber = document.getElementById('CellNumber').value.trim();
+        if (!/^(0|00)[0-9]{8,13}$/.test(cellNumber) && cellNumber !== '999999999999999') {
+            alert('Cell Number is required and must be numeric, start with 0 or 00, and be 9-15 digits (or 999999999999999 if unknown).');
+            e.preventDefault();
+            return;
+        }
+
+        const email = document.getElementById('Email').value.trim();
+        if (
+            !/^.+@.+\..+$/.test(email) &&
+            email.toUpperCase() !== 'NO@EMAIL.COM'
+        ) {
+            alert('Email is required and must be a valid email address or NO@EMAIL.COM if unknown.');
+            e.preventDefault();
+            return;
+        }
+
+        const confirmed = confirm('Are you sure you want to update this trust information?');
+        if (!confirmed) {
+            e.preventDefault();
+        }
+    });
+
+    document.getElementById('cancelButton').addEventListener('click', function() {
+        const form = document.getElementById('trustForm');
+        const confirmed = confirm('Are you sure you want to cancel and return to the home page?');
+        if (confirmed) {
+            form.reset();
+            window.location.href = '..';
+        }
+    });
+</script>
+</body>
+</html>

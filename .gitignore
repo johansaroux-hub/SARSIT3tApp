@@ -1,0 +1,7 @@
+app_errors.log
+IT3(t)/
+venv/
+__pycache__/
+*.pyc
+.env
+.idea/

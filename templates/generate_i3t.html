@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generate I3T File</title>
+    <script>
+        // Simple UUID generator for client-side
+        function generateUUID() {
+            return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+                var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+                return v.toString(16);
+            });
+        }
+
+        // Set UUID and trigger file content regeneration
+        // function setNewUUID() {
+        //     const newUUID = generateUUID();
+        //     document.getElementById('proposed-unique-id').value = newUUID;
+        //     regenerateFileContent(newUUID);
+        // }
+
+        // Regenerate file content via AJAX
+        function regenerateFileContent(uuid) {
+            const trustId = {{ trust_id }};
+            const url = `/generate_i3t/${trustId}?gh_unique_id=${encodeURIComponent(uuid)}`;
+            fetch(url)
+                .then(response => response.text())
+                .then(html => {
+                    // Parse the HTML response to extract updated content
+                    const parser = new DOMParser();
+                    const doc = parser.parseFromString(html, 'text/html');
+                    const newFileContent = doc.querySelector('#file-content').value;
+                    const newFilename = doc.querySelector('#filename').textContent;
+                    document.getElementById('file-content').value = newFileContent;
+                    document.getElementById('filename').textContent = newFilename;
+                    toggleFileContent();
+                })
+                .catch(error => {
+                    console.error('Error regenerating file content:', error);
+                    alert('Failed to regenerate file content. Please try again.');
+                    document.getElementById('file-content').value = '';
+                    document.getElementById('file-content').disabled = true;
+                });
+        }
+
+        // Toggle file content textarea based on UUID
+        function toggleFileContent() {
+            const uuid = document.getElementById('proposed-unique-id').value;
+            const textarea = document.getElementById('file-content');
+            if (uuid.trim() === '') {
+                textarea.value = '';
+                textarea.disabled = true;
+            } else {
+                textarea.disabled = false;
+            }
+        }
+    </script>
+</head>
+<body>
+    <h1>Generate I3T File</h1>
+    <h2>File Details</h2>
+    <p><strong>Trust Name:</strong> {{ trust.TrustName }}</p>
+    <p>
+        <strong>Proposed Unique ID:</strong>
+        <input type="text" id="proposed-unique-id" name="proposed_unique_id" value="{{ gh_unique_id or '' }}" oninput="regenerateFileContent(this.value)">
+        <!-- button onclick="setNewUUID()">Generate New UID</button -->
+    </p>
+    <p><strong>Filename:</strong> <span id="filename">{{ filename }}</span></p>
+    <p><strong>Number of DPB Records (Beneficiaries):</strong> {{ dpb_count }}</p>
+    <p><strong>Number of TAD Records (Distributions):</strong> {{ tad_count }}</p>
+    <p><strong>Total Financial Amount:</strong> {{ total_amount }}</p>
+
+    <h2>File Contents</h2>
+    <textarea id="file-content" rows="20" cols="80" disabled>{{ file_content if gh_unique_id else '' }}</textarea>
+
+    <p>
+        <a href="{{ url_for('index') }}">Back to Trusts</a>
+        <a href="{{ url_for('generate_sars_file', trust_id=trust_id, gh_unique_id=gh_unique_id or '') }}">Generate File for SARS</a>
+        <!-- a href="{{ url_for('generate_individual_it3t', trust_id=trust_id, gh_unique_id=gh_unique_id or '') }}">Generate Individual IT3(t)s</a-- >
+        <!-- a href="#">Submit File</a -->
+    </p>
+</body>
+</html>

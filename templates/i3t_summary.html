@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>I3T Summary</title>
+</head>
+<body>
+    <h1>I3T File Summary</h1>
+    <p><strong>Trust Name:</strong> {{ trust.TrustName }}</p>
+    <p><strong>Filename:</strong> {{ filename }}</p>
+    <p><strong>Folder:</strong> {{ folder }}</p>
+    <p><strong>DPB Records:</strong> {{ dpb_count }}</p>
+    <p><strong>TAD Records:</strong> {{ tad_count }}</p>
+    <p><strong>TFF Records:</strong> {{ tff_count }}</p>
+    <p><strong>Total Amount:</strong> {{ total_amount }}</p>
+
+    <h2>Flatfile Contents</h2>
+    <textarea rows="20" cols="100" readonly>{{ file_content }}</textarea>
+
+    <p><a href="{{ url_for('index') }}">Back to Trusts</a></p>
+</body>
+</html>

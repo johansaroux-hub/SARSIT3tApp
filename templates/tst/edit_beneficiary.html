@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+<title>Edit Beneficiary: {{ beneficiary['FirstName'] }} {{ beneficiary['LastName'] }}</title>
+<style>
+        .w-full { width: 100%; }
+        .border { border: 1px solid #ccc; }
+        .p-2 { padding: 8px; }
+        .mb-4 { margin-bottom: 16px; }
+    </style>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"/></head>
+<body><div class="container mt-4">
+<h1>Edit Beneficiary: {{ beneficiary['FirstName'] }} {{ beneficiary['LastName'] }}</h1>
+<form method="POST">
+<div class="mb-4">
+<label>Trust:</label>
+<input class="w-full border p-2" readonly="" type="text" value="{{ trust['TrustName'] }}"/>
+<input name="trust_id" type="hidden" value="{{ trust['TrustID'] }}"/>
+<p>The trust this beneficiary is associated with.</p>
+</div>
+<fieldset class="mb-4">
+<legend>Personal Details</legend>
+<div>
+<label>Tax Reference Number:</label>
+<input class="w-full border p-2" name="tax_reference_number" type="text" value="{{ beneficiary['TaxReferenceNumber'] or '' }}"/>
+<p>Income tax reference number (e.g., 2595041647).</p>
+</div>
+<div>
+<label>Last Name:</label>
+<input class="w-full border p-2" name="last_name" type="text" value="{{ beneficiary['LastName'] }}"/>
+<p>Beneficiary's surname (e.g., ZERVAS).</p>
+</div>
+<div>
+<label>First Name:</label>
+<input class="w-full border p-2" name="first_name" type="text" value="{{ beneficiary['FirstName'] }}"/>
+<p>Beneficiary's first name (e.g., COSTA).</p>
+</div>
+<div>
+<label>Other Name:</label>
+<input class="w-full border p-2" name="other_name" type="text" value="{{ beneficiary['OtherName'] or '' }}"/>
+<p>Beneficiary's other name (optional).</p>
+</div>
+<div>
+<label>Initials:</label>
+<input class="w-full border p-2" name="initials" type="text" value="{{ beneficiary['Initials'] or '' }}"/>
+<p>Beneficiary's initials (e.g., C).</p>
+</div>
+<div>
+<label>Date of Birth (YYYY-MM-DD):</label>
+<input class="w-full border p-2" name="date_of_birth" type="date" value="{{ beneficiary['DateOfBirth'] or '' }}"/>
+<p>Beneficiary's date of birth (e.g., 1947-06-01).</p>
+</div>
+<div>
+<label>ID Number:</label>
+<input class="w-full border p-2" name="id_number" type="text" value="{{ beneficiary['IDNumber'] or '' }}"/>
+<p>South African ID number (e.g., 4706015003088).</p>
+</div>
+<div>
+<label>Identification Type:</label>
+<select class="w-full border p-2" name="identification_type">
+<option %}="" %}selected{%="" beneficiary['identificationtype']="001" endif="" if="" value="001" {%="">South African ID</option>
+<option %}="" %}selected{%="" beneficiary['identificationtype']="002" endif="" if="" value="002" {%="">Passport</option>
+</select>
+<p>Type of identification (default: 001 for South African ID).</p>
+</div>
+<div>
+<label>Passport Number:</label>
+<input class="w-full border p-2" name="passport_number" type="text" value="{{ beneficiary['PassportNumber'] or '' }}"/>
+<p>Passport number (if applicable).</p>
+</div>
+<div>
+<label>Passport Country:</label>
+<input class="w-full border p-2" name="passport_country" type="text" value="{{ beneficiary['PassportCountry'] or '' }}"/>
+<p>Country that issued the passport (if applicable).</p>
+</div>
+<div>
+<label>Passport Issue Date (YYYY-MM-DD):</label>
+<input class="w-full border p-2" name="passport_issue_date" type="date" value="{{ beneficiary['PassportIssueDate'] or '' }}"/>
+<p>Date the passport was issued (if applicable).</p>
+</div>
+<div>
+<label>Nature of Person:</label>
+<select class="w-full border p-2" name="nature_of_person">
+<option value="">Select Nature of Person</option>
+<option %}="" %}selected{%="" beneficiary['natureofperson']="Individual" endif="" if="" value="Individual" {%="">Individual</option>
+<option %}="" %}selected{%="" beneficiary['natureofperson']="Company" endif="" if="" value="Company" {%="">Company</option>
+</select>
+<p>Nature of the beneficiary (e.g., INDIVIDUAL or COMPANY).</p>
+</div>
+</fieldset>
+<fieldset class="mb-4">
+<legend>Company Details (if applicable)</legend>
+<div>
+<label>Company Registration Number:</label>
+<input class="w-full border p-2" name="company_registration_number" type="text" value="{{ beneficiary['CompanyRegistrationNumber'] or '' }}"/>
+<p>Company registration number (e.g., IT10081/99).</p>
+</div>
+<div>
+<label>Company Registered Name:</label>
+<input class="w-full border p-2" name="company_registered_name" type="text" value="{{ beneficiary['CompanyRegisteredName'] or '' }}"/>
+<p>Registered name of the company (if applicable).</p>
+</div>
+</fieldset>
+<fieldset class="mb-4">
+<legend>Relationship and Financial Flags</legend>
+<div>
+<label><input %}="" %}checked{%="" beneficiary['isconnectedperson']="" endif="" if="" name="is_connected_person" type="checkbox" {%=""/> Connected Person to Trust</label>
+</div>
+<div>
+<label><input %}="" %}checked{%="" beneficiary['isbeneficiary']="" endif="" if="" name="is_beneficiary" type="checkbox" {%=""/> Person Beneficiary of This Trust</label>
+</div>
+<div>
+<label><input %}="" %}checked{%="" beneficiary['isfounder']="" endif="" if="" name="is_founder" type="checkbox" {%=""/> Founder of Trust</label>
+</div>
+<div>
+<label><input %}="" %}checked{%="" beneficiary['isnaturalperson']="" endif="" if="" name="is_natural_person" type="checkbox" {%=""/> Natural Person</label>
+</div>
+<div>
+<label><input %}="" %}checked{%="" beneficiary['isdonor']="" endif="" if="" name="is_donor" type="checkbox" {%=""/> Donor of Trust</label>
+</div>
+<div>
+<label><input %}="" %}checked{%="" beneficiary['isnonresident']="" endif="" if="" name="is_non_resident" type="checkbox" {%=""/> Non-Resident</label>
+</div>
+<div>
+<label><input %}="" %}checked{%="" beneficiary['istaxableondistributed']="" endif="" if="" name="is_taxable_on_distributed" type="checkbox" {%=""/> Taxable on Amounts Distributed to Vested</label>
+</div>
+<div>
+<label><input %}="" %}checked{%="" beneficiary['hasnontaxableamounts']="" endif="" if="" name="has_non_taxable_amounts" type="checkbox" {%=""/> Received Accrued Non-Taxable Amounts</label>
+</div>
+<div>
+<label><input %}="" %}checked{%="" beneficiary['hascapitaldistribution']="" endif="" if="" name="has_capital_distribution" type="checkbox" {%=""/> Received Accrued Capital or Asset Distribution</label>
+</div>
+<div>
+<label><input %}="" %}checked{%="" beneficiary['hasloansgranted']="" endif="" if="" name="has_loans_granted" type="checkbox" {%=""/> Held Loans Granted</label>
+</div>
+<div>
+<label><input %}="" %}checked{%="" beneficiary['hasloansfrom']="" endif="" if="" name="has_loans_from" type="checkbox" {%=""/> Held Loans From</label>
+</div>
+<div>
+<label><input %}="" %}checked{%="" beneficiary['madedonations']="" endif="" if="" name="made_donations" type="checkbox" {%=""/> Made Donations To</label>
+</div>
+<div>
+<label><input %}="" %}checked{%="" beneficiary['madecontributions']="" endif="" if="" name="made_contributions" type="checkbox" {%=""/> Made Contributions To</label>
+</div>
+<div>
+<label><input %}="" %}checked{%="" beneficiary['receiveddonations']="" endif="" if="" name="received_donations" type="checkbox" {%=""/> Received Donations From</label>
+</div>
+<div>
+<label><input %}="" %}checked{%="" beneficiary['receivedcontributions']="" endif="" if="" name="received_contributions" type="checkbox" {%=""/> Received Contributions From</label>
+</div>
+<div>
+<label><input %}="" %}checked{%="" beneficiary['madedistributions']="" endif="" if="" name="made_distributions" type="checkbox" {%=""/> Made Distributions To</label>
+</div>
+<div>
+<label><input %}="" %}checked{%="" beneficiary['receivedrefunds']="" endif="" if="" name="received_refunds" type="checkbox" {%=""/> Received Refunds on Contributions</label>
+</div>
+<div>
+<label><input %}="" %}checked{%="" beneficiary['hasrightofuse']="" endif="" if="" name="has_right_of_use" type="checkbox" {%=""/> Right of Use of Assets</label>
+</div>
+</fieldset>
+<fieldset class="mb-4">
+<legend>Address Details</legend>
+<div>
+<label>Physical Unit Number:</label>
+<input class="w-full border p-2" name="physical_unit_number" type="text" value="{{ beneficiary['PhysicalUnitNumber'] or '' }}"/>
+<p>Unit number (e.g., 902).</p>
+</div>
+<div>
+<label>Physical Complex:</label>
+<input class="w-full border p-2" name="physical_complex" type="text" value="{{ beneficiary['PhysicalComplex'] or '' }}"/>
+<p>Complex name (if applicable).</p>
+</div>
+<div>
+<label>Physical Street Number:</label>
+<input class="w-full border p-2" name="physical_street_number" type="text" value="{{ beneficiary['PhysicalStreetNumber'] or '' }}"/>
+<p>Street number (if applicable).</p>
+</div>
+<div>
+<label>Physical Street:</label>
+<input class="w-full border p-2" name="physical_street" type="text" value="{{ beneficiary['PhysicalStreet'] or '' }}"/>
+<p>Street or farm name (e.g., ARCADIA ST).</p>
+</div>
+<div>
+<label>Physical Suburb/District:</label>
+<input class="w-full border p-2" name="physical_suburb" type="text" value="{{ beneficiary['PhysicalSuburb'] or '' }}"/>
+<p>Suburb or district (e.g., HATFIELD).</p>
+</div>
+<div>
+<label>Physical City/Town:</label>
+<input class="w-full border p-2" name="physical_city" type="text" value="{{ beneficiary['PhysicalCity'] or '' }}"/>
+<p>City or town (e.g., PRETORIA).</p>
+</div>
+<div>
+<label>Physical Postal Code:</label>
+<input class="w-full border p-2" name="physical_postal_code" type="text" value="{{ beneficiary['PhysicalPostalCode'] or '' }}"/>
+<p>Postal code (e.g., 0071).</p>
+</div>
+<div>
+<label><input %}="" %}checked{%="" beneficiary['postalsameasphysical']="" endif="" if="" name="postal_same_as_physical" type="checkbox" {%=""/> Postal Address Same as Physical</label>
+</div>
+<div>
+<label>Postal Address Line 1:</label>
+<input class="w-full border p-2" name="postal_address_line1" type="text" value="{{ beneficiary['PostalAddressLine1'] or '' }}"/>
+<p>Postal address line 1 (e.g., PO BOX 28982).</p>
+</div>
+<div>
+<label>Postal Address Line 2:</label>
+<input class="w-full border p-2" name="postal_address_line2" type="text" value="{{ beneficiary['PostalAddressLine2'] or '' }}"/>
+<p>Postal address line 2 (e.g., SUNNYSIDE).</p>
+</div>
+<div>
+<label>Postal Address Line 3:</label>
+<input class="w-full border p-2" name="postal_address_line3" type="text" value="{{ beneficiary['PostalAddressLine3'] or '' }}"/>
+<p>Postal address line 3 (e.g., PRETORIA).</p>
+</div>
+<div>
+<label>Postal Address Line 4:</label>
+<input class="w-full border p-2" name="postal_address_line4" type="text" value="{{ beneficiary['PostalAddressLine4'] or '' }}"/>
+<p>Postal address line 4 (e.g., GAUTENG).</p>
+</div>
+<div>
+<label>Postal Code:</label>
+<input class="w-full border p-2" name="postal_code" type="text" value="{{ beneficiary['PostalCode'] or '' }}"/>
+<p>Postal code (e.g., 0132).</p>
+</div>
+</fieldset>
+<fieldset class="mb-4">
+<legend>Contact Details</legend>
+<div>
+<label>Telephone Number:</label>
+<input class="w-full border p-2" name="contact_number" type="text" value="{{ beneficiary['ContactNumber'] or '' }}"/>
+<p>Telephone number (e.g., 0124306556).</p>
+</div>
+<div>
+<label>Cell Phone Number:</label>
+<input class="w-full border p-2" name="cell_number" type="text" value="{{ beneficiary['CellNumber'] or '' }}"/>
+<p>Cell phone number (e.g., 0832504084).</p>
+</div>
+<div>
+<label>Email:</label>
+<input class="w-full border p-2" name="email" type="email" value="{{ beneficiary['Email'] or '' }}"/>
+<p>Email address (e.g., example@example.com).</p>
+</div>
+</fieldset>
+<input class="w-full border p-2 bg-blue-500 text-white" type="submit" value="Update Beneficiary"/>
+</form>
+<a href="{{ url_for('view_beneficiaries', trust_id=trust['TrustID']) }}">Back to Beneficiaries</a>
+</div></body>
+</html>

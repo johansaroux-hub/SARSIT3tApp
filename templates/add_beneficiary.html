@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Beneficiary for {{ trust['TrustName'] }}</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .form-group { margin-bottom: 15px; }
+        label { display: block; margin-bottom: 5px; }
+        input, select { width: 100%; padding: 8px; box-sizing: border-box; }
+        button { padding: 10px 20px; background-color: #4CAF50; color: white; border: none; cursor: pointer; }
+        button:hover { background-color: #45a049; }
+        .help-text { font-size: 0.9em; color: #666; margin-top: 5px; }
+        .section { margin-top: 20px; padding: 10px; border: 1px solid #ddd; border-radius: 5px; }
+        .section h3 { margin-top: 0; }
+    </style>
+</head>
+<body>
+    <h1>Add Beneficiary for {{ trust['TrustName'] }}</h1>
+    <form method="POST" action="">
+        <div class="form-group">
+            <label for="trust_id">Trust:</label>
+            <select id="trust_id" name="trust_id" readonly disabled>
+                <option value="{{ trust['TrustID'] }}" selected>{{ trust['TrustName'] }}</option>
+            </select>
+            <input type="hidden" name="trust_id" value="{{ trust['TrustID'] }}">
+            <div class="help-text">The trust this beneficiary is associated with.</div>
+        </div>
+
+        <div class="section">
+            <h3>Personal Details</h3>
+            <div class="form-group">
+                <label for="last_name">Last Name:</label>
+                <input type="text" id="last_name" name="last_name" required>
+                <div class="help-text">Beneficiary's surname (e.g., ZERVAS).</div>
+            </div>
+            <div class="form-group">
+                <label for="first_name">First Name:</label>
+                <input type="text" id="first_name" name="first_name" required>
+                <div class="help-text">Beneficiary's first name (e.g., COSTA).</div>
+            </div>
+            <div class="form-group">
+                <label for="identification_type">Identification Type:</label>
+                <select id="identification_type" name="identification_type" required>
+                    <option value="001">South African ID</option>
+                    <option value="002">Passport</option>
+                </select>
+                <div class="help-text">Type of identification (default: 001 for South African ID).</div>
+            </div>
+            <div class="form-group">
+                <label for="nature_of_person">Nature of Person:</label>
+                <select id="nature_of_person" name="nature_of_person">
+                    <option value="INDIVIDUAL">Individual</option>
+                    <option value="COMPANY">Company</option>
+                </select>
+                <div class="help-text">Nature of the beneficiary (e.g., INDIVIDUAL or COMPANY).</div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h3>Company Details (if applicable)</h3>
+            <div class="form-group">
+                <label for="company_registration_number">Company Registration Number:</label>
+                <input type="text" id="company_registration_number" name="company_registration_number">
+                <div class="help-text">Company registration number (e.g., IT10081/99).</div>
+            </div>
+            <div class="form-group">
+                <label for="company_registered_name">Company Registered Name:</label>
+                <input type="text" id="company_registered_name" name="company_registered_name">
+                <div class="help-text">Registered name of the company (if applicable).</div>
+            </div>
+        </div>
+
+        <a href="{{ url_for('view_beneficiaries', trust_id=trust['TrustID']) }}"><button>Add new Beneficiary</button></a>
+
+
+    </form>
+    <a href="{{ url_for('view_beneficiaries', trust_id=trust['TrustID']) }}"><button>Back to Beneficiaries</button></a>
+</body>
+</html>

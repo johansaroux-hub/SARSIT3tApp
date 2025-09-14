@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Add Beneficiary for {{ trust['TrustName'] }}</title>
+<style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .form-group { margin-bottom: 15px; }
+        label { display: block; margin-bottom: 5px; }
+        input, select { width: 100%; padding: 8px; box-sizing: border-box; }
+        button { padding: 10px 20px; background-color: #4CAF50; color: white; border: none; cursor: pointer; }
+        button:hover { background-color: #45a049; }
+        .help-text { font-size: 0.9em; color: #666; margin-top: 5px; }
+        .section { margin-top: 20px; padding: 10px; border: 1px solid #ddd; border-radius: 5px; }
+        .section h3 { margin-top: 0; }
+    </style>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"/></head>
+<body><div class="container mt-4">
+<h1>Add Beneficiary for {{ trust['TrustName'] }}</h1>
+<form action="" method="POST">
+<div class="form-group">
+<label for="trust_id">Trust:</label>
+<select disabled="" id="trust_id" name="trust_id" readonly="">
+<option selected="" value="{{ trust['TrustID'] }}">{{ trust['TrustName'] }}</option>
+</select>
+<input name="trust_id" type="hidden" value="{{ trust['TrustID'] }}"/>
+<div class="help-text">The trust this beneficiary is associated with.</div>
+</div>
+<div class="section">
+<h3>Personal Details</h3>
+<div class="form-group">
+<label for="tax_reference_number">Tax Reference Number:</label>
+<input id="tax_reference_number" name="tax_reference_number" type="text"/>
+<div class="help-text">Income tax reference number (e.g., 2595041647).</div>
+</div>
+<div class="form-group">
+<label for="last_name">Last Name:</label>
+<input id="last_name" name="last_name" required="" type="text"/>
+<div class="help-text">Beneficiary's surname (e.g., ZERVAS).</div>
+</div>
+<div class="form-group">
+<label for="first_name">First Name:</label>
+<input id="first_name" name="first_name" required="" type="text"/>
+<div class="help-text">Beneficiary's first name (e.g., COSTA).</div>
+</div>
+<div class="form-group">
+<label for="other_name">Other Name:</label>
+<input id="other_name" name="other_name" type="text"/>
+<div class="help-text">Beneficiary's other name (optional).</div>
+</div>
+<div class="form-group">
+<label for="initials">Initials:</label>
+<input id="initials" name="initials" type="text"/>
+<div class="help-text">Beneficiary's initials (e.g., C).</div>
+</div>
+<div class="form-group">
+<label for="date_of_birth">Date of Birth (YYYY-MM-DD):</label>
+<input id="date_of_birth" name="date_of_birth" type="date"/>
+<div class="help-text">Beneficiary's date of birth (e.g., 1947-06-01).</div>
+</div>
+<div class="form-group">
+<label for="id_number">ID Number:</label>
+<input id="id_number" name="id_number" type="text"/>
+<div class="help-text">South African ID number (e.g., 4706015003088).</div>
+</div>
+<div class="form-group">
+<label for="identification_type">Identification Type:</label>
+<select id="identification_type" name="identification_type" required="">
+<option value="001">South African ID</option>
+<option value="002">Passport</option>
+</select>
+<div class="help-text">Type of identification (default: 001 for South African ID).</div>
+</div>
+<div class="form-group">
+<label for="passport_number">Passport Number:</label>
+<input id="passport_number" name="passport_number" type="text"/>
+<div class="help-text">Passport number (if applicable).</div>
+</div>
+<div class="form-group">
+<label for="passport_country">Passport Country:</label>
+<input id="passport_country" name="passport_country" type="text"/>
+<div class="help-text">Country that issued the passport (if applicable).</div>
+</div>
+<div class="form-group">
+<label for="passport_issue_date">Passport Issue Date (YYYY-MM-DD):</label>
+<input id="passport_issue_date" name="passport_issue_date" type="date"/>
+<div class="help-text">Date the passport was issued (if applicable).</div>
+</div>
+<div class="form-group">
+<label for="nature_of_person">Nature of Person:</label>
+<select id="nature_of_person" name="nature_of_person">
+<option value="">Select Nature of Person</option>
+<option value="INDIVIDUAL">Individual</option>
+<option value="COMPANY">Company</option>
+</select>
+<div class="help-text">Nature of the beneficiary (e.g., INDIVIDUAL or COMPANY).</div>
+</div>
+</div>
+<div class="section">
+<h3>Company Details (if applicable)</h3>
+<div class="form-group">
+<label for="company_registration_number">Company Registration Number:</label>
+<input id="company_registration_number" name="company_registration_number" type="text"/>
+<div class="help-text">Company registration number (e.g., IT10081/99).</div>
+</div>
+<div class="form-group">
+<label for="company_registered_name">Company Registered Name:</label>
+<input id="company_registered_name" name="company_registered_name" type="text"/>
+<div class="help-text">Registered name of the company (if applicable).</div>
+</div>
+</div>
+<div class="section">
+<h3>Relationship and Financial Flags</h3>
+<div class="form-group">
+<label><input name="is_connected_person" type="checkbox"/> Connected Person to Trust</label>
+</div>
+<div class="form-group">
+<label><input name="is_beneficiary" type="checkbox"/> Person Beneficiary of This Trust</label>
+</div>
+<div class="form-group">
+<label><input name="is_founder" type="checkbox"/> Founder of Trust</label>
+</div>
+<div class="form-group">
+<label><input name="is_natural_person" type="checkbox"/> Natural Person</label>
+</div>
+<div class="form-group">
+<label><input name="is_donor" type="checkbox"/> Donor of Trust</label>
+</div>
+<div class="form-group">
+<label><input name="is_non_resident" type="checkbox"/> Non-Resident</label>
+</div>
+<div class="form-group">
+<label><input name="is_taxable_on_distributed" type="checkbox"/> Taxable on Amounts Distributed to Vested</label>
+</div>
+<div class="form-group">
+<label><input name="has_non_taxable_amounts" type="checkbox"/> Received Accrued Non-Taxable Amounts</label>
+</div>
+<div class="form-group">
+<label><input name="has_capital_distribution" type="checkbox"/> Received Accrued Capital or Asset Distribution</label>
+</div>
+<div class="form-group">
+<label><input name="has_loans_granted" type="checkbox"/> Held Loans Granted</label>
+</div>
+<div class="form-group">
+<label><input name="has_loans_from" type="checkbox"/> Held Loans From</label>
+</div>
+<div class="form-group">
+<label><input name="made_donations" type="checkbox"/> Made Donations To</label>
+</div>
+<div class="form-group">
+<label><input name="made_contributions" type="checkbox"/> Made Contributions To</label>
+</div>
+<div class="form-group">
+<label><input name="received_donations" type="checkbox"/> Received Donations From</label>
+</div>
+<div class="form-group">
+<label><input name="received_contributions" type="checkbox"/> Received Contributions From</label>
+</div>
+<div class="form-group">
+<label><input name="made_distributions" type="checkbox"/> Made Distributions To</label>
+</div>
+<div class="form-group">
+<label><input name="received_refunds" type="checkbox"/> Received Refunds on Contributions</label>
+</div>
+<div class="form-group">
+<label><input name="has_right_of_use" type="checkbox"/> Right of Use of Assets</label>
+</div>
+</div>
+<div class="section">
+<h3>Address Details</h3>
+<div class="form-group">
+<label for="physical_unit_number">Physical Unit Number:</label>
+<input id="physical_unit_number" name="physical_unit_number" type="text"/>
+<div class="help-text">Unit number (e.g., 902).</div>
+</div>
+<div class="form-group">
+<label for="physical_complex">Physical Complex:</label>
+<input id="physical_complex" name="physical_complex" type="text"/>
+<div class="help-text">Complex name (if applicable).</div>
+</div>
+<div class="form-group">
+<label for="physical_street_number">Physical Street Number:</label>
+<input id="physical_street_number" name="physical_street_number" type="text"/>
+<div class="help-text">Street number (if applicable).</div>
+</div>
+<div class="form-group">
+<label for="physical_street">Physical Street:</label>
+<input id="physical_street" name="physical_street" type="text"/>
+<div class="help-text">Street or farm name (e.g., ARCADIA ST).</div>
+</div>
+<div class="form-group">
+<label for="physical_suburb">Physical Suburb/District:</label>
+<input id="physical_suburb" name="physical_suburb" type="text"/>
+<div class="help-text">Suburb or district (e.g., HATFIELD).</div>
+</div>
+<div class="form-group">
+<label for="physical_city">Physical City/Town:</label>
+<input id="physical_city" name="physical_city" type="text"/>
+<div class="help-text">City or town (e.g., PRETORIA).</div>
+</div>
+<div class="form-group">
+<label for="physical_postal_code">Physical Postal Code:</label>
+<input id="physical_postal_code" name="physical_postal_code" type="text"/>
+<div class="help-text">Postal code (e.g., 0071).</div>
+</div>
+<div class="form-group">
+<label><input name="postal_same_as_physical" type="checkbox"/> Postal Address Same as Physical</label>
+</div>
+<div class="form-group">
+<label for="postal_address_line1">Postal Address Line 1:</label>
+<input id="postal_address_line1" name="postal_address_line1" type="text"/>
+<div class="help-text">Postal address line 1 (e.g., PO BOX 28982).</div>
+</div>
+<div class="form-group">
+<label for="postal_address_line2">Postal Address Line 2:</label>
+<input id="postal_address_line2" name="postal_address_line2" type="text"/>
+<div class="help-text">Postal address line 2 (e.g., SUNNYSIDE).</div>
+</div>
+<div class="form-group">
+<label for="postal_address_line3">Postal Address Line 3:</label>
+<input id="postal_address_line3" name="postal_address_line3" type="text"/>
+<div class="help-text">Postal address line 3 (e.g., PRETORIA).</div>
+</div>
+<div class="form-group">
+<label for="postal_address_line4">Postal Address Line 4:</label>
+<input id="postal_address_line4" name="postal_address_line4" type="text"/>
+<div class="help-text">Postal address line 4 (e.g., GAUTENG).</div>
+</div>
+<div class="form-group">
+<label for="postal_code">Postal Code:</label>
+<input id="postal_code" name="postal_code" type="text"/>
+<div class="help-text">Postal code (e.g., 0132).</div>
+</div>
+</div>
+<div class="section">
+<h3>Contact Details</h3>
+<div class="form-group">
+<label for="contact_number">Telephone Number:</label>
+<input id="contact_number" name="contact_number" type="text"/>
+<div class="help-text">Telephone number (e.g., 0124306556).</div>
+</div>
+<div class="form-group">
+<label for="cell_number">Cell Phone Number:</label>
+<input id="cell_number" name="cell_number" type="text"/>
+<div class="help-text">Cell phone number (e.g., 0832504084).</div>
+</div>
+<div class="form-group">
+<label for="email">Email:</label>
+<input id="email" name="email" type="email"/>
+<div class="help-text">Email address (e.g., TAX@ROSSPIENAAR.CO.ZA).</div>
+</div>
+</div>
+<button type="submit">Add Beneficiary</button>
+</form>
+<a href="{{ url_for('view_beneficiaries', trust_id=trust['TrustID']) }}"><button>Back to Beneficiaries</button></a>
+</div></body>
+</html>

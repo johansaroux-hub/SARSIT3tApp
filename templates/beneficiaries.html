@@ -1,0 +1,144 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<title>Edit/Add Beneficiary</title>
+<style>
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background: #f5f7fa;
+      margin: 0;
+      padding: 0;
+    }
+    .container {
+      max-width: 700px;
+      margin: 40px auto;
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+      padding: 32px 40px 24px 40px;
+    }
+    h2 {
+      text-align: center;
+      color: #2a4d69;
+      margin-bottom: 24px;
+    }
+    form label {
+      display: block;
+      margin-top: 18px;
+      font-weight: 500;
+      color: #2a4d69;
+    }
+    form input[type="text"],
+    form input[type="email"],
+    form select {
+      width: 100%;
+      padding: 10px 12px;
+      margin-top: 6px;
+      border: 1px solid #bfc9d1;
+      border-radius: 6px;
+      font-size: 1rem;
+      background: #f9fbfc;
+      transition: border 0.2s;
+    }
+    form input[type="text"]:focus,
+    form input[type="email"]:focus,
+    form select:focus {
+      border: 1.5px solid #4a90e2;
+      outline: none;
+      background: #fff;
+    }
+    fieldset {
+      border: 1px solid #e3e7ed;
+      border-radius: 8px;
+      margin-top: 18px;
+      padding: 16px 18px 10px 18px;
+      background: #f7fafd;
+    }
+    legend {
+      font-weight: 600;
+      color: #41729f;
+      padding: 0 8px;
+    }
+    .address-fields {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px 18px;
+    }
+    .address-fields input {
+      margin-top: 0;
+    }
+    .checkbox-row {
+      margin-top: 10px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    button[type="submit"],
+    .cancel-btn {
+      width: 100%;
+      border: none;
+      border-radius: 6px;
+      padding: 14px 0;
+      font-size: 1.1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    button[type="submit"] {
+      background: #41729f;
+      color: #fff;
+    }
+    button[type="submit"]:hover {
+      background: #2a4d69;
+    }
+    .cancel-btn {
+      background: #f8d7da;
+      color: #721c24;
+    }
+    .cancel-btn:hover {
+      background: #f5c6cb;
+    }
+    .required {
+      color: #e74c3c;
+      margin-left: 2px;
+    }
+    @media (max-width: 600px) {
+      .container { padding: 16px 6px; }
+      .address-fields { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+<h1>Edit/Add Beneficiary</h1>
+<h3>Enter Beneficiary Details</h3>
+<div class="container"><form action="{{ url_for('save_beneficiary') }}" method="post">
+<label for="IDNumber">ID Number *</label>
+<input id="IDNumber" name="IDNumber" type="text" value="{{ beneficiary.get('IDNumber', '') }}"/>
+<label for="IdentificationType">Identification Type *</label>
+<input id="IdentificationType" name="IdentificationType" type="text" value="{{ beneficiary.get('IdentificationType', '') }}"/>
+<label for="FirstName">First Name *</label>
+<input id="FirstName" name="FirstName" type="text" value="{{ beneficiary.get('FirstName', '') }}"/>
+<label for="LastName">Last Name *</label>
+<input id="LastName" name="LastName" type="text" value="{{ beneficiary.get('LastName', '') }}"/>
+<label for="NatureOfPerson">Nature of Person</label>
+<input id="NatureOfPerson" name="NatureOfPerson" type="text" value="{{ beneficiary.get('NatureOfPerson', '') }}"/>
+<label for="Address">Address</label>
+<input id="Address" name="Address" type="text" value="{{ beneficiary.get('Address', '') }}"/>
+<label for="ContactNumber">Contact Number</label>
+<input id="ContactNumber" name="ContactNumber" type="text" value="{{ beneficiary.get('ContactNumber', '') }}"/>
+<label for="Email">Email</label>
+<input id="Email" name="Email" type="email" value="{{ beneficiary.get('Email', '') }}"/>
+<label for="StartDate">Start Date</label>
+<input id="StartDate" name="StartDate" type="date" value="{{ beneficiary.get('StartDate', '') }}"/>
+<label for="EndDate">End Date</label>
+<input id="EndDate" name="EndDate" type="date" value="{{ beneficiary.get('EndDate', '') }}"/>
+<div class="form-actions">
+<button type="submit">Submit</button>
+<a href="{{ url_for('trust_list') }}"><button type="button">Cancel</button></a>
+</div>
+</form></div>
+</body>
+</html>

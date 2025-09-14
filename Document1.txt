@@ -1,0 +1,770 @@
+Alert: Queue depth has increased from 0!
+07:46:29 ALERT: Run started, ITS queue depth 17
+07:46:29 ITS queue Depth: 17
+07:46:34 ITS queue Depth: 26
+07:46:39 ALERT: First decrease in ITS queue: 0
+Alert: Queue depth has increased from 0!
+07:46:44 ALERT: Run started, ITS queue depth 4
+07:46:44 ITS queue Depth: 4
+07:46:49 ITS queue Depth: 3, 1 Messages removed, 0.20 Messages per second, Predicted time to reach 0 depth: 07:47:05 
+07:46:49 ALERT: First decrease in ITS queue: 3
+Alert: Queue depth has increased from 0!
+07:46:59 ALERT: Run started, ITS queue depth 70
+07:46:59 ITS queue Depth: 70
+07:47:05 ITS queue Depth: 54, 16 Messages removed, 3.12 Messages per second, Predicted time to reach 0 depth: 07:47:22 
+07:47:05 ALERT: First decrease in ITS queue: 54
+07:47:10 ITS queue Depth: 61
+07:47:15 ITS queue Depth: 15, 46 Messages removed, 8.97 Messages per second, Predicted time to reach 0 depth: 07:47:17 
+07:47:15 ALERT: First decrease in ITS queue: 15
+07:47:20 ITS queue Depth: 20
+07:47:25 ITS queue Depth: 26
+07:47:30 ALERT: First decrease in ITS queue: 0
+07:47:35 ALERT: Run done, ITS queue clear.
+Alert: Queue depth has increased from 0!
+07:47:41 ALERT: Run started, ITS queue depth 18
+07:47:41 ITS queue Depth: 18
+07:47:46 ITS queue Depth: 9, 9 Messages removed, 1.75 Messages per second, Predicted time to reach 0 depth: 07:47:51 
+07:47:46 ALERT: First decrease in ITS queue: 9
+07:47:51 ITS queue Depth: 51
+07:47:56 ITS queue Depth: 19, 32 Messages removed, 6.15 Messages per second, Predicted time to reach 0 depth: 07:47:59 
+07:47:56 ALERT: First decrease in ITS queue: 19
+07:48:01 ITS queue Depth: 102
+07:48:06 ITS queue Depth: 54, 48 Messages removed, 9.30 Messages per second, Predicted time to reach 0 depth: 07:48:12 
+07:48:06 ALERT: First decrease in ITS queue: 54
+07:48:11 ITS queue Depth: 64
+07:48:17 ITS queue Depth: 11, 53 Messages removed, 10.35 Messages per second, Predicted time to reach 0 depth: 07:48:18 
+07:48:17 ALERT: First decrease in ITS queue: 11
+Alert: Queue depth has increased from 0!
+07:48:27 ALERT: Run started, ITS queue depth 3
+07:48:27 ITS queue Depth: 3
+07:48:32 ALERT: First decrease in ITS queue: 0
+07:48:37 ALERT: Run done, ITS queue clear.
+Alert: Queue depth has increased from 0!
+07:49:03 ALERT: Run started, ITS queue depth 2
+07:49:03 ITS queue Depth: 2
+07:49:08 ALERT: First decrease in ITS queue: 0
+07:49:13 ALERT: Run done, ITS queue clear.
+Alert: Queue depth has increased from 0!
+07:49:23 ALERT: Run started, ITS queue depth 43
+07:49:23 ITS queue Depth: 43
+07:49:28 ALERT: First decrease in ITS queue: 0
+Alert: Queue depth has increased from 0!
+07:49:33 ALERT: Run started, ITS queue depth 12
+07:49:33 ITS queue Depth: 12
+07:49:39 ITS queue Depth: 14
+07:49:44 ITS queue Depth: 51
+07:49:49 ALERT: First decrease in ITS queue: 0
+Alert: Queue depth has increased from 0!
+07:49:54 ALERT: Run started, ITS queue depth 52
+07:49:54 ITS queue Depth: 52
+07:49:59 ITS queue Depth: 65
+07:50:04 ITS queue Depth: 21, 44 Messages removed, 8.55 Messages per second, Predicted time to reach 0 depth: 07:50:07 
+07:50:04 ALERT: First decrease in ITS queue: 21
+07:50:09 ITS queue Depth: 69
+07:50:14 ITS queue Depth: 41, 28 Messages removed, 5.45 Messages per second, Predicted time to reach 0 depth: 07:50:22 
+07:50:14 ALERT: First decrease in ITS queue: 41
+07:50:25 ALERT: Run done, ITS queue clear.
+Alert: Queue depth has increased from 0!
+07:50:30 ALERT: Run started, ITS queue depth 1
+07:50:30 ITS queue Depth: 1
+07:50:35 ITS queue Depth: 1
+07:50:40 ALERT: First decrease in ITS queue: 0
+07:50:45 ALERT: Run done, ITS queue clear.
+Alert: Queue depth has increased from 0!
+07:50:51 ALERT: Run started, ITS queue depth 47
+07:50:51 ITS queue Depth: 47
+07:50:56 ITS queue Depth: 164
+07:51:01 ITS queue Depth: 133, 31 Messages removed, 6.05 Messages per second, Predicted time to reach 0 depth: 07:51:23 
+07:51:01 ALERT: First decrease in ITS queue: 133
+07:51:06 ITS queue Depth: 104, 29 Messages removed, 5.67 Messages per second, Predicted time to reach 0 depth: 07:51:24 
+07:51:11 ITS queue Depth: 57, 47 Messages removed, 8.99 Messages per second, Predicted time to reach 0 depth: 07:51:17 
+07:51:16 ITS queue Depth: 46, 11 Messages removed, 2.15 Messages per second, Predicted time to reach 0 depth: 07:51:38 
+07:51:21 ITS queue Depth: 82
+07:51:26 ITS queue Depth: 36, 46 Messages removed, 8.99 Messages per second, Predicted time to reach 0 depth: 07:51:30 
+07:51:26 ALERT: First decrease in ITS queue: 36
+07:51:32 ITS queue Depth: 61
+07:51:37 ITS queue Depth: 85
+07:51:42 ITS queue Depth: 32, 53 Messages removed, 10.12 Messages per second, Predicted time to reach 0 depth: 07:51:45 
+07:51:42 ALERT: First decrease in ITS queue: 32
+07:51:52 ALERT: Run done, ITS queue clear.
+Alert: Queue depth has increased from 0!
+07:52:08 ALERT: Run started, ITS queue depth 1
+07:52:08 ITS queue Depth: 1
+07:52:13 ALERT: First decrease in ITS queue: 0
+07:52:18 ALERT: Run done, ITS queue clear.
+Alert: Queue depth has increased from 0!
+07:52:33 ALERT: Run started, ITS queue depth 4
+07:52:33 ITS queue Depth: 4
+07:52:38 ITS queue Depth: 25
+07:52:43 ALERT: First decrease in ITS queue: 0
+Alert: Queue depth has increased from 0!
+07:52:49 ALERT: Run started, ITS queue depth 46
+07:52:49 ITS queue Depth: 46
+07:52:54 ALERT: First decrease in ITS queue: 0
+Alert: Queue depth has increased from 0!
+07:52:59 ALERT: Run started, ITS queue depth 23
+07:52:59 ITS queue Depth: 23
+07:53:04 ITS queue Depth: 160
+07:53:09 ITS queue Depth: 106, 54 Messages removed, 10.55 Messages per second, Predicted time to reach 0 depth: 07:53:19 
+07:53:09 ALERT: First decrease in ITS queue: 106
+07:53:14 ITS queue Depth: 36, 70 Messages removed, 13.70 Messages per second, Predicted time to reach 0 depth: 07:53:17 
+07:53:20 ITS queue Depth: 1, 35 Messages removed, 6.59 Messages per second, Predicted time to reach 0 depth: 07:53:20 
+07:53:25 ITS queue Depth: 11
+07:53:30 ALERT: First decrease in ITS queue: 0
+07:53:35 ALERT: Run done, ITS queue clear.
+Alert: Queue depth has increased from 0!
+07:53:50 ALERT: Run started, ITS queue depth 64
+07:53:50 ITS queue Depth: 64
+07:53:56 ITS queue Depth: 4, 60 Messages removed, 11.69 Messages per second, Predicted time to reach 0 depth: 07:53:56 
+07:53:56 ALERT: First decrease in ITS queue: 4
+07:54:06 ALERT: Run done, ITS queue clear.
+Alert: Queue depth has increased from 0!
+07:54:16 ALERT: Run started, ITS queue depth 1
+07:54:16 ITS queue Depth: 1
+07:54:21 ITS queue Depth: 17
+07:54:26 ITS queue Depth: 11, 6 Messages removed, 1.16 Messages per second, Predicted time to reach 0 depth: 07:54:36 
+07:54:26 ALERT: First decrease in ITS queue: 11
+07:54:32 ITS queue Depth: 4, 7 Messages removed, 1.37 Messages per second, Predicted time to reach 0 depth: 07:54:34 
+07:54:37 ITS queue Depth: 13
+07:54:42 ITS queue Depth: 34
+07:54:47 ITS queue Depth: 10, 24 Messages removed, 4.64 Messages per second, Predicted time to reach 0 depth: 07:54:49 
+07:54:47 ALERT: First decrease in ITS queue: 10
+07:54:52 ITS queue Depth: 102
+07:54:57 ITS queue Depth: 133
+07:55:02 ITS queue Depth: 120, 13 Messages removed, 2.53 Messages per second, Predicted time to reach 0 depth: 07:55:50 
+07:55:02 ALERT: First decrease in ITS queue: 120
+07:55:08 ITS queue Depth: 90, 30 Messages removed, 5.83 Messages per second, Predicted time to reach 0 depth: 07:55:23 
+07:55:13 ITS queue Depth: 53, 37 Messages removed, 7.23 Messages per second, Predicted time to reach 0 depth: 07:55:20 
+07:55:18 ITS queue Depth: 23, 30 Messages removed, 5.87 Messages per second, Predicted time to reach 0 depth: 07:55:22 
+Alert: Queue depth has increased from 0!
+07:55:28 ALERT: Run started, ITS queue depth 42
+07:55:28 ITS queue Depth: 42
+07:55:33 ALERT: First decrease in ITS queue: 0
+07:55:38 ALERT: Run done, ITS queue clear.
+Alert: Queue depth has increased from 0!
+08:17:53 ALERT: Run started, ITS queue depth 22
+08:17:53 ITS queue Depth: 22
+08:17:59 ITS queue Depth: 45
+08:18:04 ITS queue Depth: 71
+08:18:09 ITS queue Depth: 96
+08:18:15 ITS queue Depth: 116
+08:18:21 ITS queue Depth: 153
+08:18:26 ITS queue Depth: 180
+08:18:31 ITS queue Depth: 211
+08:18:37 ITS queue Depth: 230
+08:18:42 ITS queue Depth: 264
+08:18:47 ITS queue Depth: 287
+08:18:52 ITS queue Depth: 326
+08:18:57 ITS queue Depth: 366
+08:19:02 ITS queue Depth: 394
+08:19:07 ITS queue Depth: 426
+08:19:13 ITS queue Depth: 449
+08:19:18 ITS queue Depth: 427, 22 Messages removed, 4.30 Messages per second, Predicted time to reach 0 depth: 08:20:57 
+08:19:18 ALERT: First decrease in ITS queue: 427
+08:19:23 ITS queue Depth: 415, 12 Messages removed, 2.34 Messages per second, Predicted time to reach 0 depth: 08:22:20 
+08:19:28 ITS queue Depth: 381, 34 Messages removed, 6.64 Messages per second, Predicted time to reach 0 depth: 08:20:25 
+08:19:33 ITS queue Depth: 334, 47 Messages removed, 9.19 Messages per second, Predicted time to reach 0 depth: 08:20:09 
+08:19:38 ITS queue Depth: 304, 30 Messages removed, 5.87 Messages per second, Predicted time to reach 0 depth: 08:20:30 
+08:19:43 ITS queue Depth: 254, 50 Messages removed, 9.76 Messages per second, Predicted time to reach 0 depth: 08:20:09 
+08:19:48 ITS queue Depth: 214, 40 Messages removed, 7.81 Messages per second, Predicted time to reach 0 depth: 08:20:16 
+08:19:53 ITS queue Depth: 158, 56 Messages removed, 10.94 Messages per second, Predicted time to reach 0 depth: 08:20:08 
+08:19:59 ITS queue Depth: 97, 61 Messages removed, 11.93 Messages per second, Predicted time to reach 0 depth: 08:20:07 
+08:20:04 ITS queue Depth: 52, 45 Messages removed, 8.80 Messages per second, Predicted time to reach 0 depth: 08:20:10 
+08:20:09 ITS queue Depth: 6, 46 Messages removed, 8.94 Messages per second, Predicted time to reach 0 depth: 08:20:10 
+08:20:19 ALERT: Run done, ITS queue clear.
+Alert: Queue depth has increased from 0!
+08:20:40 ALERT: Run started, ITS queue depth 26
+08:20:40 ITS queue Depth: 26
+08:20:45 ITS queue Depth: 113
+08:20:50 ITS queue Depth: 63, 50 Messages removed, 9.79 Messages per second, Predicted time to reach 0 depth: 08:20:56 
+08:20:50 ALERT: First decrease in ITS queue: 63
+08:20:55 ITS queue Depth: 17, 46 Messages removed, 8.95 Messages per second, Predicted time to reach 0 depth: 08:20:57 
+08:21:05 ALERT: Run done, ITS queue clear.
+Alert: Queue depth has increased from 0!
+08:21:16 ALERT: Run started, ITS queue depth 66
+08:21:16 ITS queue Depth: 66
+08:21:21 ITS queue Depth: 46, 20 Messages removed, 3.90 Messages per second, Predicted time to reach 0 depth: 08:21:32 
+08:21:21 ALERT: First decrease in ITS queue: 46
+08:21:31 ALERT: Run done, ITS queue clear.
+Alert: Queue depth has increased from 0!
+08:21:52 ALERT: Run started, ITS queue depth 43
+08:21:52 ITS queue Depth: 43
+08:21:57 ITS queue Depth: 41, 2 Messages removed, 0.39 Messages per second, Predicted time to reach 0 depth: 08:23:43 
+08:21:57 ALERT: First decrease in ITS queue: 41
+Alert: Queue depth has increased from 0!
+08:22:07 ALERT: Run started, ITS queue depth 17
+08:22:07 ITS queue Depth: 17
+08:22:12 ITS queue Depth: 29
+08:22:17 ITS queue Depth: 22, 7 Messages removed, 1.36 Messages per second, Predicted time to reach 0 depth: 08:22:34 
+08:22:17 ALERT: First decrease in ITS queue: 22
+08:22:23 ITS queue Depth: 19, 3 Messages removed, 0.59 Messages per second, Predicted time to reach 0 depth: 08:22:55 
+Alert: Queue depth has increased from 0!
+08:22:33 ALERT: Run started, ITS queue depth 16
+08:22:33 ITS queue Depth: 16
+08:22:38 ITS queue Depth: 18
+08:22:43 ALERT: First decrease in ITS queue: 0
+08:22:48 ALERT: Run done, ITS queue clear.
+Alert: Queue depth has increased from 0!
+08:23:14 ALERT: Run started, ITS queue depth 36
+08:23:14 ITS queue Depth: 36
+08:23:20 ALERT: First decrease in ITS queue: 0
+08:23:25 ALERT: Run done, ITS queue clear.
+
+
+
+
+
+
+
+Alert: Queue depth has increased from 0!
+09:40:19 ALERT: Run started, ITS queue depth 133
+09:40:19 ITS queue Depth: 133
+09:40:24 ITS queue Depth: 181
+09:40:29 ITS queue Depth: 239
+09:40:34 ITS queue Depth: 288
+09:40:39 ITS queue Depth: 341
+09:40:44 ITS queue Depth: 396
+09:40:50 ITS queue Depth: 453
+09:40:55 ITS queue Depth: 521
+09:41:00 ITS queue Depth: 576
+09:41:05 ITS queue Depth: 620
+09:41:10 ITS queue Depth: 680
+09:41:15 ITS queue Depth: 727
+09:41:20 ITS queue Depth: 772
+09:41:25 ITS queue Depth: 811
+09:41:31 ITS queue Depth: 868
+09:41:36 ITS queue Depth: 932
+09:41:41 ITS queue Depth: 1000
+09:41:46 ITS queue Depth: 1055
+09:41:51 ITS queue Depth: 1109
+09:41:56 ITS queue Depth: 1175
+09:42:01 ITS queue Depth: 1237
+09:42:06 ITS queue Depth: 1283
+09:42:12 ITS queue Depth: 1346
+09:42:17 ITS queue Depth: 1403
+09:42:22 ITS queue Depth: 1449
+09:42:27 ITS queue Depth: 1496
+09:42:32 ITS queue Depth: 1541
+09:42:37 ITS queue Depth: 1588
+09:42:42 ITS queue Depth: 1644
+09:42:48 ITS queue Depth: 1695
+09:42:59 ITS queue Depth: 1811
+09:43:07 ITS queue Depth: 1901
+09:43:13 ITS queue Depth: 1948
+09:43:18 ITS queue Depth: 2012
+09:43:23 ITS queue Depth: 2069
+09:43:28 ITS queue Depth: 2112
+09:43:33 ITS queue Depth: 2159
+09:43:38 ITS queue Depth: 2215
+09:43:43 ITS queue Depth: 2262
+09:43:48 ITS queue Depth: 2316
+09:43:54 ITS queue Depth: 2360
+09:43:59 ITS queue Depth: 2423
+09:44:04 ITS queue Depth: 2481
+09:44:09 ITS queue Depth: 2530
+09:44:14 ITS queue Depth: 2581
+09:44:19 ITS queue Depth: 2621
+09:44:24 ITS queue Depth: 2678
+09:44:29 ITS queue Depth: 2733
+09:44:35 ITS queue Depth: 2790
+09:44:40 ITS queue Depth: 2845
+09:44:45 ITS queue Depth: 2901
+09:44:50 ITS queue Depth: 2951
+09:44:55 ITS queue Depth: 2997
+09:45:00 ITS queue Depth: 3053
+09:45:05 ITS queue Depth: 3113
+09:45:10 ITS queue Depth: 3160
+09:45:16 ITS queue Depth: 3223
+09:45:21 ITS queue Depth: 3279
+09:45:26 ITS queue Depth: 3324
+09:45:31 ITS queue Depth: 3375
+09:45:36 ITS queue Depth: 3428
+09:45:41 ITS queue Depth: 3478
+09:45:46 ITS queue Depth: 3516
+09:45:51 ITS queue Depth: 3578
+09:45:57 ITS queue Depth: 3630
+09:46:02 ITS queue Depth: 3680
+09:46:07 ITS queue Depth: 3746
+09:46:12 ITS queue Depth: 3788
+09:46:17 ITS queue Depth: 3857
+09:46:22 ITS queue Depth: 3911
+09:46:27 ITS queue Depth: 3950
+09:46:34 ITS queue Depth: 4020
+09:46:39 ITS queue Depth: 4053
+09:46:44 ITS queue Depth: 4099
+09:46:49 ITS queue Depth: 4153
+09:46:54 ITS queue Depth: 4187
+09:46:59 ITS queue Depth: 4239
+09:47:04 ITS queue Depth: 4294
+09:47:09 ITS queue Depth: 4336
+09:47:15 ITS queue Depth: 4373
+09:47:20 ITS queue Depth: 4415
+09:47:25 ITS queue Depth: 4433
+09:47:30 ITS queue Depth: 4312, 121 Messages removed, 23.66 Messages per second, Predicted time to reach 0 depth: 09:50:32 
+09:47:30 ALERT: First decrease in ITS queue: 4312
+09:47:35 ITS queue Depth: 4192, 120 Messages removed, 22.95 Messages per second, Predicted time to reach 0 depth: 09:50:38 
+09:47:40 ITS queue Depth: 4065, 127 Messages removed, 24.83 Messages per second, Predicted time to reach 0 depth: 09:50:24 
+09:47:45 ITS queue Depth: 3939, 126 Messages removed, 24.60 Messages per second, Predicted time to reach 0 depth: 09:50:25 
+09:47:50 ITS queue Depth: 3821, 118 Messages removed, 22.93 Messages per second, Predicted time to reach 0 depth: 09:50:37 
+09:47:56 ITS queue Depth: 3694, 127 Messages removed, 24.73 Messages per second, Predicted time to reach 0 depth: 09:50:25 
+09:48:01 ITS queue Depth: 3560, 134 Messages removed, 25.91 Messages per second, Predicted time to reach 0 depth: 09:50:18 
+09:48:06 ITS queue Depth: 3440, 120 Messages removed, 23.38 Messages per second, Predicted time to reach 0 depth: 09:50:33 
+09:48:11 ITS queue Depth: 3317, 123 Messages removed, 24.05 Messages per second, Predicted time to reach 0 depth: 09:50:29 
+09:48:16 ITS queue Depth: 3197, 120 Messages removed, 23.45 Messages per second, Predicted time to reach 0 depth: 09:50:33 
+09:48:21 ITS queue Depth: 3088, 109 Messages removed, 21.29 Messages per second, Predicted time to reach 0 depth: 09:50:46 
+09:48:26 ITS queue Depth: 3096
+09:48:32 ITS queue Depth: 3169
+09:48:37 ITS queue Depth: 3251
+09:48:42 ITS queue Depth: 3330
+09:48:47 ITS queue Depth: 3404
+09:48:52 ITS queue Depth: 3486
+09:48:57 ITS queue Depth: 3575
+09:49:02 ITS queue Depth: 3649
+09:49:07 ITS queue Depth: 3720
+09:49:13 ITS queue Depth: 3794
+09:49:18 ITS queue Depth: 3869
+09:49:23 ITS queue Depth: 3936
+09:49:28 ITS queue Depth: 4019
+09:49:33 ITS queue Depth: 4089
+09:49:38 ITS queue Depth: 4173
+09:49:43 ITS queue Depth: 4251
+09:49:48 ITS queue Depth: 4304
+09:49:54 ITS queue Depth: 4374
+09:49:59 ITS queue Depth: 4432
+09:50:04 ITS queue Depth: 4501
+09:50:09 ITS queue Depth: 4567
+09:50:14 ITS queue Depth: 4632
+09:50:19 ITS queue Depth: 4689
+09:50:24 ITS queue Depth: 4744
+09:50:30 ITS queue Depth: 4797
+09:50:35 ITS queue Depth: 4849
+09:50:40 ITS queue Depth: 4894
+09:50:45 ITS queue Depth: 4927
+09:50:50 ITS queue Depth: 4986
+09:50:55 ITS queue Depth: 5031
+09:51:00 ITS queue Depth: 5076
+09:51:05 ITS queue Depth: 5125
+09:51:10 ITS queue Depth: 5160
+09:51:16 ITS queue Depth: 5209
+09:51:21 ITS queue Depth: 5253
+09:51:26 ITS queue Depth: 5298
+09:51:31 ITS queue Depth: 5335
+09:51:36 ITS queue Depth: 5379
+09:51:41 ITS queue Depth: 5424
+09:51:46 ITS queue Depth: 5449
+09:51:51 ITS queue Depth: 5479
+09:51:57 ITS queue Depth: 5512
+09:52:02 ITS queue Depth: 5546
+09:52:07 ITS queue Depth: 5571
+09:52:12 ITS queue Depth: 5607
+09:52:17 ITS queue Depth: 5642
+09:52:22 ITS queue Depth: 5677
+09:52:27 ITS queue Depth: 5712
+09:52:33 ITS queue Depth: 5726
+09:52:38 ITS queue Depth: 5751
+09:52:43 ITS queue Depth: 5777
+09:52:48 ITS queue Depth: 5809
+09:52:53 ITS queue Depth: 5853
+09:52:58 ITS queue Depth: 5883
+09:53:03 ITS queue Depth: 5913
+09:53:08 ITS queue Depth: 5952
+09:53:14 ITS queue Depth: 5987
+09:53:19 ITS queue Depth: 6022
+09:53:24 ITS queue Depth: 6065
+09:53:29 ITS queue Depth: 6103
+09:53:34 ITS queue Depth: 6138
+09:53:39 ITS queue Depth: 6170
+09:53:44 ITS queue Depth: 6197
+09:53:49 ITS queue Depth: 6239
+09:53:55 ITS queue Depth: 6285
+09:54:00 ITS queue Depth: 6320
+09:54:05 ITS queue Depth: 6358
+09:54:10 ITS queue Depth: 6406
+09:54:15 ITS queue Depth: 6445
+09:54:20 ITS queue Depth: 6486
+09:54:25 ITS queue Depth: 6529
+09:54:30 ITS queue Depth: 6564
+09:54:35 ITS queue Depth: 6601
+09:54:41 ITS queue Depth: 6643
+09:54:46 ITS queue Depth: 6675
+09:54:51 ITS queue Depth: 6730
+09:54:56 ITS queue Depth: 6768
+09:55:01 ITS queue Depth: 6813
+09:55:06 ITS queue Depth: 6863
+09:55:12 ITS queue Depth: 6917
+09:55:17 ITS queue Depth: 6973
+09:55:22 ITS queue Depth: 7027
+09:55:27 ITS queue Depth: 7082
+09:55:32 ITS queue Depth: 7139
+09:55:37 ITS queue Depth: 7184
+09:55:42 ITS queue Depth: 7126, 58 Messages removed, 11.30 Messages per second, Predicted time to reach 0 depth: 10:06:13 
+09:55:42 ALERT: First decrease in ITS queue: 7126
+09:55:47 ITS queue Depth: 7011, 115 Messages removed, 22.45 Messages per second, Predicted time to reach 0 depth: 10:01:00 
+09:55:53 ITS queue Depth: 6907, 104 Messages removed, 20.37 Messages per second, Predicted time to reach 0 depth: 10:01:32 
+09:55:58 ITS queue Depth: 6792, 115 Messages removed, 22.55 Messages per second, Predicted time to reach 0 depth: 10:00:59 
+09:56:03 ITS queue Depth: 6685, 107 Messages removed, 20.93 Messages per second, Predicted time to reach 0 depth: 10:01:22 
+09:56:08 ITS queue Depth: 6572, 113 Messages removed, 22.11 Messages per second, Predicted time to reach 0 depth: 10:01:05 
+09:56:13 ITS queue Depth: 6461, 111 Messages removed, 21.73 Messages per second, Predicted time to reach 0 depth: 10:01:10 
+09:56:18 ITS queue Depth: 6381, 80 Messages removed, 15.32 Messages per second, Predicted time to reach 0 depth: 10:03:15 
+09:56:23 ITS queue Depth: 6262, 119 Messages removed, 23.24 Messages per second, Predicted time to reach 0 depth: 10:00:53 
+09:56:28 ITS queue Depth: 6146, 116 Messages removed, 22.62 Messages per second, Predicted time to reach 0 depth: 10:01:00 
+09:56:34 ITS queue Depth: 6039, 107 Messages removed, 20.87 Messages per second, Predicted time to reach 0 depth: 10:01:23 
+09:56:39 ITS queue Depth: 5931, 108 Messages removed, 21.12 Messages per second, Predicted time to reach 0 depth: 10:01:19 
+09:56:44 ITS queue Depth: 5822, 109 Messages removed, 21.34 Messages per second, Predicted time to reach 0 depth: 10:01:17 
+09:56:49 ITS queue Depth: 5710, 112 Messages removed, 21.89 Messages per second, Predicted time to reach 0 depth: 10:01:10 
+09:56:54 ITS queue Depth: 5603, 107 Messages removed, 20.95 Messages per second, Predicted time to reach 0 depth: 10:01:21 
+09:56:59 ITS queue Depth: 5483, 120 Messages removed, 23.42 Messages per second, Predicted time to reach 0 depth: 10:00:53 
+09:57:04 ITS queue Depth: 5377, 106 Messages removed, 20.71 Messages per second, Predicted time to reach 0 depth: 10:01:24 
+09:57:09 ITS queue Depth: 5263, 114 Messages removed, 22.32 Messages per second, Predicted time to reach 0 depth: 10:01:05 
+09:57:14 ITS queue Depth: 5155, 108 Messages removed, 21.08 Messages per second, Predicted time to reach 0 depth: 10:01:19 
+09:57:20 ITS queue Depth: 5047, 108 Messages removed, 21.08 Messages per second, Predicted time to reach 0 depth: 10:01:19 
+09:57:25 ITS queue Depth: 4934, 113 Messages removed, 22.10 Messages per second, Predicted time to reach 0 depth: 10:01:08 
+09:57:30 ITS queue Depth: 4820, 114 Messages removed, 22.29 Messages per second, Predicted time to reach 0 depth: 10:01:06 
+09:57:35 ITS queue Depth: 4708, 112 Messages removed, 21.84 Messages per second, Predicted time to reach 0 depth: 10:01:10 
+09:57:40 ITS queue Depth: 4600, 108 Messages removed, 21.14 Messages per second, Predicted time to reach 0 depth: 10:01:18 
+09:57:45 ITS queue Depth: 4490, 110 Messages removed, 21.53 Messages per second, Predicted time to reach 0 depth: 10:01:14 
+09:57:50 ITS queue Depth: 4376, 114 Messages removed, 22.21 Messages per second, Predicted time to reach 0 depth: 10:01:07 
+09:57:56 ITS queue Depth: 4272, 104 Messages removed, 19.90 Messages per second, Predicted time to reach 0 depth: 10:01:30 
+09:58:01 ITS queue Depth: 4163, 109 Messages removed, 21.28 Messages per second, Predicted time to reach 0 depth: 10:01:16 
+09:58:06 ITS queue Depth: 4076, 87 Messages removed, 16.92 Messages per second, Predicted time to reach 0 depth: 10:02:07 
+09:58:11 ITS queue Depth: 3975, 101 Messages removed, 19.77 Messages per second, Predicted time to reach 0 depth: 10:01:32 
+09:58:16 ITS queue Depth: 3864, 111 Messages removed, 21.69 Messages per second, Predicted time to reach 0 depth: 10:01:14 
+09:58:21 ITS queue Depth: 3753, 111 Messages removed, 21.74 Messages per second, Predicted time to reach 0 depth: 10:01:14 
+09:58:26 ITS queue Depth: 3639, 114 Messages removed, 21.91 Messages per second, Predicted time to reach 0 depth: 10:01:12 
+09:58:31 ITS queue Depth: 3530, 109 Messages removed, 21.32 Messages per second, Predicted time to reach 0 depth: 10:01:17 
+09:58:37 ITS queue Depth: 3415, 115 Messages removed, 22.48 Messages per second, Predicted time to reach 0 depth: 10:01:08 
+09:58:42 ITS queue Depth: 3304, 111 Messages removed, 21.58 Messages per second, Predicted time to reach 0 depth: 10:01:15 
+09:58:47 ITS queue Depth: 3197, 107 Messages removed, 20.92 Messages per second, Predicted time to reach 0 depth: 10:01:20 
+09:58:52 ITS queue Depth: 3085, 112 Messages removed, 21.87 Messages per second, Predicted time to reach 0 depth: 10:01:13 
+09:58:57 ITS queue Depth: 2968, 117 Messages removed, 22.86 Messages per second, Predicted time to reach 0 depth: 10:01:07 
+09:59:02 ITS queue Depth: 2862, 106 Messages removed, 20.25 Messages per second, Predicted time to reach 0 depth: 10:01:24 
+09:59:07 ITS queue Depth: 2744, 118 Messages removed, 23.00 Messages per second, Predicted time to reach 0 depth: 10:01:07 
+09:59:13 ITS queue Depth: 2631, 113 Messages removed, 22.08 Messages per second, Predicted time to reach 0 depth: 10:01:12 
+09:59:18 ITS queue Depth: 2522, 109 Messages removed, 21.35 Messages per second, Predicted time to reach 0 depth: 10:01:16 
+09:59:23 ITS queue Depth: 2408, 114 Messages removed, 22.31 Messages per second, Predicted time to reach 0 depth: 10:01:11 
+09:59:28 ITS queue Depth: 2293, 115 Messages removed, 22.49 Messages per second, Predicted time to reach 0 depth: 10:01:10 
+09:59:33 ITS queue Depth: 2189, 104 Messages removed, 20.08 Messages per second, Predicted time to reach 0 depth: 10:01:22 
+09:59:38 ITS queue Depth: 2071, 118 Messages removed, 23.02 Messages per second, Predicted time to reach 0 depth: 10:01:08 
+09:59:43 ITS queue Depth: 1965, 106 Messages removed, 20.70 Messages per second, Predicted time to reach 0 depth: 10:01:18 
+09:59:48 ITS queue Depth: 1844, 121 Messages removed, 23.68 Messages per second, Predicted time to reach 0 depth: 10:01:06 
+09:59:53 ITS queue Depth: 1752, 92 Messages removed, 18.01 Messages per second, Predicted time to reach 0 depth: 10:01:31 
+09:59:59 ITS queue Depth: 1632, 120 Messages removed, 23.45 Messages per second, Predicted time to reach 0 depth: 10:01:08 
+10:00:04 ITS queue Depth: 1527, 105 Messages removed, 20.56 Messages per second, Predicted time to reach 0 depth: 10:01:18 
+10:00:09 ITS queue Depth: 1418, 109 Messages removed, 21.19 Messages per second, Predicted time to reach 0 depth: 10:01:16 
+10:00:14 ITS queue Depth: 1323, 95 Messages removed, 18.55 Messages per second, Predicted time to reach 0 depth: 10:01:25 
+10:00:19 ITS queue Depth: 1238, 85 Messages removed, 16.58 Messages per second, Predicted time to reach 0 depth: 10:01:34 
+10:00:24 ITS queue Depth: 1146, 92 Messages removed, 17.94 Messages per second, Predicted time to reach 0 depth: 10:01:28 
+10:00:29 ITS queue Depth: 1064, 82 Messages removed, 16.02 Messages per second, Predicted time to reach 0 depth: 10:01:36 
+10:00:35 ITS queue Depth: 975, 89 Messages removed, 17.31 Messages per second, Predicted time to reach 0 depth: 10:01:31 
+10:00:40 ITS queue Depth: 877, 98 Messages removed, 18.88 Messages per second, Predicted time to reach 0 depth: 10:01:26 
+10:00:45 ITS queue Depth: 796, 81 Messages removed, 15.82 Messages per second, Predicted time to reach 0 depth: 10:01:35 
+10:00:50 ITS queue Depth: 699, 97 Messages removed, 18.88 Messages per second, Predicted time to reach 0 depth: 10:01:27 
+10:00:57 ITS queue Depth: 560, 139 Messages removed, 18.91 Messages per second, Predicted time to reach 0 depth: 10:01:27 
+10:01:02 ITS queue Depth: 437, 123 Messages removed, 23.99 Messages per second, Predicted time to reach 0 depth: 10:01:21 
+10:01:08 ITS queue Depth: 339, 98 Messages removed, 19.12 Messages per second, Predicted time to reach 0 depth: 10:01:25 
+10:01:14 ITS queue Depth: 218, 121 Messages removed, 19.12 Messages per second, Predicted time to reach 0 depth: 10:01:25 
+10:01:19 ITS queue Depth: 82, 136 Messages removed, 26.40 Messages per second, Predicted time to reach 0 depth: 10:01:22 
+10:01:29 ALERT: Run done, ITS queue clear.
+Alert: Queue depth has increased from 0!
+10:56:27 ALERT: Run started, ITS queue depth 21
+10:56:27 ITS queue Depth: 21
+10:56:32 ITS queue Depth: 72
+10:56:37 ITS queue Depth: 122
+10:56:42 ITS queue Depth: 179
+10:56:47 ITS queue Depth: 244
+10:56:52 ITS queue Depth: 307
+10:56:58 ITS queue Depth: 380
+10:57:03 ITS queue Depth: 451
+10:57:08 ITS queue Depth: 526
+10:57:13 ITS queue Depth: 604
+10:57:18 ITS queue Depth: 698
+10:57:23 ITS queue Depth: 785
+10:57:28 ITS queue Depth: 886
+10:57:33 ITS queue Depth: 972
+10:57:39 ITS queue Depth: 1070
+10:57:44 ITS queue Depth: 1169
+10:57:49 ITS queue Depth: 1263
+10:57:54 ITS queue Depth: 1361
+10:57:59 ITS queue Depth: 1459
+10:58:04 ITS queue Depth: 1551
+10:58:09 ITS queue Depth: 1644
+10:58:15 ITS queue Depth: 1741
+10:58:20 ITS queue Depth: 1840
+10:58:25 ITS queue Depth: 1938
+10:58:30 ITS queue Depth: 2013
+10:58:35 ITS queue Depth: 2091
+10:58:40 ITS queue Depth: 2184
+10:58:45 ITS queue Depth: 2265
+10:58:50 ITS queue Depth: 2345
+10:58:56 ITS queue Depth: 2429
+10:59:01 ITS queue Depth: 2509
+10:59:06 ITS queue Depth: 2590
+10:59:11 ITS queue Depth: 2673
+10:59:16 ITS queue Depth: 2741
+10:59:21 ITS queue Depth: 2814
+10:59:26 ITS queue Depth: 2877
+10:59:31 ITS queue Depth: 2949
+10:59:36 ITS queue Depth: 3006
+10:59:42 ITS queue Depth: 3063
+10:59:47 ITS queue Depth: 3118
+10:59:52 ITS queue Depth: 3192
+10:59:57 ITS queue Depth: 3253
+11:00:02 ITS queue Depth: 3306
+11:00:07 ITS queue Depth: 3356
+11:00:12 ITS queue Depth: 3395
+11:00:17 ITS queue Depth: 3456
+11:00:23 ITS queue Depth: 3527
+11:00:28 ITS queue Depth: 3608
+11:00:33 ITS queue Depth: 3717
+11:00:38 ITS queue Depth: 3803
+11:00:43 ITS queue Depth: 3877
+11:00:48 ITS queue Depth: 3947
+11:00:53 ITS queue Depth: 4033
+11:00:59 ITS queue Depth: 4115
+11:01:04 ITS queue Depth: 4176
+11:01:09 ITS queue Depth: 4241
+11:01:14 ITS queue Depth: 4288
+11:01:19 ITS queue Depth: 4330
+11:01:24 ITS queue Depth: 4378
+11:01:29 ITS queue Depth: 4420
+11:01:34 ITS queue Depth: 4464
+11:01:40 ITS queue Depth: 4509
+11:01:45 ITS queue Depth: 4549
+11:01:50 ITS queue Depth: 4589
+11:01:55 ITS queue Depth: 4640
+11:02:00 ITS queue Depth: 4681
+11:02:05 ITS queue Depth: 4716
+11:02:10 ITS queue Depth: 4772
+11:02:15 ITS queue Depth: 4809
+11:02:20 ITS queue Depth: 4838
+11:02:26 ITS queue Depth: 4886
+11:02:31 ITS queue Depth: 4935
+11:02:36 ITS queue Depth: 4980
+11:02:41 ITS queue Depth: 5022
+11:02:46 ITS queue Depth: 5080
+11:02:51 ITS queue Depth: 5134
+11:02:56 ITS queue Depth: 5176
+11:03:01 ITS queue Depth: 5220
+11:03:07 ITS queue Depth: 5263
+11:03:12 ITS queue Depth: 5303
+11:03:17 ITS queue Depth: 5348
+11:03:22 ITS queue Depth: 5406
+11:03:27 ITS queue Depth: 5452
+11:03:32 ITS queue Depth: 5492
+11:03:37 ITS queue Depth: 5533
+11:03:42 ITS queue Depth: 5567
+11:03:48 ITS queue Depth: 5606
+11:03:53 ITS queue Depth: 5647
+11:03:58 ITS queue Depth: 5685
+11:04:03 ITS queue Depth: 5721
+11:04:08 ITS queue Depth: 5754
+11:04:13 ITS queue Depth: 5794
+11:04:18 ITS queue Depth: 5820
+11:04:23 ITS queue Depth: 5860
+11:04:29 ITS queue Depth: 5886
+11:04:34 ITS queue Depth: 5933
+11:04:39 ITS queue Depth: 5971
+11:04:44 ITS queue Depth: 5991
+11:04:49 ITS queue Depth: 6035
+11:04:54 ITS queue Depth: 6073
+11:04:59 ITS queue Depth: 6106
+11:05:04 ITS queue Depth: 6143
+11:05:10 ITS queue Depth: 6170
+11:05:15 ITS queue Depth: 6209
+11:05:20 ITS queue Depth: 6243
+11:05:25 ITS queue Depth: 6274
+11:05:30 ITS queue Depth: 6309
+11:05:35 ITS queue Depth: 6340
+11:05:40 ITS queue Depth: 6376
+11:05:45 ITS queue Depth: 6406
+11:05:51 ITS queue Depth: 6434
+11:05:56 ITS queue Depth: 6466
+11:06:01 ITS queue Depth: 6506
+11:06:06 ITS queue Depth: 6542
+11:06:11 ITS queue Depth: 6587
+11:06:16 ITS queue Depth: 6655
+11:06:21 ITS queue Depth: 6704
+11:06:26 ITS queue Depth: 6741
+11:06:32 ITS queue Depth: 6772
+11:06:37 ITS queue Depth: 6807
+11:06:42 ITS queue Depth: 6851
+11:06:47 ITS queue Depth: 6886
+11:06:52 ITS queue Depth: 6925
+11:06:57 ITS queue Depth: 6975
+11:07:02 ITS queue Depth: 7003
+11:07:07 ITS queue Depth: 7043
+11:07:13 ITS queue Depth: 7068
+11:07:18 ITS queue Depth: 7101
+11:07:23 ITS queue Depth: 7141
+11:07:28 ITS queue Depth: 7186
+11:07:33 ITS queue Depth: 7213
+11:07:38 ITS queue Depth: 7256
+11:07:43 ITS queue Depth: 7289
+11:07:49 ITS queue Depth: 7325
+11:07:54 ITS queue Depth: 7368
+11:07:59 ITS queue Depth: 7404
+11:08:04 ITS queue Depth: 7438
+11:08:09 ITS queue Depth: 7475
+11:08:14 ITS queue Depth: 7507
+11:08:19 ITS queue Depth: 7544
+11:08:24 ITS queue Depth: 7592
+11:08:29 ITS queue Depth: 7624
+11:08:35 ITS queue Depth: 7668
+11:08:40 ITS queue Depth: 7705
+11:08:45 ITS queue Depth: 7743
+11:08:50 ITS queue Depth: 7768
+11:08:55 ITS queue Depth: 7809
+11:09:00 ITS queue Depth: 7848
+11:09:05 ITS queue Depth: 7889
+11:09:10 ITS queue Depth: 7922
+11:09:16 ITS queue Depth: 7956
+11:09:21 ITS queue Depth: 8000
+11:09:26 ITS queue Depth: 8026
+11:09:31 ITS queue Depth: 8063
+11:09:36 ITS queue Depth: 8119
+11:09:41 ITS queue Depth: 8153
+11:09:46 ITS queue Depth: 8188
+11:09:51 ITS queue Depth: 8236
+11:09:57 ITS queue Depth: 8272
+11:10:02 ITS queue Depth: 8309
+11:10:07 ITS queue Depth: 8365
+11:10:12 ITS queue Depth: 8411
+11:10:17 ITS queue Depth: 8458
+11:10:22 ITS queue Depth: 8498
+11:10:27 ITS queue Depth: 8532
+11:10:33 ITS queue Depth: 8568
+11:10:38 ITS queue Depth: 8613
+11:10:43 ITS queue Depth: 8647
+11:10:48 ITS queue Depth: 8694
+11:10:53 ITS queue Depth: 8738
+11:10:58 ITS queue Depth: 8773
+11:11:03 ITS queue Depth: 8810
+11:11:09 ITS queue Depth: 8849
+11:11:14 ITS queue Depth: 8883
+11:11:19 ITS queue Depth: 8926
+11:11:24 ITS queue Depth: 8971
+11:11:29 ITS queue Depth: 9031
+11:11:34 ITS queue Depth: 9057
+11:11:39 ITS queue Depth: 9104
+11:11:44 ITS queue Depth: 9139
+11:11:50 ITS queue Depth: 9169
+11:11:55 ITS queue Depth: 9205
+11:12:00 ITS queue Depth: 9249
+11:12:05 ITS queue Depth: 9291
+11:12:10 ITS queue Depth: 9341
+11:12:15 ITS queue Depth: 9375
+11:12:21 ITS queue Depth: 9410
+11:12:26 ITS queue Depth: 9450
+11:12:31 ITS queue Depth: 9507
+11:12:36 ITS queue Depth: 9522
+11:12:41 ITS queue Depth: 9412, 110 Messages removed, 21.46 Messages per second, Predicted time to reach 0 depth: 11:20:00 
+11:12:41 ALERT: First decrease in ITS queue: 9412
+11:12:46 ITS queue Depth: 9309, 103 Messages removed, 20.13 Messages per second, Predicted time to reach 0 depth: 11:20:29 
+11:12:51 ITS queue Depth: 9197, 112 Messages removed, 21.86 Messages per second, Predicted time to reach 0 depth: 11:19:52 
+11:12:56 ITS queue Depth: 9092, 105 Messages removed, 20.49 Messages per second, Predicted time to reach 0 depth: 11:20:20 
+11:13:02 ITS queue Depth: 8984, 108 Messages removed, 21.06 Messages per second, Predicted time to reach 0 depth: 11:20:08 
+11:13:07 ITS queue Depth: 8873, 111 Messages removed, 21.64 Messages per second, Predicted time to reach 0 depth: 11:19:57 
+11:13:12 ITS queue Depth: 8761, 112 Messages removed, 21.71 Messages per second, Predicted time to reach 0 depth: 11:19:55 
+11:13:17 ITS queue Depth: 8650, 111 Messages removed, 21.46 Messages per second, Predicted time to reach 0 depth: 11:20:00 
+11:13:22 ITS queue Depth: 8547, 103 Messages removed, 20.13 Messages per second, Predicted time to reach 0 depth: 11:20:27 
+11:13:27 ITS queue Depth: 8436, 111 Messages removed, 21.22 Messages per second, Predicted time to reach 0 depth: 11:20:05 
+11:13:32 ITS queue Depth: 8322, 114 Messages removed, 22.24 Messages per second, Predicted time to reach 0 depth: 11:19:47 
+11:13:38 ITS queue Depth: 8216, 106 Messages removed, 20.70 Messages per second, Predicted time to reach 0 depth: 11:20:14 
+11:13:43 ITS queue Depth: 8110, 106 Messages removed, 20.68 Messages per second, Predicted time to reach 0 depth: 11:20:15 
+11:13:48 ITS queue Depth: 8003, 107 Messages removed, 20.87 Messages per second, Predicted time to reach 0 depth: 11:20:11 
+11:13:53 ITS queue Depth: 7894, 109 Messages removed, 21.31 Messages per second, Predicted time to reach 0 depth: 11:20:03 
+11:13:58 ITS queue Depth: 7781, 113 Messages removed, 21.90 Messages per second, Predicted time to reach 0 depth: 11:19:53 
+11:14:03 ITS queue Depth: 7670, 111 Messages removed, 21.69 Messages per second, Predicted time to reach 0 depth: 11:19:57 
+11:14:08 ITS queue Depth: 7563, 107 Messages removed, 20.91 Messages per second, Predicted time to reach 0 depth: 11:20:10 
+11:14:13 ITS queue Depth: 7449, 114 Messages removed, 22.21 Messages per second, Predicted time to reach 0 depth: 11:19:49 
+11:14:19 ITS queue Depth: 7342, 107 Messages removed, 20.92 Messages per second, Predicted time to reach 0 depth: 11:20:09 
+11:14:24 ITS queue Depth: 7233, 109 Messages removed, 21.26 Messages per second, Predicted time to reach 0 depth: 11:20:04 
+11:14:29 ITS queue Depth: 7120, 113 Messages removed, 22.12 Messages per second, Predicted time to reach 0 depth: 11:19:51 
+11:14:34 ITS queue Depth: 7009, 111 Messages removed, 21.15 Messages per second, Predicted time to reach 0 depth: 11:20:05 
+11:14:39 ITS queue Depth: 6896, 113 Messages removed, 22.08 Messages per second, Predicted time to reach 0 depth: 11:19:52 
+11:14:44 ITS queue Depth: 6789, 107 Messages removed, 20.81 Messages per second, Predicted time to reach 0 depth: 11:20:11 
+11:14:49 ITS queue Depth: 6682, 107 Messages removed, 20.96 Messages per second, Predicted time to reach 0 depth: 11:20:08 
+11:14:55 ITS queue Depth: 6578, 104 Messages removed, 20.31 Messages per second, Predicted time to reach 0 depth: 11:20:18 
+11:15:00 ITS queue Depth: 6471, 107 Messages removed, 20.08 Messages per second, Predicted time to reach 0 depth: 11:20:22 
+11:15:05 ITS queue Depth: 6366, 105 Messages removed, 20.23 Messages per second, Predicted time to reach 0 depth: 11:20:20 
+11:15:10 ITS queue Depth: 6261, 105 Messages removed, 20.50 Messages per second, Predicted time to reach 0 depth: 11:20:16 
+11:15:15 ITS queue Depth: 6155, 106 Messages removed, 20.69 Messages per second, Predicted time to reach 0 depth: 11:20:13 
+11:15:20 ITS queue Depth: 6048, 107 Messages removed, 20.95 Messages per second, Predicted time to reach 0 depth: 11:20:09 
+11:15:26 ITS queue Depth: 5965, 83 Messages removed, 16.24 Messages per second, Predicted time to reach 0 depth: 11:21:33 
+11:15:31 ITS queue Depth: 5869, 96 Messages removed, 18.76 Messages per second, Predicted time to reach 0 depth: 11:20:43 
+11:15:36 ITS queue Depth: 5779, 90 Messages removed, 17.54 Messages per second, Predicted time to reach 0 depth: 11:21:05 
+11:15:41 ITS queue Depth: 5672, 107 Messages removed, 20.91 Messages per second, Predicted time to reach 0 depth: 11:20:12 
+11:15:46 ITS queue Depth: 5555, 117 Messages removed, 22.87 Messages per second, Predicted time to reach 0 depth: 11:19:49 
+11:15:51 ITS queue Depth: 5447, 108 Messages removed, 21.15 Messages per second, Predicted time to reach 0 depth: 11:20:09 
+11:15:56 ITS queue Depth: 5331, 116 Messages removed, 22.65 Messages per second, Predicted time to reach 0 depth: 11:19:52 
+11:16:01 ITS queue Depth: 5227, 104 Messages removed, 20.36 Messages per second, Predicted time to reach 0 depth: 11:20:18 
+11:16:07 ITS queue Depth: 5112, 115 Messages removed, 22.39 Messages per second, Predicted time to reach 0 depth: 11:19:55 
+11:16:12 ITS queue Depth: 5000, 112 Messages removed, 21.81 Messages per second, Predicted time to reach 0 depth: 11:20:01 
+11:16:17 ITS queue Depth: 4915, 85 Messages removed, 16.60 Messages per second, Predicted time to reach 0 depth: 11:21:13 
+11:16:22 ITS queue Depth: 4794, 121 Messages removed, 23.60 Messages per second, Predicted time to reach 0 depth: 11:19:45 
+11:16:27 ITS queue Depth: 4688, 106 Messages removed, 20.74 Messages per second, Predicted time to reach 0 depth: 11:20:13 
+11:16:32 ITS queue Depth: 4575, 113 Messages removed, 22.13 Messages per second, Predicted time to reach 0 depth: 11:19:59 
+11:16:37 ITS queue Depth: 4464, 111 Messages removed, 21.65 Messages per second, Predicted time to reach 0 depth: 11:20:03 
+11:16:43 ITS queue Depth: 4358, 106 Messages removed, 20.09 Messages per second, Predicted time to reach 0 depth: 11:20:19 
+11:16:48 ITS queue Depth: 4248, 110 Messages removed, 21.28 Messages per second, Predicted time to reach 0 depth: 11:20:07 
+11:16:53 ITS queue Depth: 4140, 108 Messages removed, 20.95 Messages per second, Predicted time to reach 0 depth: 11:20:10 
+11:16:58 ITS queue Depth: 4024, 116 Messages removed, 22.65 Messages per second, Predicted time to reach 0 depth: 11:19:56 
+11:17:03 ITS queue Depth: 3908, 116 Messages removed, 22.00 Messages per second, Predicted time to reach 0 depth: 11:20:01 
+11:17:08 ITS queue Depth: 3802, 106 Messages removed, 20.69 Messages per second, Predicted time to reach 0 depth: 11:20:12 
+11:17:14 ITS queue Depth: 3690, 112 Messages removed, 21.20 Messages per second, Predicted time to reach 0 depth: 11:20:08 
+11:17:19 ITS queue Depth: 3585, 105 Messages removed, 20.43 Messages per second, Predicted time to reach 0 depth: 11:20:14 
+11:17:24 ITS queue Depth: 3487, 98 Messages removed, 19.17 Messages per second, Predicted time to reach 0 depth: 11:20:26 
+11:17:29 ITS queue Depth: 3379, 108 Messages removed, 21.15 Messages per second, Predicted time to reach 0 depth: 11:20:09 
+11:17:34 ITS queue Depth: 3269, 110 Messages removed, 21.50 Messages per second, Predicted time to reach 0 depth: 11:20:06 
+11:17:39 ITS queue Depth: 3159, 110 Messages removed, 21.49 Messages per second, Predicted time to reach 0 depth: 11:20:06 
+11:17:44 ITS queue Depth: 3044, 115 Messages removed, 22.44 Messages per second, Predicted time to reach 0 depth: 11:20:00 
+11:17:49 ITS queue Depth: 2932, 112 Messages removed, 21.80 Messages per second, Predicted time to reach 0 depth: 11:20:04 
+11:17:55 ITS queue Depth: 2814, 118 Messages removed, 23.05 Messages per second, Predicted time to reach 0 depth: 11:19:57 
+11:18:00 ITS queue Depth: 2708, 106 Messages removed, 20.72 Messages per second, Predicted time to reach 0 depth: 11:20:10 
+11:18:05 ITS queue Depth: 2595, 113 Messages removed, 22.04 Messages per second, Predicted time to reach 0 depth: 11:20:03 
+11:18:10 ITS queue Depth: 2484, 111 Messages removed, 21.70 Messages per second, Predicted time to reach 0 depth: 11:20:04 
+11:18:15 ITS queue Depth: 2381, 103 Messages removed, 20.10 Messages per second, Predicted time to reach 0 depth: 11:20:14 
+11:18:20 ITS queue Depth: 2274, 107 Messages removed, 20.32 Messages per second, Predicted time to reach 0 depth: 11:20:12 
+11:18:25 ITS queue Depth: 2158, 116 Messages removed, 22.62 Messages per second, Predicted time to reach 0 depth: 11:20:01 
+11:18:31 ITS queue Depth: 2047, 111 Messages removed, 21.72 Messages per second, Predicted time to reach 0 depth: 11:20:05 
+11:18:36 ITS queue Depth: 1942, 105 Messages removed, 20.33 Messages per second, Predicted time to reach 0 depth: 11:20:11 
+11:18:41 ITS queue Depth: 1834, 108 Messages removed, 21.08 Messages per second, Predicted time to reach 0 depth: 11:20:08 
+11:18:46 ITS queue Depth: 1729, 105 Messages removed, 20.45 Messages per second, Predicted time to reach 0 depth: 11:20:11 
+11:18:51 ITS queue Depth: 1614, 115 Messages removed, 22.19 Messages per second, Predicted time to reach 0 depth: 11:20:04 
+11:18:56 ITS queue Depth: 1500, 114 Messages removed, 22.24 Messages per second, Predicted time to reach 0 depth: 11:20:04 
+11:19:01 ITS queue Depth: 1390, 110 Messages removed, 21.43 Messages per second, Predicted time to reach 0 depth: 11:20:06 
+11:19:07 ITS queue Depth: 1280, 110 Messages removed, 21.43 Messages per second, Predicted time to reach 0 depth: 11:20:06 
+11:19:12 ITS queue Depth: 1166, 114 Messages removed, 22.28 Messages per second, Predicted time to reach 0 depth: 11:20:04 
+11:19:17 ITS queue Depth: 1047, 119 Messages removed, 23.31 Messages per second, Predicted time to reach 0 depth: 11:20:02 
+11:19:22 ITS queue Depth: 941, 106 Messages removed, 20.64 Messages per second, Predicted time to reach 0 depth: 11:20:08 
+11:19:27 ITS queue Depth: 828, 113 Messages removed, 22.03 Messages per second, Predicted time to reach 0 depth: 11:20:05 
+11:19:32 ITS queue Depth: 716, 112 Messages removed, 21.93 Messages per second, Predicted time to reach 0 depth: 11:20:05 
+11:19:37 ITS queue Depth: 609, 107 Messages removed, 20.91 Messages per second, Predicted time to reach 0 depth: 11:20:06 
+11:19:42 ITS queue Depth: 497, 112 Messages removed, 21.87 Messages per second, Predicted time to reach 0 depth: 11:20:05 
+11:19:48 ITS queue Depth: 381, 116 Messages removed, 22.64 Messages per second, Predicted time to reach 0 depth: 11:20:04 
+11:19:53 ITS queue Depth: 275, 106 Messages removed, 20.67 Messages per second, Predicted time to reach 0 depth: 11:20:06 
+11:19:58 ITS queue Depth: 158, 117 Messages removed, 22.36 Messages per second, Predicted time to reach 0 depth: 11:20:05 
+11:20:03 ITS queue Depth: 43, 115 Messages removed, 21.53 Messages per second, Predicted time to reach 0 depth: 11:20:05 
+11:20:13 ALERT: Run done, ITS queue clear.
+Alert: Queue depth has increased from 0!
+11:23:29 ALERT: Run started, ITS queue depth 33
+11:23:29 ITS queue Depth: 33
+11:23:34 ITS queue Depth: 78
+11:23:39 ITS queue Depth: 117
+11:23:44 ITS queue Depth: 142
+11:23:49 ITS queue Depth: 165
+11:23:55 ITS queue Depth: 192
+11:24:00 ITS queue Depth: 222
+11:24:05 ITS queue Depth: 253
+11:24:10 ITS queue Depth: 280
+11:24:15 ITS queue Depth: 326
+11:24:20 ITS queue Depth: 379
+11:24:25 ITS queue Depth: 408
+11:24:30 ITS queue Depth: 439
+11:24:36 ITS queue Depth: 470
+11:24:41 ITS queue Depth: 491
+11:24:46 ITS queue Depth: 516
+11:24:51 ITS queue Depth: 549
+11:24:56 ITS queue Depth: 572
+11:25:01 ITS queue Depth: 605
+11:25:06 ITS queue Depth: 630

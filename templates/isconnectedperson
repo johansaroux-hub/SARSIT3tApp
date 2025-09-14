@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<title>Edit Beneficiary</title>
+<style>
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background: #f5f7fa;
+      margin: 0;
+      padding: 0;
+    }
+    .container {
+      max-width: 800px;
+      margin: 40px auto;
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+      padding: 32px 40px 24px 40px;
+    }
+    h2 {
+      text-align: center;
+      color: #2a4d69;
+      margin-bottom: 24px;
+    }
+    form label {
+      display: block;
+      margin-top: 18px;
+      font-weight: 500;
+      color: #2a4d69;
+    }
+    form input[type="text"],
+    form input[type="email"],
+    form input[type="date"],
+    form select {
+      width: 100%;
+      padding: 10px 12px;
+      margin-top: 6px;
+      border: 1px solid #bfc9d1;
+      border-radius: 6px;
+      font-size: 1rem;
+      background: #f9fbfc;
+      transition: border 0.2s;
+    }
+    form input[type="text"]:focus,
+    form input[type="email"]:focus,
+    form input[type="date"]:focus,
+    form select:focus {
+      border: 1.5px solid #4a90e2;
+      outline: none;
+      background: #fff;
+    }
+    fieldset {
+      border: 1px solid #e3e7ed;
+      border-radius: 8px;
+      margin-top: 24px;
+      padding: 16px 18px 10px 18px;
+      background: #f7fafd;
+    }
+    legend {
+      font-weight: 600;
+      color: #41729f;
+      padding: 0 8px;
+    }
+    .checkbox-row {
+      margin-top: 10px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .checkbox-row label {
+      margin: 0;
+    }
+    .form-actions {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      margin-top: 28px;
+    }
+    button[type="submit"],
+    .cancel-btn {
+      width: 100%;
+      border: none;
+      border-radius: 6px;
+      padding: 14px 0;
+      font-size: 1.1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    button[type="submit"] {
+      background: #41729f;
+      color: #fff;
+    }
+    button[type="submit"]:hover {
+      background: #2a4d69;
+    }
+    .cancel-btn {
+      background: #f8d7da;
+      color: #721c24;
+    }
+    .cancel-btn:hover {
+      background: #f5c6cb;
+    }
+    @media (max-width: 600px) {
+      .container { padding: 16px 6px; }
+    }
+  </style>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  const form = document.querySelector('form');
+  form.addEventListener('submit', function (e) {
+    const nature = form.querySelector('[name="nature_of_person"]').value;
+    const idType = form.querySelector('[name="identification_type"]').value;
+    const idNumber = form.querySelector('[name="id_number"]').value.trim();
+    const passportNumber = form.querySelector('[name="passport_number"]').value.trim();
+    const dob = form.querySelector('[name="date_of_birth"]').value.trim();
+    const companyReg = form.querySelector('[name="company_registration_number"]').value.trim();
+    const companyName = form.querySelector('[name="company_registered_name"]').value.trim();
+    const firstName = form.querySelector('[name="first_name"]').value.trim();
+    const lastName = form.querySelector('[name="last_name"]').value.trim();
+    const taxRef = form.querySelector('[name="tax_reference_number"]').value.trim();
+    const postalSame = form.querySelector('[name="postal_same_as_physical"]').checked;
+    const postalFields = [
+      form.querySelector('[name="postal_address_line1"]').value.trim(),
+      form.querySelector('[name="postal_address_line2"]').value.trim(),
+      form.querySelector('[name="postal_address_line3"]').value.trim(),
+      form.querySelector('[name="postal_address_line4"]').value.trim(),
+      form.querySelector('[name="postal_code"]').value.trim()
+    ];
+    const contactNumber = form.querySelector('[name="contact_number"]').value.trim();
+    const cellNumber = form.querySelector('[name="cell_number"]').value.trim();
+    const email = form.querySelector('[name="email"]').value.trim();
+
+    let errors = [];
+
+    if (!firstName) errors.push("First Name is required.");
+    if (!lastName) errors.push("Last Name is required.");
+    if (!taxRef) errors.push("Tax Reference Number is required.");
+    if (!nature) errors.push("Nature of Person must be selected.");
+    if (!idType) errors.push("Identification Type must be selected.");
+
+    if (nature === "Individual") {
+      if (!dob) errors.push("Date of Birth is required for Individuals.");
+      if (idType === "001" && !idNumber) errors.push("ID Number is required for South African ID.");
+      if (idType === "002" && !passportNumber) errors.push("Passport Number is required for Passport identification.");
+    }
+
+    if (nature === "Company") {
+      if (!companyReg) errors.push("Company Registration Number is required for Companies.");
+      if (!companyName) errors.push("Company Registered Name is required for Companies.");
+    }
+
+    if (!postalSame && postalFields.every(f => !f)) {
+      errors.push("Postal address is required if not same as physical.");
+    }
+
+    if (!email) {
+      errors.push("Email address is required.");
+    }
+
+    if (!contactNumber && !cellNumber) {
+      errors.push("At least one contact detail (telephone or cell phone number) must be provided.");
+    }
+
+    if (errors.length > 0) {
+      alert("Please correct the following errors:\n" + errors.join("\n"));
+      e.preventDefault();
+    }
+  });
+});
+</script>
+</head>
+<body>
+<div class="container">
+<h2>Edit Beneficiary</h2>
+<form method="POST">
+<label for="trust_name">Trust Name</label>
+<input id="trust_name" name="trust_name" readonly="" type="text" value="{{ trust['TrustName'] }}"/>
+<input name="trust_id" type="hidden" value="{{ trust['TrustID'] }}"/>
+<fieldset>
+<legend>Personal Details</legend>
+<label>Tax Reference Number</label>
+<input name="tax_reference_number" type="text" value="{{ beneficiary['TaxReferenceNumber'] or '' }}"/>
+<label>Last Name</label>
+<input name="last_name" type="text" value="{{ beneficiary['LastName'] }}"/>
+<label>First Name</label>
+<input name="first_name" type="text" value="{{ beneficiary['FirstName'] }}"/>
+<label>Other Name</label>
+<input name="other_name" type="text" value="{{ beneficiary['OtherName'] or '' }}"/>
+<label>Initials</label>
+<input name="initials" type="text" value="{{ beneficiary['Initials'] or '' }}"/>
+<label>Date of Birth</label>
+<input name="date_of_birth" type="date" value="{{ beneficiary['DateOfBirth'] or '' }}"/>
+<label>ID Number</label>
+<input name="id_number" type="text" value="{{ beneficiary['IDNumber'] or '' }}"/>
+<label>Identification Type</label>
+<select name="identification_type">
+<option value="001">{% if beneficiary['IdentificationType'] == '001' %}selected{% endif %} South African ID</option>
+<option value="002">{% if beneficiary['IdentificationType'] == '002' %}selected{% endif %} Passport</option>
+</select>
+<label>Passport Number</label>
+<input name="passport_number" type="text" value="{{ beneficiary['PassportNumber'] or '' }}"/>
+<label>Passport Country</label>
+<input name="passport_country" type="text" value="{{ beneficiary['PassportCountry'] or '' }}"/>
+<label>Passport Issue Date</label>
+<input name="passport_issue_date" type="date" value="{{ beneficiary['PassportIssueDate'] or '' }}"/>
+<label>Nature of Person</label>
+<!--  nature_of_person  -->
+<select name="nature_of_person">
+<option value="Individual">Individual</option>
+<option value="Company">Company</option>
+<option value="001">{% if beneficiary['NatureOfPerson'] == '001' %}selected{% endif %} South African ID</option>
+<option value="002">{% if beneficiary['NatureOfPerson'] == '002' %}selected{% endif %} Passport</option>
+</select>
+</fieldset>
+<fieldset>
+<legend>Company Details</legend>
+<label>Company Registration Number</label>
+<input name="company_registration_number" type="text" value="{{ beneficiary['CompanyRegistrationNumber'] or '' }}"/>
+<label>Company Registered Name</label>
+<input name="company_registered_name" type="text" value="{{ beneficiary['CompanyRegisteredName'] or '' }}"/>
+</fieldset>
+<fieldset>
+<legend>Relationship and Financial Flags</legend>
+<div class="checkbox-row"><input %}="" %}checked{%="" beneficiary['isconnectedperson']="" endif="" if="" name="is_connected_person" type="checkbox" value="1" {%=""/><label>Connected Person</label></div>
+<div class="checkbox-row"><input %}="" %}checked{%="" beneficiary['isbeneficiary']="" endif="" if="" name="is_beneficiary" type="checkbox" value="1" {%=""/><label>Beneficiary</label></div>
+<div class="checkbox-row"><input %}="" %}checked{%="" beneficiary['isfounder']="" endif="" if="" name="is_founder" type="checkbox" value="1" {%=""/><label>Founder</label></div>
+<div class="checkbox-row"><input %}="" %}checked{%="" beneficiary['isnaturalperson']="" endif="" if="" name="is_natural_person" type="checkbox" value="1" {%=""/><label>Natural Person</label></div>
+<div class="checkbox-row"><input %}="" %}checked{%="" beneficiary['isdonor']="" endif="" if="" name="is_donor" type="checkbox" value="1" {%=""/><label>Donor</label></div>
+<div class="checkbox-row"><input %}="" %}checked{%="" beneficiary['isnonresident']="" endif="" if="" name="is_non_resident" type="checkbox" value="1" {%=""/><label>Non Resident</label></div>
+<div class="checkbox-row"><input %}="" %}checked{%="" beneficiary['istaxableondistributed']="" endif="" if="" name="is_taxable_on_distributed" type="checkbox" value="1" {%=""/><label>Taxable On Distributed</label></div>
+<div class="checkbox-row"><input %}="" %}checked{%="" beneficiary['hasnontaxableamounts']="" endif="" if="" name="has_non_taxable_amounts" type="checkbox" value="1" {%=""/><label>Has Non Taxable Amounts</label></div>
+<div class="checkbox-row"><input %}="" %}checked{%="" beneficiary['hascapitaldistribution']="" endif="" if="" name="has_capital_distribution" type="checkbox" value="1" {%=""/><label>Has Capital Distribution</label></div>
+<div class="checkbox-row"><input %}="" %}checked{%="" beneficiary['hasloansgranted']="" endif="" if="" name="has_loans_granted" type="checkbox" value="1" {%=""/><label>Has Loans Granted</label></div>
+<div class="checkbox-row"><input %}="" %}checked{%="" beneficiary['hasloansfrom']="" endif="" if="" name="has_loans_from" type="checkbox" value="1" {%=""/><label>Has Loans From</label></div>
+<div class="checkbox-row"><input %}="" %}checked{%="" beneficiary['madedonations']="" endif="" if="" name="made_donations" type="checkbox" value="1" {%=""/><label>Made Donations</label></div>
+<div class="checkbox-row"><input %}="" %}checked{%="" beneficiary['madecontributions']="" endif="" if="" name="made_contributions" type="checkbox" value="1" {%=""/><label>Made Contributions</label></div>
+<div class="checkbox-row"><input %}="" %}checked{%="" beneficiary['receiveddonations']="" endif="" if="" name="received_donations" type="checkbox" value="1" {%=""/><label>Received Donations</label></div>
+<div class="checkbox-row"><input %}="" %}checked{%="" beneficiary['receivedcontributions']="" endif="" if="" name="received_contributions" type="checkbox" value="1" {%=""/><label>Received Contributions</label></div>
+<div class="checkbox-row"><input %}="" %}checked{%="" beneficiary['madedistributions']="" endif="" if="" name="made_distributions" type="checkbox" value="1" {%=""/><label>Made Distributions</label></div>
+<div class="checkbox-row"><input %}="" %}checked{%="" beneficiary['receivedrefunds']="" endif="" if="" name="received_refunds" type="checkbox" value="1" {%=""/><label>Received Refunds</label></div>
+<div class="checkbox-row"><input %}="" %}checked{%="" beneficiary['hasrightofuse']="" endif="" if="" name="has_right_of_use" type="checkbox" value="1" {%=""/><label>Has Right Of Use</label></div></fieldset>
+<fieldset>
+<legend>Address Details</legend>
+<label>Physical Unit Number</label>
+<input name="physical_unit_number" type="text" value="{{ beneficiary['PhysicalUnitNumber'] or '' }}"/>
+<label>Physical Complex</label>
+<input name="physical_complex" type="text" value="{{ beneficiary['PhysicalComplex'] or '' }}"/>
+<label>Physical Street Number</label>
+<input name="physical_street_number" type="text" value="{{ beneficiary['PhysicalStreetNumber'] or '' }}">
+<label>Physical Street</label>
+<input name="physical_street" type="text" value="{{ beneficiary['PhysicalStreet'] or '' }}">
+<label>Physical Suburb</label>
+<input name="physical_suburb" type="text" value="{{ beneficiary['PhysicalSuburb'] or '' }}"/>
+<label>Physical City</label>
+<input name="physical_city" type="text" value="{{ beneficiary['PhysicalCity'] or '' }}"/>
+<label>Physical Postal Code</label>
+<input name="physical_postal_code" type="text" value="{{ beneficiary['PhysicalPostalCode'] or '' }}"/>
+<div class="checkbox-row">
+<input %}="" %}checked{%="" beneficiary['postalsameasphysical']="" endif="" if="" name="postal_same_as_physical" type="checkbox" value="1" {%=""/>
+<label>Postal Address Same as Physical</label>
+</div>
+<label>Postal Address Line 1</label>
+<input name="postal_address_line1" type="text" value="{{ beneficiary['PostalAddressLine1'] or '' }}"/>
+<label>Postal Address Line 2</label>
+<input name="postal_address_line2" type="text" value="{{ beneficiary['PostalAddressLine2'] or '' }}">
+<label>Postal Address Line 3</label>
+<input name="postal_address_line3" type="text" value="{{ beneficiary['PostalAddressLine3'] or '' }}"/>
+<label>Postal Address Line 4</label>
+<input name="postal_address_line4" type="text" value="{{ beneficiary['PostalAddressLine4'] or '' }}"/>
+<label>Postal Code</label>
+<input name="postal_code" type="text" value="{{ beneficiary['PostalCode'] or '' }}"/>
+</input></input></input></fieldset>
+<fieldset>
+<legend>Contact Details</legend>
+<label>Telephone Number</label>
+<input name="contact_number" type="text" value="{{ beneficiary['ContactNumber'] or '' }}"/>
+<label>Cell Phone Number</label>
+<input name="cell_number" type="text" value="{{ beneficiary['CellNumber'] or '' }}"/>
+<label>Email</label>
+<input name="email" type="email" value="{{ beneficiary['Email'] or '' }}"/>
+</fieldset>
+<div class="form-actions">
+<button class="cancel-btn" onclick="window.location.href='{{ url_for('view_beneficiaries', trust_id=trust['TrustID']) }}'" type="button">Cancel</button>
+<button type="submit">Submit</button>
+</div>
+</form>
+</div>
+<div class="form-group">
+<label for="company_income_tax_ref_no">Company Income Tax Reference Number</label>
+<input class="form-control" id="company_income_tax_ref_no" name="company_income_tax_ref_no" type="text" value="{{ beneficiary.CompanyIncomeTaxRefNo }}"/>
+</div>
+
+</body>
+</html>

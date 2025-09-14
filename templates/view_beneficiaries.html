@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>View Beneficiaries</title>
+    <style>
+        body {
+          font-family: 'Segoe UI', Arial, sans-serif;
+          background: #f5f7fa;
+          margin: 0;
+          padding: 0;
+        }
+        .container {
+          max-width: 900px;
+          margin: 40px auto;
+          background: #fff;
+          border-radius: 12px;
+          box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+          padding: 32px 40px 24px 40px;
+          overflow-x: auto;
+        }
+        h2 {
+          text-align: center;
+          color: #2a4d69;
+          margin-bottom: 24px;
+        }
+        table {
+          width: 100%;
+          border-collapse: collapse;
+          margin-top: 20px;
+        }
+        th, td {
+          border: 1px solid #e3e7ed;
+          padding: 10px;
+          text-align: left;
+          max-width: 180px;
+          word-wrap: break-word;
+        }
+        th {
+          background: #f7fafd;
+          color: #2a4d69;
+        }
+        tr:nth-child(even) {
+          background: #f9fbfc;
+        }
+        .btn-edit {
+          background: #41729f;
+          color: #fff;
+          border: none;
+          padding: 6px 12px;
+          border-radius: 4px;
+          cursor: pointer;
+        }
+        .btn-edit:hover {
+          background: #2a4d69;
+        }
+        .btn-delete {
+          background: #e57373;
+          color: #fff;
+          border: none;
+          padding: 6px 12px;
+          border-radius: 4px;
+          cursor: pointer;
+        }
+        .btn-delete:hover {
+          background: #d32f2f;
+        }
+        .actions {
+          margin-bottom: 20px;
+          display: flex;
+          justify-content: space-between;
+        }
+        .actions a button {
+          padding: 10px 16px;
+          font-size: 1rem;
+          border-radius: 6px;
+          border: none;
+          cursor: pointer;
+        }
+        .add-btn {
+          background: #41729f;
+          color: #fff;
+        }
+        .add-btn:hover {
+          background: #2a4d69;
+        }
+        .back-btn {
+          background: #f8d7da;
+          color: #721c24;
+        }
+        .back-btn:hover {
+          background: #f5c6cb;
+        }
+        @media (max-width: 768px) {
+          .container {
+            padding: 16px;
+          }
+          table, th, td {
+            font-size: 0.9rem;
+          }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h2>View Beneficiaries for {{ trust['TrustName'] }}</h2>
+
+    <div class="actions">
+        <a href="{{ url_for('add_beneficiary', trust_id=trust['TrustID']) }}">
+            <button class="add-btn">Add New Beneficiary</button>
+        </a>
+
+
+        <a href="{{ url_for('trusts_list', mode=mode) }}">
+            <button class="back-btn">Back to Trusts</button>
+        </a>
+    </div>
+
+    <table>
+        <thead>
+        <tr>
+            <th>Tax Reference Number</th>
+            <th>Last Name</th>
+            <th>First Name</th>
+            <th>Initials</th>
+            <th>ID Number</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for beneficiary in beneficiaries %}
+        <tr>
+            <td>{{ beneficiary['TaxReferenceNumber'] or 'N/A' }}</td>
+            <td>{{ beneficiary['LastName'] }}</td>
+            <td>{{ beneficiary['FirstName'] }}</td>
+            <td>{{ beneficiary['Initials'] or 'N/A' }}</td>
+            <td>{{ beneficiary['IDNumber'] or 'N/A' }}</td>
+            <td>
+                <a href="{{ url_for('edit_beneficiary', beneficiary_id=beneficiary['BeneficiaryID']) }}">
+                    <button class="btn-edit">Edit</button>
+                </a>
+
+                <a href="{{ url_for('delete_beneficiary', beneficiary_id=beneficiary['BeneficiaryID']) }}"
+                   onclick="return confirm('Are you sure you want to delete this beneficiary?');">
+                    <button class="btn-delete">Delete</button>
+                </a>
+            </td>
+        </tr>
+        {% else %}
+        <tr>
+            <td colspan="6" style="text-align:center; color:#888;">No beneficiaries found for this trust.</td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+</body>
+</html>

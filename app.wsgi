@@ -1,0 +1,1 @@
+from app import app as application  # Replace 'your_app_module' with your main app file name (without .py)

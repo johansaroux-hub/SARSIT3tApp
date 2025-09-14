@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Add Trust</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background: #f5f7fa;
+      margin: 0;
+      padding: 0;
+    }
+    .container {
+      max-width: 700px;
+      margin: 40px auto;
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+      padding: 32px 40px 24px 40px;
+    }
+    h2 {
+      text-align: center;
+      color: #2a4d69;
+      margin-bottom: 24px;
+    }
+    form label {
+      display: block;
+      margin-top: 18px;
+      font-weight: 500;
+      color: #2a4d69;
+    }
+    form input[type="text"],
+    form input[type="email"],
+    form select {
+      width: 100%;
+      padding: 10px 12px;
+      margin-top: 6px;
+      border: 1px solid #bfc9d1;
+      border-radius: 6px;
+      font-size: 1rem;
+      background: #f9fbfc;
+      transition: border 0.2s;
+    }
+    form input[type="text"]:focus,
+    form input[type="email"]:focus,
+    form select:focus {
+      border: 1.5px solid #4a90e2;
+      outline: none;
+      background: #fff;
+    }
+    fieldset {
+      border: 1px solid #e3e7ed;
+      border-radius: 8px;
+      margin-top: 18px;
+      padding: 16px 18px 10px 18px;
+      background: #f7fafd;
+    }
+    legend {
+      font-weight: 600;
+      color: #41729f;
+      padding: 0 8px;
+    }
+    .address-fields {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px 18px;
+    }
+    .address-fields input {
+      margin-top: 0;
+    }
+    .checkbox-row {
+      margin-top: 10px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    button[type="submit"],
+    .cancel-btn {
+      width: 100%;
+      border: none;
+      border-radius: 6px;
+      padding: 14px 0;
+      font-size: 1.1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    button[type="submit"] {
+      background: #41729f;
+      color: #fff;
+    }
+    button[type="submit"]:hover {
+      background: #2a4d69;
+    }
+    .cancel-btn {
+      background: #f8d7da;
+      color: #721c24;
+    }
+    .cancel-btn:hover {
+      background: #f5c6cb;
+    }
+    .required {
+      color: #e74c3c;
+      margin-left: 2px;
+    }
+    @media (max-width: 600px) {
+      .container { padding: 16px 6px; }
+      .address-fields { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Add Trust for IT3(t) Reporting</h2>
+    <form id="trustForm" method="post" novalidate autocomplete="off">
+
+      <!-- Trust Registration Number: Free text -->
+      <label for="TrustRegNumber">Trust Registration Number <span class="required">*</span></label>
+      <input type="text" id="TrustRegNumber" name="TrustRegNumber" maxlength="15"
+        placeholder="Unique trust registration number (e.g., IT123456/2025)" required />
+
+      <label for="TrustName">Trust Name <span class="required">*</span></label>
+      <input type="text" id="TrustName" name="TrustName" maxlength="120" required
+        placeholder="Legal name of the trust (e.g., Smith Family Trust)" />
+
+      <label for="TaxNumber">Tax Number <span class="required">*</span></label>
+      <input type="text" id="TaxNumber" name="TaxNumber" required maxlength="10"
+        pattern="^[012379]\d{9}$"
+        placeholder="Tax reference number (mandatory)" />
+
+      <label for="NatureOfPerson">Nature of Person</label>
+      <select id="NatureOfPerson" name="NatureOfPerson">
+        <option value="Inter Vivos Trust">Inter Vivos Trust</option>
+        <option value="Testamentary Trust">Testamentary Trust</option>
+      </select>
+
+      <label for="TrustType">Trust Type</label>
+      <select id="TrustType" name="TrustType">
+        <option value="Inter Vivos">Inter Vivos</option>
+        <option value="Testamentary">Testamentary</option>
+      </select>
+
+      <label for="Residency">Residency for Tax Purposes</label>
+      <select id="Residency" name="Residency">
+        <option value="South Africa (ZA)">South Africa (ZA)</option>
+        <option value="Not Specified">Not Specified</option>
+      </select>
+
+      <label for="MastersOffice">Masters Office Registration</label>
+      <input type="text" id="MastersOffice" name="MastersOffice" maxlength="50"
+        placeholder="Masters office where the trust is registered (e.g., PRETORIA)" />
+
+      <fieldset>
+        <legend>Physical Address</legend>
+        <div class="address-fields">
+          <input type="text" id="PhysicalUnitNumber" name="PhysicalUnitNumber" maxlength="8" placeholder="Unit number for physical address (optional)" />
+          <input type="text" id="PhysicalComplex" name="PhysicalComplex" maxlength="27" placeholder="Complex name for physical address (optional)" />
+          <input type="text" id="PhysicalStreetNumber" name="PhysicalStreetNumber" maxlength="8" placeholder="Street number for physical address (e.g., 902, optional)" />
+          <input type="text" id="PhysicalStreet" name="PhysicalStreet" maxlength="27" placeholder="Street name for physical address (e.g., ARCADIA STR, optional)" />
+          <input type="text" id="PhysicalSuburb" name="PhysicalSuburb" maxlength="36" placeholder="Suburb or district (e.g., HATFIELD, optional)" />
+          <input type="text" id="PhysicalCity" name="PhysicalCity" maxlength="36" placeholder="City or town (e.g., PRETORIA, optional)" />
+          <input type="text" id="PhysicalPostalCode" name="PhysicalPostalCode" maxlength="10" pattern="^\d{4}$"
+            placeholder="Postal code for physical address (e.g., 0007, optional)" />
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>Postal Address</legend>
+        <div class="address-fields">
+          <input type="text" id="PostalAddressLine1" name="PostalAddressLine1" maxlength="100" placeholder="Postal address line 1 (e.g., PO BOX 28982, optional)" />
+          <input type="text" id="PostalAddressLine2" name="PostalAddressLine2" maxlength="100" placeholder="Postal address line 2 (e.g., SUNNYSIDE, optional)" />
+          <input type="text" id="PostalAddressLine3" name="PostalAddressLine3" maxlength="100" placeholder="Postal address line 3 (e.g., PRETORIA, optional)" />
+          <input type="text" id="PostalAddressLine4" name="PostalAddressLine4" maxlength="100" placeholder="Postal address line 4 (e.g., GAUTENG, optional)" />
+          <input type="text" id="PostalCode" name="PostalCode" maxlength="10" pattern="^\d{4}$"
+            placeholder="Postal code for postal address (e.g., 0132, optional)" />
+        </div>
+        <div class="checkbox-row">
+          <input type="checkbox" id="PostalSameAsPhysical" name="PostalSameAsPhysical">
+          <label for="PostalSameAsPhysical" style="margin:0;">Postal Address Same as Physical</label>
+        </div>
+      </fieldset>
+
+      <label for="ContactNumber">Contact Number</label>
+      <input type="text" id="ContactNumber" name="ContactNumber"
+        pattern="^(0|00)[0-9]{8,13}$" maxlength="15"
+        placeholder="Telephone number (e.g., +27112345678, optional)" />
+
+      <label for="CellNumber">Cell Number</label>
+      <input type="text" id="CellNumber" name="CellNumber"
+        pattern="^(0|00)[0-9]{8,13}$" maxlength="15"
+        placeholder="Cell phone number (e.g., +27832504084, optional)" />
+
+      <label for="Email">Email</label>
+      <input type="email" id="Email" name="Email" maxlength="80"
+        pattern="^[^@]+@[^@]+\.[^@]+$"
+        placeholder="Email address (e.g., trust@example.com, optional)" />
+
+      <div style="display: flex; justify-content: space-between; gap: 12px; margin-top: 28px;">
+        <a href="{{ url_for('index') }}"><button type="button" class="cancel-btn">Cancel</button></a>
+        <button type="submit">Add Trust</button>
+      </div>
+    </form>
+  </div>
+  <script>
+    // Helper: Modulus 10 check for Tax Number
+    function isValidSarsTaxNumber(num) {
+      if (!/^[012379]\d{9}$/.test(num)) return false;
+      let total = 0;
+      for (let i = 0; i < 9; i++) {
+        let digit = parseInt(num[i]);
+        total += (i % 2 === 0) ? digit * 2 : digit;
+        if (i % 2 === 0 && digit * 2 > 9) total += -9;
+      }
+      let checkDigit = (10 - (total % 10)) % 10;
+      return checkDigit === parseInt(num[9]);
+    }
+
+    document.getElementById('trustForm').addEventListener('submit', function(e) {
+      // Tax Number modulus 10 check
+      const taxNumber = document.getElementById('TaxNumber').value.trim();
+      if (taxNumber && !isValidSarsTaxNumber(taxNumber)) {
+        alert('Invalid SARS Tax Number (failed modulus 10 check).');
+        e.preventDefault();
+        return;
+      }
+
+      // Residency: must be 2 uppercase letters (ISO country code)
+      const residency = document.getElementById('Residency').value.trim();
+      if (!/^[A-Z]{2}$/.test(residency)) {
+        alert('Residency must be a valid 2-letter country code (e.g. ZA).');
+        e.preventDefault();
+        return;
+      }
+
+      // Masters Office: 1-50 chars
+      const mastersOffice = document.getElementById('MastersOffice').value.trim();
+      if (mastersOffice.length < 1 or mastersOffice.length > 50) {
+        alert('Masters Office must be between 1 and 50 characters.');
+        e.preventDefault();
+        return;
+      }
+
+      // At least one address (physical or postal) must be filled
+      function isFilled(fields) {
+        return fields.some(id => document.getElementById(id).value.trim() !== '');
+      }
+      const physicalFields = [
+        'PhysicalUnitNumber', 'PhysicalComplex', 'PhysicalStreetNumber',
+        'PhysicalStreet', 'PhysicalSuburb', 'PhysicalCity', 'PhysicalPostalCode'
+      ];
+      const postalFields = [
+        'PostalAddressLine1', 'PostalAddressLine2', 'PostalAddressLine3',
+        'PostalAddressLine4', 'PostalCode'
+      ];
+      if (!isFilled(physicalFields) && !isFilled(postalFields)) {
+        alert('At least one address (physical or postal) must be completed.');
+        e.preventDefault();
+        return;
+      }
+
+      // Copy physical to postal if checkbox checked
+      if (document.getElementById('PostalSameAsPhysical').checked) {
+        document.getElementById('PostalAddressLine1').value = document.getElementById('PhysicalStreet').value;
+        document.getElementById('PostalAddressLine2').value = document.getElementById('PhysicalSuburb').value;
+        document.getElementById('PostalAddressLine3').value = document.getElementById('PhysicalCity').value;
+        document.getElementById('PostalAddressLine4').value = '';
+        document.getElementById('PostalCode').value = document.getElementById('PhysicalPostalCode').value;
+      }
+
+      // Contact Number: optional, but if filled must match pattern
+      const contactNumber = document.getElementById('ContactNumber').value.trim();
+      if (contactNumber && !/^(0|00)[0-9]{8,13}$/.test(contactNumber)) {
+        alert('Contact Number must be numeric, start with 0 or 00, and be 9-15 digits.');
+        e.preventDefault();
+        return;
+      }
+
+      // Cell Number: optional, but if filled must match pattern
+      const cellNumber = document.getElementById('CellNumber').value.trim();
+      if (cellNumber && !/^(0|00)[0-9]{8,13}$/.test(cellNumber)) {
+        alert('Cell Number must be numeric, start with 0 or 00, and be 9-15 digits.');
+        e.preventDefault();
+        return;
+      }
+
+      // Email: optional, must be valid format if filled
+      const email = document.getElementById('Email').value.trim();
+      if (email && !/^.+@.+\..+$/.test(email)) {
+        alert('Email must be a valid email address if provided.');
+        e.preventDefault();
+        return;
+      }
+
+      // Confirmation dialog
+      const confirmed = confirm('Are you sure you want to add this trust information?');
+      if (!confirmed) {
+        e.preventDefault();
+      }
+    });
+
+    document.getElementById('trustForm').addEventListener('reset', function() {
+      // Optional: Clear any additional dynamic fields
+    });
+
+    // Cancel button
+    document.querySelector('.cancel-btn').addEventListener('click', function() {
+      const confirmed = confirm('Are you sure you want to cancel and return to the home page?');
+      if (confirmed) {
+        window.location.href = '{{ url_for('index') }}';
+      }
+    });
+  </script>
+</body>
+</html>

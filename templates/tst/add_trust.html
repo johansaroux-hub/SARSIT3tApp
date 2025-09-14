@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Add Trust</title>
+<style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .form-group { margin-bottom: 15px; }
+        label { display: block; margin-bottom: 5px; }
+        input, select { width: 100%; padding: 8px; box-sizing: border-box; }
+        button { padding: 10px 20px; background-color: #4CAF50; color: white; border: none; cursor: pointer; }
+        button:hover { background-color: #45a049; }
+        .help-text { font-size: 0.9em; color: #666; margin-top: 5px; }
+    </style>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"/></head>
+<body><div class="container mt-4">
+<h1>Add Trust</h1>
+<form action="" method="POST">
+<div class="form-group">
+<label for="trust_reg_number">Trust Registration Number:</label>
+<input id="trust_reg_number" name="trust_reg_number" required="" type="text"/>
+<div class="help-text">Unique trust registration number (e.g., IT123456/2025). Must be unique per SARS IT3(t) Section 6.5.3.</div>
+</div>
+<div class="form-group">
+<label for="trust_name">Trust Name:</label>
+<input id="trust_name" name="trust_name" required="" type="text"/>
+<div class="help-text">Legal name of the trust (e.g., Smith Family Trust).</div>
+</div>
+<div class="form-group">
+<label for="tax_number">Tax Number:</label>
+<input id="tax_number" name="tax_number" type="text"/>
+<div class="help-text">Tax reference number (optional).</div>
+</div>
+<div class="form-group">
+<label for="status">Status:</label>
+<input id="status" name="status" type="text"/>
+<div class="help-text">Status of the trust (e.g., Active, Inactive). Optional per IT3(t) Section 6.5.3.</div>
+</div>
+<div class="form-group">
+<label for="reporting_date">Reporting Date (YYYY-MM-DD):</label>
+<input id="reporting_date" name="reporting_date" type="date"/>
+<div class="help-text">Date of reporting (e.g., 2025-05-09). Optional per IT3(t) Section 6.5.3.</div>
+</div>
+<div class="form-group">
+<label for="nature_of_person">Nature of Person:</label>
+<select id="nature_of_person" name="nature_of_person" required="">
+<option value="INTERVIVOS_TRUST">Inter Vivos Trust</option>
+<option value="TESTAMENTARY_TRUST">Testamentary Trust</option>
+</select>
+<div class="help-text">Nature of the trust entity (e.g., INTERVIVOS_TRUST). Aligns with IT3(t) entity types.</div>
+</div>
+<div class="form-group">
+<label for="trust_type">Trust Type:</label>
+<select id="trust_type" name="trust_type" required="">
+<option value="INTER VIVOS">Inter Vivos</option>
+<option value="TESTAMENTARY">Testamentary</option>
+</select>
+<div class="help-text">Type of trust (e.g., INTER VIVOS). Aligns with IT3(t) trust classifications.</div>
+</div>
+<div class="form-group">
+<label for="residency">Residency for Tax Purposes:</label>
+<select id="residency" name="residency">
+<option value="ZA">South Africa (ZA)</option>
+<option value="">Not Specified</option>
+</select>
+<div class="help-text">Residency for tax purposes (e.g., ZA). Optional.</div>
+</div>
+<div class="form-group">
+<label for="masters_office">Masters Office Registration:</label>
+<input id="masters_office" name="masters_office" type="text"/>
+<div class="help-text">Masters office where the trust is registered (e.g., PRETORIA). Optional.</div>
+</div>
+<div class="form-group">
+<label for="physical_unit_number">Physical Unit Number:</label>
+<input id="physical_unit_number" name="physical_unit_number" type="text"/>
+<div class="help-text">Unit number for physical address (optional).</div>
+</div>
+<div class="form-group">
+<label for="physical_complex">Physical Complex:</label>
+<input id="physical_complex" name="physical_complex" type="text"/>
+<div class="help-text">Complex name for physical address (optional).</div>
+</div>
+<div class="form-group">
+<label for="physical_street_number">Physical Street Number:</label>
+<input id="physical_street_number" name="physical_street_number" type="text"/>
+<div class="help-text">Street number for physical address (e.g., 902, optional).</div>
+</div>
+<div class="form-group">
+<label for="physical_street">Physical Street:</label>
+<input id="physical_street" name="physical_street" type="text"/>
+<div class="help-text">Street name for physical address (e.g., ARCADIA STR, optional).</div>
+</div>
+<div class="form-group">
+<label for="physical_suburb">Physical Suburb/District:</label>
+<input id="physical_suburb" name="physical_suburb" type="text"/>
+<div class="help-text">Suburb or district (e.g., HATFIELD, optional).</div>
+</div>
+<div class="form-group">
+<label for="physical_city">Physical City/Town:</label>
+<input id="physical_city" name="physical_city" type="text"/>
+<div class="help-text">City or town (e.g., PRETORIA, optional).</div>
+</div>
+<div class="form-group">
+<label for="physical_postal_code">Physical Postal Code:</label>
+<input id="physical_postal_code" name="physical_postal_code" type="text"/>
+<div class="help-text">Postal code for physical address (e.g., 0007, optional).</div>
+</div>
+<div class="form-group">
+<label for="postal_same_as_physical">Postal Address Same as Physical:</label>
+<input id="postal_same_as_physical" name="postal_same_as_physical" type="checkbox"/>
+<div class="help-text">Check if postal address is the same as physical address.</div>
+</div>
+<div class="form-group">
+<label for="postal_address_line1">Postal Address Line 1:</label>
+<input id="postal_address_line1" name="postal_address_line1" type="text"/>
+<div class="help-text">Postal address line 1 (e.g., PO BOX 28982, optional).</div>
+</div>
+<div class="form-group">
+<label for="postal_address_line2">Postal Address Line 2:</label>
+<input id="postal_address_line2" name="postal_address_line2" type="text"/>
+<div class="help-text">Postal address line 2 (e.g., SUNNYSIDE, optional).</div>
+</div>
+<div class="form-group">
+<label for="postal_address_line3">Postal Address Line 3:</label>
+<input id="postal_address_line3" name="postal_address_line3" type="text"/>
+<div class="help-text">Postal address line 3 (e.g., PRETORIA, optional).</div>
+</div>
+<div class="form-group">
+<label for="postal_address_line4">Postal Address Line 4:</label>
+<input id="postal_address_line4" name="postal_address_line4" type="text"/>
+<div class="help-text">Postal address line 4 (e.g., GAUTENG, optional).</div>
+</div>
+<div class="form-group">
+<label for="postal_code">Postal Code:</label>
+<input id="postal_code" name="postal_code" type="text"/>
+<div class="help-text">Postal code for postal address (e.g., 0132, optional).</div>
+</div>
+<div class="form-group">
+<label for="contact_number">Contact Number:</label>
+<input id="contact_number" name="contact_number" type="text"/>
+<div class="help-text">Telephone number (e.g., +27112345678, optional).</div>
+</div>
+<div class="form-group">
+<label for="cell_number">Cell Number:</label>
+<input id="cell_number" name="cell_number" type="text"/>
+<div class="help-text">Cell phone number (e.g., +27832504084, optional).</div>
+</div>
+<div class="form-group">
+<label for="email">Email:</label>
+<input id="email" name="email" type="email"/>
+<div class="help-text">Email address (e.g., trust@example.com, optional).</div>
+</div>
+<button type="submit">Add Trust</button>
+</form>
+<a href="{{ url_for('index') }}"><button>Back to Home</button></a>
+</div></body>
+</html>

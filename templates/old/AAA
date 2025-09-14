@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Beneficiary</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 800px; margin: 20px auto; padding: 20px; }
+        h2, h3 { color: #333; }
+        label { display: block; margin: 10px 0 5px; font-weight: bold; }
+        input, select { width: 100%; padding: 8px; margin-bottom: 10px; border: 1px solid #ccc; border-radius: 4px; }
+        input[type="checkbox"] { width: auto; margin-right: 10px; }
+        .section { margin: 20px 0; padding: 10px; border: 1px solid #ccc; border-radius: 4px; }
+        .tad-entry { border: 1px dashed #ccc; padding: 10px; margin-bottom: 10px; position: relative; }
+        .delete-tad { position: absolute; top: 10px; right: 10px; background: red; color: white; border: none; cursor: pointer; padding: 5px; }
+        button { padding: 10px 20px; margin: 5px; background: #007BFF; color: white; border: none; border-radius: 4px; cursor: pointer; }
+        button:hover { background: #0056b3; }
+        .error { color: red; font-size: 0.9em; }
+        .hidden { display: none; }
+        input[disabled] { background: #f0f0f0; }
+    </style>
+</head>
+<body>
+<h2>Edit Beneficiary</h2>
+<form id="beneficiaryForm" action="/edit_beneficiary/{{ beneficiary.BeneficiaryID }}" method="POST">
+    <div class="section">
+        <h3>Trust Details</h3>
+        <label for="trustName">Trust Name</label>
+        <input type="text" id="trustName" name="trustName" value="{{ trust.TrustName or '' }}" readonly>
+    </div>
+
+    <div class="section" id="personalDetails">
+        <h3>Personal Details</h3>
+        <label for="taxReferenceNumber">Tax Reference Number</label>
+        <input type="text" id="taxReferenceNumber" name="taxReferenceNumber"
+               value="{{ beneficiary.TaxReferenceNumber or '' }}">
+
+        <label for="lastName">Last Name</label>
+        <input type="text" id="lastName" name="lastName" value="{{ beneficiary.LastName or '' }}" required>
+
+        <label for="firstName">First Name</label>
+        <input type="text" id="firstName" name="firstName" value="{{ beneficiary.FirstName or '' }}" required>
+
+        <label for="otherName">Other Name</label>
+        <input type="text" id="otherName" name="otherName" value="{{ beneficiary.OtherName or '' }}">
+
+        <label for="initials">Initials</label>
+        <input type="text" id="initials" name="initials" value="{{ beneficiary.Initials or '' }}">
+
+        <label for="dateOfBirth">Date of Birth</label>
+        <input type="date" id="dateOfBirth" name="dateOfBirth" value="{{ beneficiary.DateOfBirth or '' }}">
+
+        <label for="identificationType">Identification Type</label>
+        <select id="identificationType" name="identificationType">
+            <option value="001" {% if beneficiary.IdentificationType=='001' %}selected{% endif %}>South African ID
+            </option>
+            <option value="002" {% if beneficiary.IdentificationType=='002' %}selected{% endif %}>Passport</option>
+        </select>
+
+        <label for="IDNumber">ID Number</label>
+        <input type="text" id="IDNumber" name="idNumber" value="{{ beneficiary.IDNumber or '' }}">
+
+        <label for="passportNumber">Passport Number</label>
+        <input type="text" id="passportNumber" name="passportNumber" value="{{ beneficiary.PassportNumber or '' }}">
+
+        <label for="passportCountry">Passport Country</label>
+        <input type="text" id="passportCountry" name="passportCountry" value="{{ beneficiary.PassportCountry or '' }}">
+
+        <label for="passportIssueDate">Passport Issue Date</label>
+        <input type="date" id="passportIssueDate" name="passportIssueDate"
+               value="{{ beneficiary.PassportIssueDate or '' }}">
+    </div>
+
+    <div class="section hidden" id="companyDetails">
+        <h3>Company Details</h3>
+        <label for="companyIncomeTaxRefNo">Company Income Tax Ref No</label>
+        <input type="text" id="companyIncomeTaxRefNo" name="companyIncomeTaxRefNo"
+               value="{{ beneficiary.CompanyIncomeTaxRefNo or '' }}">
+
+        <label for="companyRegistrationNumber">Company Registration Number</label>
+        <input type="text" id="companyRegistrationNumber" name="companyRegistrationNumber"
+               value="{{ beneficiary.CompanyRegistrationNumber or '' }}">
+
+        <label for="companyRegisteredName">Company Registered Name</label>
+        <input type="text" id="companyRegisteredName" name="companyRegisteredName"
+               value="{{ beneficiary.CompanyRegisteredName or '' }}">
+    </div>
+
+    <div class="section">
+        <h3>Relationship and Financial Flags</h3>
+        <input type="hidden" id="natureOfPersonHidden" name="natureOfPerson"
+               value="{{ beneficiary.NatureOfPerson or 'I' }}">
+
+
+
+        <label><input type="checkbox" id="isNaturalPerson" name="isNaturalPerson" {% if beneficiary.NatureOfPerson=='I'
+                      %}checked{% endif %} onchange="toggleSections()"> Natural Person</label>
+        <label><input type="checkbox" name="isConnectedPerson" {% if beneficiary.IsConnectedPerson %}checked{% endif %}>
+            Connected Person</label>
+        <label><input type="checkbox" name="isBeneficiary" {% if beneficiary.IsBeneficiary %}checked{% endif %}>
+            Beneficiary</label>
+        <label><input type="checkbox" name="isFounder" {% if beneficiary.IsFounder %}checked{% endif %}> Founder</label>
+        <label><input type="checkbox" name="isDonor" {% if beneficiary.IsDonor %}checked{% endif %}> Donor</label>
+        <label><input type="checkbox" name="isNonResident" {% if beneficiary.IsNonResident %}checked{% endif %}> Non
+            Resident</label>
+        <label><input type="checkbox" name="isTaxableOnDistributed" {% if beneficiary.IsTaxableOnDistributed %}checked{%
+                      endif %} onchange="toggleTFFField('isTaxableOnDistributed', 'distributions-made')"> Taxable On
+            Distributed</label>
+        <label><input type="checkbox" name="hasNonTaxableAmounts" {% if beneficiary.HasNonTaxableAmounts %}checked{%
+                      endif %}> Has Non Taxable Amounts</label>
+        <label><input type="checkbox" name="hasCapitalDistribution" {% if beneficiary.HasCapitalDistribution %}checked{%
+                      endif %} onchange="toggleTFFField('hasCapitalDistribution', 'distributions-made')"> Has Capital
+            Distribution</label>
+        <label><input type="checkbox" name="madeDonations" {% if beneficiary.MadeDonations %}checked{% endif %}
+                      onchange="toggleTFFField('madeDonations', 'donations-made')"> Made Donations</label>
+        <label><input type="checkbox" name="madeContributions" {% if beneficiary.MadeContributions %}checked{% endif %}
+                      onchange="toggleTFFField('madeContributions', 'contributions-made')"> Made Contributions</label>
+        <label><input type="checkbox" name="receivedDonations" {% if beneficiary.ReceivedDonations %}checked{% endif %}
+                      onchange="toggleTFFField('receivedDonations', 'donations-received')"> Received Donations</label>
+        <label><input type="checkbox" name="receivedContributions" {% if beneficiary.ReceivedContributions %}checked{%
+                      endif %} onchange="toggleTFFField('receivedContributions', 'contributions-received')"> Received
+            Contributions</label>
+        <label><input type="checkbox" name="madeDistributions" {% if beneficiary.MadeDistributions %}checked{% endif %}
+                      onchange="toggleTFFField('madeDistributions', 'distributions-made')"> Made Distributions</label>
+        <label><input type="checkbox" name="receivedRefunds" {% if beneficiary.ReceivedRefunds %}checked{% endif %}
+                      onchange="toggleTFFField('receivedRefunds', 'refunds-received')"> Received Refunds</label>
+        <label><input type="checkbox" name="hasRightOfUse" {% if beneficiary.HasRightOfUse %}checked{% endif %}
+                      onchange="toggleTFFField('hasRightOfUse', 'right-of-use')"> Has Right Of Use</label>
+    </div>
+
+    <div class="section">
+        <h3>Address Details</h3>
+        <label for="physicalUnitNumber">Physical Unit Number</label>
+        <input type="text" id="physicalUnitNumber" name="physicalUnitNumber"
+               value="{{ beneficiary.PhysicalUnitNumber or '' }}">
+
+        <label for="physicalComplex">Physical Complex</label>
+        <input type="text" id="physicalComplex" name="physicalComplex" value="{{ beneficiary.PhysicalComplex or '' }}">
+
+        <label for="physicalStreetNumber">Physical Street Number</label>
+        <input type="text" id="physicalStreetNumber" name="physicalStreetNumber"
+               value="{{ beneficiary.PhysicalStreetNumber or '' }}">
+
+        <label for="physicalStreet">Physical Street</label>
+        <input type="text" id="physicalStreet" name="physicalStreet" value="{{ beneficiary.PhysicalStreet or '' }}">
+
+        <label for="physicalSuburb">Physical Suburb</label>
+        <input type="text" id="physicalSuburb" name="physicalSuburb" value="{{ beneficiary.PhysicalSuburb or '' }}">
+
+        <label for="physicalCity">Physical City</label>
+        <input type="text" id="physicalCity" name="physicalCity" value="{{ beneficiary.PhysicalCity or '' }}">
+
+        <label for="physicalPostalCode">Physical Postal Code</label>
+        <input type="text" id="physicalPostalCode" name="physicalPostalCode"
+               value="{{ beneficiary.PhysicalPostalCode or '' }}">
+
+        <label><input type="checkbox" name="postalSameAsPhysical" {% if beneficiary.PostalSameAsPhysical %}checked{%
+                      endif %}> Postal Address Same as Physical</label>
+
+        <label for="postalAddressLine1">Postal Address Line 1</label>
+        <input type="text" id="postalAddressLine1" name="postalAddressLine1"
+               value="{{ beneficiary.PostalAddressLine1 or '' }}">
+
+        <label for="postalAddressLine2">Postal Address Line 2</label>
+        <input type="text" id="postalAddressLine2" name="postalAddressLine2"
+               value="{{ beneficiary.PostalAddressLine2 or '' }}">
+
+        <label for="postalAddressLine3">Postal Address Line 3</label>
+        <input type="text" id="postalAddressLine3" name="postalAddressLine3"
+               value="{{ beneficiary.PostalAddressLine3 or '' }}">
+
+        <label for="postalAddressLine4">Postal Address Line 4</label>
+        <input type="text" id="postalAddressLine4" name="postalAddressLine4"
+               value="{{ beneficiary.PostalAddressLine4 or '' }}">
+
+        <label for="postalCode">Postal Code</label>
+        <input type="text" id="postalCode" name="postalCode" value="{{ beneficiary.PostalCode or '' }}">
+    </div>
+
+    <div class="section">
+        <h3>Contact Details</h3>
+        <label for="contactNumber">Telephone Number</label>
+        <input type="text" id="contactNumber" name="contactNumber" value="{{ beneficiary.ContactNumber or '' }}">
+
+        <label for="cellNumber">Cell Phone Number</label>
+        <input type="text" id="cellNumber" name="cellNumber" value="{{ beneficiary.CellNumber or '' }}">
+
+        <label for="email">Email</label>
+        <input type="email" id="email" name="email" value="{{ beneficiary.Email or '' }}">
+    </div>
+
+    <!-- TAD Capturing Section (Consolidated Dynamic Table) -->
+    <div class="section" id="tad-section">
+        <h2>TAD Records (Distributions)</h2>
+        <table class="table table-bordered" id="tadTable">
+            <thead>
+            <tr>
+                <th>Source Code</th>
+                <th>Distributed Amount</th>
+                <th>Foreign Tax Credit</th>
+                <th>Action</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for tad in tad_records %}
+            <tr>
+                <td><input type="text" class="form-control" name="tad_source_code[]"
+                           value="{{ tad['SourceCode'] }}" required
+                           pattern="^((0[1-9]|1[0-9]|2[0-9]|31|32|33|34)\d[02468]|3006|3025|3601|3602|3603|3604|3605|3606|3610|3611|3616|3617|3667|3719|3720|3721|3620|3670|3621|4201|4210|4212|4214|4216|4218|4220|4238|4250|4252|4292|4276)$"
+                           title="Valid source code as per corrected rules: All even-ending in 01-34 (excl 30), plus 3006,3025, and specific from 36 and 42 ranges">
+                </td>
+                <td><input type="number" step="0.01" class="form-control" name="tad_amount[]"
+                           value="{{ tad['AmountSubjectToTax'] }}" min="0" required
+                           title="Non-negative decimal (BRS Field 506)">
+                </td>
+                <td><input type="number" step="0.01" class="form-control" name="tad_foreign_tax[]"
+                           value="{{ tad['ForeignTaxCredits'] }}" min="0" required
+                           title="Non-negative decimal (BRS Field 507)"></td>
+                <td>
+                    <button type="button" class="btn btn-danger remove-row">Delete</button>
+                </td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        <button type="button" class="btn btn-primary" id="addTadRow">Add Row</button>
+    </div>
+
+    <!-- New DNT Section -->
+    <div class="section" id="dnt-section">
+        <h2>Details of Non-Taxable Income Distributed (DNT)</h2>
+        <p>This section is required if "Has Non-Taxable Amounts" is selected (BRS Field 443).</p>
+        <div class="form-group">
+            <label for="local_dividends">Local Dividends (BRS Field 607)</label>
+            <input type="number" step="0.01" class="form-control" id="local_dividends" name="local_dividends"
+                   value="{{ dnt_data['LocalDividends'] }}" min="0"
+                   title="Non-negative decimal for non-taxable local dividends distributed">
+        </div>
+        <div class="form-group">
+            <label for="exempt_foreign_dividends">Exempt Foreign Dividends (BRS Field 608)</label>
+            <input type="number" step="0.01" class="form-control" id="exempt_foreign_dividends"
+                   name="exempt_foreign_dividends" value="{{ dnt_data['ExemptForeignDividends'] }}" min="0"
+                   title="Non-negative decimal for exempt foreign dividends distributed">
+        </div>
+        <div class="form-group">
+            <label for="other_non_taxable">Other Non-Taxable Income (BRS Field 609)</label>
+            <input type="number" step="0.01" class="form-control" id="other_non_taxable" name="other_non_taxable"
+                   value="{{ dnt_data['OtherNonTaxableIncome'] }}" min="0"
+                   title="Non-negative decimal for other non-taxable income distributed">
+        </div>
+    </div>
+
+
+    <div class="section" id="tff-section">
+        <h2>TFF Financial Flows</h2>
+        <div class="form-group">
+            <label for="donations_made">Donations Made</label>
+            <input type="number" step="0.01" class="form-control" id="donations_made" name="donations_made"
+                   value="{{ tff_data['TotalDonationsToTrust'] }}" min="0" required title="BRS Field 709">
+        </div>
+        <div class="form-group">
+            <label for="donations_received">Donations Received</label>
+            <input type="number" step="0.01" class="form-control" id="donations_received" name="donations_received"
+                   value="{{ tff_data['TotalDonationsReceivedFromTrust'] }}" min="0" required title="BRS Field 711">
+        </div>
+        <div class="form-group">
+            <label for="contributions_made">Contributions Made</label>
+            <input type="number" step="0.01" class="form-control" id="contributions_made" name="contributions_made"
+                   value="{{ tff_data['TotalContributionsToTrust] }}" min="0" required title="BRS Field 710">
+        </div>
+        <div class="form-group">
+            <label for="contributions_received">Contributions Received</label>
+            <input type="number" step="0.01" class="form-control" id="contributions_received"
+                   name="contributions_received" value="{{ tff_data[TotalContributionsReceivedFromTrust] }}" min="0"
+                   required title="BRS Field 712">
+        </div>
+        <div class="form-group">
+            <label for="distributions_made">Distributions Made</label>
+            <input type="number" step="0.01" class="form-control" id="distributions_made" name="distributions_made"
+                   value="{{ tff_data[TotalDistributionsToTrust] }}" min="0" required title="BRS Field 707">
+        </div>
+        <div class="form-group">
+            <label for="refunds_received">Refunds Received</label>
+            <input type="number" step="0.01" class="form-control" id="refunds_received" name="refunds_received"
+                   value="{{ tff_data[TotalContributionsRefundedByTrust] }}" min="0" required title="BRS Field 713">
+        </div>
+        <div class="form-group">
+            <label for="total_value_of_capital_distributed">Total Value Of Capital Distributed</label>
+            <input type="number" step="0.01" class="form-control" id="total_value_of_capital_distributed"
+                   name="total_value_of_capital_distributed"
+                   value="{{ tff_data[TotalValueOfCapitalDistributed] }}" min="0" required title="BRS Field 714">
+        </div>
+    </div>
+
+
+    <button type="button" onclick="confirmCancel)">Cancel</button>
+    <button type="submit" onclick="return confirmSubmit() && validateTFFFlags()">Submit</button>
+
+</form>

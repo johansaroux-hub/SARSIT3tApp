@@ -1,0 +1,98 @@
+<script type="text/javascript">
+        var gk_isXlsx = false;
+        var gk_xlsxFileLookup = {};
+        var gk_fileData = {};
+        function filledCell(cell) {
+          return cell !== '' && cell != null;
+        }
+        function loadFileData(filename) {
+        if (gk_isXlsx && gk_xlsxFileLookup[filename]) {
+            try {
+                var workbook = XLSX.read(gk_fileData[filename], { type: 'base64' });
+                var firstSheetName = workbook.SheetNames[0];
+                var worksheet = workbook.Sheets[firstSheetName];
+
+                // Convert sheet to JSON to filter blank rows
+                var jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, blankrows: false, defval: '' });
+                // Filter out blank rows (rows where all cells are empty, null, or undefined)
+                var filteredData = jsonData.filter(row => row.some(filledCell));
+
+                // Heuristic to find the header row by ignoring rows with fewer filled cells than the next row
+                var headerRowIndex = filteredData.findIndex((row, index) =>
+                  row.filter(filledCell).length >= filteredData[index + 1]?.filter(filledCell).length
+                );
+                // Fallback
+                if (headerRowIndex === -1 || headerRowIndex > 25) {
+                  headerRowIndex = 0;
+                }
+
+                // Convert filtered JSON back to CSV
+                var csv = XLSX.utils.aoa_to_sheet(filteredData.slice(headerRowIndex)); // Create a new sheet from filtered array of arrays
+                csv = XLSX.utils.sheet_to_csv(csv, { header: 1 });
+                return csv;
+            } catch (e) {
+                console.error(e);
+                return "";
+            }
+        }
+        return gk_fileData[filename] || "";
+        }
+        </script><!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Submission for {{ trust['TrustName'] }}</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .form-group { margin-bottom: 15px; }
+        label { display: block; margin-bottom: 5px; }
+        input, select { width: 100%; padding: 8px; box-sizing: border-box; }
+        button { padding: 10px 20px; background-color: #4CAF50; color: white; border: none; cursor: pointer; }
+        button:hover { background-color: #45a049; }
+        .help-text { font-size: 0.9em; color: #666; margin-top: 5px; }
+    </style>
+</head>
+<body>
+    <h1>Add Submission for {{ trust['TrustName'] }} (Reg: {{ trust['TrustRegNumber'] }})</h1>
+    <form method="POST" action="">
+        <div class="form-group">
+            <label for="tax_ref_no">Tax Reference Number:</label>
+            <input type="text" id="tax_ref_no" name="tax_ref_no" required>
+            <div class="help-text">Tax reference number of the submitting entity (e.g., 987654321). Required per IT3(t) Section 6.5.1.</div>
+        </div>
+        <div class="form-group">
+            <label for="unique_file_id">Unique File ID:</label>
+            <input type="text" id="unique_file_id" name="unique_file_id" required>
+            <div class="help-text">Unique identifier for the submission file (e.g., 123e4567-e89b-12d3-a456-426614174000). Required per IT3(t) Section 6.5.1.</div>
+        </div>
+        <div class="form-group">
+            <label for="submission_date">Submission Date (YYYY-MM-DD):</label>
+            <input type="date" id="submission_date" name="submission_date" required>
+            <div class="help-text">Date of submission (e.g., 2025-05-09). Required per IT3(t) Section 6.5.1.</div>
+        </div>
+        <div class="form-group">
+            <label for="file_path">File Path:</label>
+            <input type="text" id="file_path" name="file_path" required>
+            <div class="help-text">Path to the submission file (e.g., /path/to/file.psv).</div>
+        </div>
+        <div class="form-group">
+            <label for="status">Status:</label>
+            <input type="text" id="status" name="status" required>
+            <div class="help-text">Submission status (e.g., Success, Failed).</div>
+        </div>
+        <div class="form-group">
+            <label for="file_response_code">File Response Code:</label>
+            <input type="text" id="file_response_code" name="file_response_code">
+            <div class="help-text">SARS response code (e.g., 001 for Success). Optional per IT3(t) Appendix H.</div>
+        </div>
+        <div class="form-group">
+            <label for="response_details">Response Details:</label>
+            <input type="text" id="response_details" name="response_details">
+            <div class="help-text">Details of the submission response (e.g., Success: Mock submission received by SARS, optional).</div>
+        </div>
+        <button type="submit">Add Submission</button>
+    </form>
+    <a href="{{ url_for('view_submissions', trust_id=trust['TrustID']) }}"><button>Back to Submissions</button></a>
+</body>
+</html>

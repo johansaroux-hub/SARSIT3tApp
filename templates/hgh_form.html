@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Add HGH Header</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</head>
+<body>
+    <div class="container mt-4">
+        <h1 class="mb-4">Add HGH Header</h1>
+        <form method="post">
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <label for="section_identifier" class="form-label">Section Identifier *</label>
+                    <input type="text" class="form-control" id="section_identifier" name="section_identifier" value="H" readonly required>
+                </div>
+                <div class="col-md-6">
+                    <label for="header_type" class="form-label">Header Type *</label>
+                    <input type="text" class="form-control" id="header_type" name="header_type" value="GH" readonly required>
+                </div>
+                <div class="col-md-6">
+                    <label for="message_create_date" class="form-label">Message Create Date *</label>
+                    <input type="text" class="form-control" id="message_create_date" name="message_create_date" value="{{ current_datetime }}" readonly required>
+                </div>
+                <div class="col-md-6">
+                    <label for="file_layout_version" class="form-label">File Layout Version *</label>
+                    <input type="text" class="form-control" id="file_layout_version" name="file_layout_version" value="1" readonly required>
+                </div>
+                <div class="col-md-6">
+                    <label for="unique_file_id" class="form-label">Unique File ID *</label>
+                    <input type="text" class="form-control" id="unique_file_id" name="unique_file_id" value="{{ unique_file_id }}" readonly required>
+                </div>
+                <div class="col-md-6">
+                    <label for="sars_request_reference" class="form-label">SARS Request Reference</label>
+                    <input type="text" class="form-control" id="sars_request_reference" name="sars_request_reference">
+                </div>
+                <div class="col-md-6">
+                    <label for="test_data_indicator" class="form-label">Test Data Indicator *</label>
+                    <select class="form-select" id="test_data_indicator" name="test_data_indicator" required>
+                        <option value="T">T</option>
+                        <option value="L" selected>L</option>
+                    </select>
+                </div>
+                <div class="col-md-6">
+                    <label for="data_type_supplied" class="form-label">Data Type Supplied *</label>
+                    <input type="text" class="form-control" id="data_type_supplied" name="data_type_supplied" value="IT3" readonly required>
+                </div>
+                <div class="col-md-6">
+                    <label for="channel_identifier" class="form-label">Channel Identifier *</label>
+                    <select class="form-select" id="channel_identifier" name="channel_identifier" required>
+                        <option value="CD">CD</option>
+                        <option value="HTTPS">HTTPS</option>
+                    </select>
+                </div>
+                <div class="col-md-6">
+                    <label for="source_identifier" class="form-label">Source Identifier *</label>
+                    <input type="text" class="form-control" id="source_identifier" name="source_identifier" required>
+                </div>
+                <div class="col-md-6">
+                    <label for="source_system" class="form-label">Source System *</label>
+                    <input type="text" class="form-control" id="source_system" name="source_system" required>
+                </div>
+                <div class="col-md-6">
+                    <label for="source_system_version" class="form-label">Source System Version *</label>
+                    <input type="text" class="form-control" id="source_system_version" name="source_system_version" required>
+                </div>
+                <div class="col-md-6">
+                    <label for="contact_person_name" class="form-label">Contact Person Name *</label>
+                    <input type="text" class="form-control" id="contact_person_name" name="contact_person_name" required>
+                </div>
+                <div class="col-md-6">
+                    <label for="contact_person_surname" class="form-label">Contact Person Surname *</label>
+                    <input type="text" class="form-control" id="contact_person_surname" name="contact_person_surname" required>
+                </div>
+                <div class="col-md-6">
+                    <label for="business_telephone_number1" class="form-label">Business Telephone Number 1 *</label>
+                    <input type="text" class="form-control" id="business_telephone_number1" name="business_telephone_number1" required>
+                </div>
+                <div class="col-md-6">
+                    <label for="business_telephone_number2" class="form-label">Business Telephone Number 2</label>
+                    <input type="text" class="form-control" id="business_telephone_number2" name="business_telephone_number2">
+                </div>
+                <div class="col-md-6">
+                    <label for="cell_phone_number" class="form-label">Cell Phone Number *</label>
+                    <input type="text" class="form-control" id="cell_phone_number" name="cell_phone_number" required>
+                </div>
+                <div class="col-md-6">
+                    <label for="contact_email" class="form-label">Contact Email *</label>
+                    <input type="email" class="form-control" id="contact_email" name="contact_email" required>
+                </div>
+                <div class="col-12 mt-4">
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</body>
+</html>

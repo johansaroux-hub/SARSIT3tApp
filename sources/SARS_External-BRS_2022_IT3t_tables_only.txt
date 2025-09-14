@@ -1,0 +1,4089 @@
+﻿6.5 IT3 Schedule T Data Submission 
+ 
+This section lists all the fields that are required for the IT3 Schedule T file. The table specifies for each field, the required length, provides a 
+description and indicates the relevant validation rules. 
+ 
+Note 1: The number column is used to reference fields in the table for ease of use and does not indicate sequence in the file. 
+Note 2  
+
+ M = Mandatory: Implying the field must always be completed 
+ C = Conditional: Implying the field must always be completed under the defined conditions, else it can be left blank 
+ O = Optional: Implying the field can be completed if possible 
+ MW = Mandatory with warning: Implying from a SARS perspective this field is mandatory (as defined above), however due to constraints 
+
+experienced by the submitting entities to provide the required data, the field can be left blank for a pre-defined time period and SARS will 
+accept a record where such a mandatory field has not been completed. At the applicable time the field will revert to the intended Mandatory 
+type and at such time SARS will reject the records if not completed. 
+
+ CW = Conditional with warning: Implying that from a SARS perspective, when the conditions are met, this field is mandatory, however due to 
+constraints experienced by the submitting entities to provide the required data, the field can be left blank for a pre-defined time period and 
+SARS will accept a record where such a field has not been completed under the specified conditions. At the applicable time the field will 
+revert to the intended mandatory type when the conditions are met and at such time SARS will reject the records if not completed. 
+
+Note 3 IX (Fixed) in order to save space. 
+Note 4: Bulk or Real Time submissions: 
+
+ Fields marked with Bulk (B) is for submissions via eFiling, HTTPS or C:D.   
+ Fields marked with Real Time (R) is for submissions via API process (this implementation is for a future phase  not applicable to this BRS). 
+ Fields can be identified as B/R too, which makes both applicable. 
+
+SARS_External BRS_2022_IT3s_v4.0.0T-9 Page 202 of 282
+
+
+
+ 
+Note 5: In order to enhance the readability and understanding of some of the complex validations, some Field names used has been replaced with 
+characters, e.g. Submission Tax Year (Field 24) = X.  Where this has been done, the list of field names replaced will appear at the start of the 
+validation.  The same character has not necessarily been used throughout for the same field name. 
+Note 6: File name definition  Refer to the file name structure table under Section 5 / 6. 
+Note 7: The IT3-02 declaration will be processed by the Submitting Entity (SE)  and not on the Reporting Entity (RE) level. 
+Note 8: All monetary values are in South African Rand. 
+
+ 
+
+ 
+ 
+
+SARS_External BRS_2022_IT3s_v4.0.0T-9 Page 203 of 282
+
+
+
+No F ield Description Required Bulk Data Length Length Data Validations Logic Validations
+Name (B) or Type Type
+
+real (Min:Max)
+Type Condition Rule 
+
+time 
+(R)  
+
+6.5.1 SUBMISSION FILE HEADER (Person doing actual submission) (Mandatory Record 1:1) 
+1 Section To identify the start M  B/R A FIX 1:1  Must = H, where H =  
+
+Identifier of the section as Header 
+well as identifying 
+the type of section 
+
+2 Header To indicate the type M  B/R A VAR 1:3  Must = GH, where GH =  
+Type of header in order General Header 
+
+to differentiate 
+between various 
+types 
+
+3 Message Date and time that M  B/R FT FIX 19:19  Format must be: CCYY-   
+Create the message was MM-DDThh:mm:ss 
+Date created  24h time format must be 
+
+used 
+4 File Layout The version of the M  B/R N VAR 1:4  Must = 1  Must be greater than or equal to 1 and 
+
+Version delimited file layout  Value must not contain a less than or equal to 9999 
+that is being decimal point 
+submitted.   
+Sequential number, Note  SARS will only 
+which increments support the version(s) 
+with one every time specified above 
+that the file layout 
+version changes 
+once files are being 
+submitted to the 
+production 
+environment. This 
+number is provided 
+by SARS. 
+
+5 Unique File The submitting M  B/R AN VAR 1:64  Value must not contain a  Must be unique per submission and 
+ID source must create decimal point across submissions per submitting entity 
+
+this field when data 
+is submitted to  Although this field is 
+SARS. This field designed using the 
+will uniquely identify definition of AN (as 
+this file when specified in Section 1.2.2 
+coupled with the of this document), SARS 
+source. This value 
+
+SARS_External BRS_2022_IT3s_v4.0.0T-9 Page 204 of 282
+
+
+
+ 
+No Field Description Required Bulk Data Length Length Data Validations Logic Validations 
+
+Name (B) or Type Type 
+real (Min:Max) 
+
+Type Condition Rule 
+time 
+(R)  
+
+must not be will also accept dashes "-" 
+repeated by the (this is to cater for entities 
+submitting source that have chosen to make 
+(e.g. use the date 
+time with some use of a GUID). Please 
+other unique note this is the only 
+number). This field exception to the AN 
+will also be used to definition that will be 
+link the records to permitted and only on this 
+the original file. The field. 
+field must be 
+generated by the 
+software from 
+which the entity is 
+submitting the data 
+to SARS. When 
+SARS sends the 
+response file, the 
+Unique File ID in 
+the response file 
+must be equal to 
+the Unique File ID 
+obtained from the 
+file name of the 
+submitted file 
+
+6 SARS In the scenario O If Data Type B AN VAR  0:0  If this   
+Request where SARS sends Being Supplied = field is left 
+Reference a request file to the I3T, then this field blank  
+
+entity requesting 
+data, SARS must be left blank  1:64  If 
+provides this this field is 
+reference number completed 
+to use in the file to 
+be submitted to 
+SARS. SARS also 
+uses this reference 
+number when 
+responding to the 
+taxpayer on files 
+submitted to SARS 
+
+SARS_External BRS_2022_IT3s_v4.0.0T-9 Page 205 of 282
+
+
+
+ 
+No Field Description Required Bulk Data Length Length Data Validations Logic Validations 
+
+Name (B) or Type Type 
+real (Min:Max) 
+
+Type Condition Rule 
+time 
+(R)  
+
+7 Test Data This should be M  B/R A FIX 1:1  Must = T or L, where T = A test file with Field 7 = T will only be allowed 
+Indicator used to indicate if Test and L = Live in the test environment.  A production file with 
+
+the data is for Field 7 = L will only be allowed in the 
+testing or is live production environment. 
+data and should be 
+processed. The 
+purpose of the field 
+is to avoid test data 
+accidentally being 
+processed in 
+production and 
+allow the source to 
+test their 
+submission without 
+it being processed. 
+
+8 Data Type When data is M  B/R AN FIX 3:3  Must = I3T, where I3T =  
+Being submitted to SARS, IT3(t) supporting data 
+Supplied this field indicates 
+
+the type of data that 
+can be found in the 
+file, e.g. Dividends 
+tax, VAT supporting 
+data. When SARS 
+sends a response 
+on a file submitted, 
+SARS indicates the 
+data type on which 
+the response is 
+based. 
+
+9 Channel Identifies the M  B/R AN VAR 1:10  Must = CD or HTTPS,  
+Identifier channel from which where CD = Connect 
+
+the file was Direct, HTTPS = 
+submitted, e.g. Hypertext Transfer 
+Connect Direct Protocol 
+
+SARS_External BRS_2022_IT3s_v4.0.0T-9 Page 206 of 282
+
+
+
+ 
+No Field Description Required Bulk Data Length Length Data Validations Logic Validations 
+
+Name (B) or Type Type 
+Type Condition Rule real (Min:Max) 
+
+time 
+(R)  
+
+The channel, from 
+which the file was 
+submitted to SARS, 
+must generate this 
+identifier. 
+
+10 Source This identifies the M  B/R FT FIX 144:144   Validate that this value = the value 
+Identifier file submitter and supplied by SARS 
+
+contains the 
+security token. This 
+value will be 
+supplied by SARS if 
+the C:D or HTTPS 
+channels are used.  
+ 
+Note  For testing 
+purposes please 
+refer to the SARS 
+website where a 
+value will be 
+supplied that can 
+be used in the 
+interim. This value 
+will only be 
+applicable for test 
+purposes and will 
+not be accepted in 
+the production 
+environment. 
+
+14 Source The name of the M  B/R FT VAR 1:30   
+System system from where 
+
+the data was 
+generated, e.g. 
+Pastel or SAP 
+
+15 Source The version M  B/R FT VAR 1:10   
+System number system, 
+Version e.g. 1.1.7. 
+
+SARS_External BRS_2022_IT3s_v4.0.0T-9 Page 207 of 282
+
+
+
+ 
+No Field Description Required Bulk Data Length Length Data Validations Logic Validations 
+
+Name (B) or Type Type 
+real (Min:Max) 
+
+Type Condition Rule 
+time 
+(R)  
+
+16 Contact The full names of M  B/R FT VAR 1:100   
+Person the businessperson 
+Name to be contacted 
+
+with queries related 
+to this file. 
+
+17 Contact The surname of the M  B/R FT VAR 1:120   
+Person businessperson to  
+Surname be contacted with  
+
+queries related to 
+this file.  
+
+18 Business The primary contact C  At least one B/R AN VAR  0:15 - No  Only numeric values are  
+Telephone telephone number of Business condition allowed 
+Number 1 for business Telephone met 
+
+contact person  No spaces are allowed 
+Number 1 or  9:15   + is not allowed 
+the Cell Condition 
+
+Include country  Value must not contain a 
+code if not South Phone met decimal point 
+African number Number field 
+(e.g. 0044 for the must be 
+United Kingdom). completed 
+
+19 Business A secondary O  B/R AN VAR  0:0  if  Only numeric values are  
+Telephone contact telephone this field is allowed 
+Number 2 number for blank 
+
+business contact  No spaces are allowed 
+person  9:15  if  + is not allowed 
+
+this field is  Value must not contain a 
+Include country completed decimal point 
+code if not South 
+African number 
+(e.g. 0044 for the 
+United Kingdom). 
+
+20 Cell Phone The cell phone C  At least one B/R AN VAR  0:15 - No  Only numeric values are  
+Number number of the of Business condition allowed 
+
+business contact Telephone met 
+person  No spaces are allowed 
+
+Number 1 or  9:15   + is not allowed 
+the Cell Condition 
+
+Include country  Value must not contain a 
+code if not South Phone met decimal point 
+African number Number field 
+
+SARS_External BRS_2022_IT3s_v4.0.0T-9 Page 208 of 282
+
+
+
+ 
+No Field Description Required Bulk Data Length Length Data Validations Logic Validations 
+
+Name (B) or Type Type 
+real (Min:Max) 
+
+Type Condition Rule 
+time 
+(R)  
+
+(e.g. 0044 for the must be 
+United Kingdom). completed 
+
+21 Contact The email address M  B/R FT VAR 5:80  Must contain one @ sign  
+Email for the business  Must contain a domain 
+
+contact person which must be indicated 
+with a dot (.) 
+
+6.5.2 SUBMITTING ENTITY DATA (Mandatory Record 1:1) (e.g. Bank Trust Manager, Taxpayer Representative, etc.)  
+201 Section To identify the start M  B A FIX 1:1  Must = H, where H =  
+
+Identifier of the section as Header 
+well as identifying 
+the type of section 
+
+202 Header To indicate the type M  B/R A VAR 1:3  Must = SE, where SE =  
+Type of header in order Submitting Entity 
+
+to differentiate  
+between various 
+types.  
+ 
+
+203 Submissio Tax year to which M  B/R N FIX 4:4  Format CCYY  Must be greater than or equal to 2022
+n Tax Year submission applies 
+
+204 Period The starting date M  B/R FT FIX 10:10  Format CCYY-MM-DD  Date must fall within the Submission Tax 
+Start Date for the period Year 
+
+that is reported by 
+this IT3 extract 
+
+205 Period End The ending date for M  B/R FT FIX 10:10  Format CCYY-MM-DD  Date must fall within the Submission Tax 
+Date the period Year 
+
+that is reported by 
+this IT3(t) extract 
+
+206 Nature of The type / category M  B/R FT VAR 4:33  Refer to Appendix A for  Value must not = INDIVIDUAL or 
+Person of the Submitting code table FOREIGN_INDIVIDUAL or 
+
+Entity INDIVIDUAL_ESTATE 
+Individuals as 
+Submitting Entity 
+will be allowed. 
+
+207 Surname / Personal particulars M  B/R FT VAR 1:120   
+Registered  Surname of the  
+Name individual or  
+
+SARS_External BRS_2022_IT3s_v4.0.0T-9 Page 209 of 282
+
+
+
+ 
+No Field Description Required Bulk Data Length Length Data Validations Logic Validations 
+
+Name (B) or Type Type 
+real (Min:Max) 
+
+Type Condition Rule 
+time 
+(R)  
+
+Registered name of 
+the organisation 
+
+208 Initials Personal particulars C  If Nature of B/R FT VAR  0:0  No   
+ Initials applicable Person (Field condition 
+
+only to individuals 206) is met 
+INDIVIDUAL  1:30  
+or Condition 
+FOREIGN_I met 
+NDIVIDUAL 
+or 
+INDIVIDUAL
+_ESTATE, 
+then Initials is 
+Mandatory 
+
+ Else field is 
+NULL 
+
+209 Names Personal particulars C  If Nature of B/R FT VAR  0:0  No  Names must be separated  
+ All the names of Person (Field condition by a single space 
+
+the individual 206) is met 
+(excluding 
+Surname) INDIVIDUAL  1:100  
+
+or Condition 
+FOREIGN_I met 
+NDIVIDUAL 
+or 
+INDIVIDUAL
+_ESTATE, 
+then this field 
+is Mandatory 
+
+ Else Field is 
+NULL 
+
+210 Trading The name the O  B/R FT VAR 1:120   
+Name Submitting Entity is 
+
+trading under. 
+211 Identificatio This field defines M  B/R AN FIX 3:3  Refer to Appendix G for  
+
+n Type the type of code table 
+identification that 
+
+SARS_External BRS_2022_IT3s_v4.0.0T-9 Page 210 of 282
+
+
+
+ 
+No Field Description Required Bulk Data Length Length Data Validations Logic Validations 
+
+Name (B) or Type Type 
+real (Min:Max) 
+
+Type Condition Rule 
+time 
+(R)  
+
+will be provided in 
+the Identification 
+Number field 
+
+212 Identificatio Uniquely identifies M  B/R FT VAR 1:30  If Identification Type (Field  
+n Number the Submitting 211) = 001, then refer to 
+
+Entity Appendix J for the ID 
+validation that must be 
+applied 
+
+ If Identification Type (Field 
+211) = 004, then refer to 
+Appendix K for the 
+applicable validation that 
+must be applied 
+
+213 Passport Indicates the C  If B/R AN FIX  0:0  No  Refer to Appendix F   
+Country of country that issued Identification condition Country Codes table 
+Issue the passport  Type (Field met 
+
+211) = 003,  2:2  
+then Condition 
+Passport met 
+Country of 
+Issue is 
+Mandatory 
+
+ Else field is 
+NULL 
+
+214 Regulator Regulator O  B/R FT VAR 0:50   
+Registratio Registration 
+n Number Number for 
+
+Submitting Entity 
+(e.g. Financial 
+Sector Conduct 
+Authority (FSCA) 
+registration 
+number) 
+
+215 Regulator Insert the Regulator C  If Regulator B/R FT VAR  0:0  No   
+Designatio Designation e.g. Registration value 
+n FSCA Number 
+
+SARS_External BRS_2022_IT3s_v4.0.0T-9 Page 211 of 282
+
+
+
+ 
+No Field Description Required Bulk Data Length Length Data Validations Logic Validations 
+
+Name (B) or Type Type 
+real (Min:Max) 
+
+Type Condition Rule 
+time 
+(R)  
+
+(Field 601)  1:30  
+contains a Contains 
+value then a value 
+this field is 
+Mandatory 
+
+ Else field is 
+Optional 
+
+216 Tax Tax Reference M  B/R N FIX 10:10  Refer to Appendix I -  Tax reference number can only start with 
+Reference Number as Modulus 10 Validation 0, 1, 2, 3, 7 or 9 
+Number registered at SARS  
+
+217 Universal This is the universal O  B/R N VAR 0:6   
+Branch Branch code of the 
+Code Submitting Entity  
+
+218 Postal The first line of the M  B/R FT VAR 1:100   
+address 
+line 1 postal address. 
+
+219 Postal The second line of O  B/R FT VAR 0:100    
+address the Submitting 
+line 2 
+
+address. 
+220 Postal The third line of the O  B/R FT VAR 0:100    
+
+address 
+line 3 postal address. 
+
+221 Postal The fourth line of O  B/R FT VAR 0:100    
+address the Submitting 
+line 4 
+
+address. 
+222 Postal The postal code of M  B/R ANS VAR 1:10   
+
+code the Submitting 
+
+address. 
+223 Telephone Telephone number  O  B/R AN VAR  0:0  if  Only numeric values are  
+
+Number this field is allowed 
+Include country blank  No spaces are allowed 
+code if not South  + is not allowed 
+African number 
+
+SARS_External BRS_2022_IT3s_v4.0.0T-9 Page 212 of 282
+
+
+
+ 
+No Field Description Required Bulk Data Length Length Data Validations Logic Validations 
+
+Name (B) or Type Type 
+real (Min:Max) 
+
+Type Condition Rule 
+time 
+(R)  
+
+(e.g. 0044 for the  9:15  if  Value must not contain a 
+United Kingdom). this field is decimal point 
+
+completed  National numbers must 
+start with 0 
+
+ International numbers 
+must start with 00 
+
+224 Cell Phone Cell phone number  M  B/R AN VAR 9:15  Only numeric values are  
+Number allowed 
+
+Include country  No spaces are allowed 
+code if not South  + is not allowed 
+African number  Value must not contain a 
+(e.g. 0044 for the decimal point 
+United Kingdom).  National numbers must 
+
+start with 0 
+ International numbers 
+
+must start with 00 
+ Insert 
+
+information available. 
+225 Contact Contact Email M  B/R FT VAR 5:80  Must contain one @ sign  
+
+Email  Must contain a domain 
+ which must be indicated 
+
+with a dot (.) 
+ 
+
+if no information available. 
+
+6.5.3 REPORTING INSTITUTION (Mandatory Record 1: ) (Trust that is reporting) 
+301 Section To identify the start M  B/R A FIX 1:1  Must = B, where B = Body  
+
+Identifier of the section as 
+well as identifying 
+the type of section 
+
+302 Record To indicate the type M  B/R AN VAR 1:6  Must = RI, where RI =  
+Type of header in order Reporting Institution 
+
+to differentiate  
+
+SARS_External BRS_2022_IT3s_v4.0.0T-9 Page 213 of 282
+
+
+
+ 
+No Field Description Required Bulk Data Length Length Data Validations Logic Validations 
+
+Name (B) or Type Type 
+real (Min:Max) 
+
+Type Condition Rule 
+time 
+(R)  
+
+between various 
+types 
+
+303 Record Indicates the status M  B/R A FIX 1:1  Record status can only be  
+Status of the record, one of: 
+
+whether it is a new 
+record, an adjusted  N = New Record; 
+record or a record  C = Correction 
+that must be  D = Delete record 
+deleted  
+
+Note: The statuses must be 
+used as follows: 
+
+ N  Indicate a new record 
+that has not been 
+submitted before; 
+
+ C  Indicate that a 
+previously submitted 
+record is amended; 
+
+ D  Indicate that a 
+previously submitted 
+record must be deleted. 
+
+304 Unique The M  B/R FT VAR 1:100   If the record status (Field 303) = C or D, 
+Number system must then this number must contain the number 
+
+generate a unique that was originally submitted 
+number for each  Must be unique within the section across
+record. all files 
+In the response file, 
+the unique number 
+would be the 
+number specified in 
+the file submitted to 
+SARS to enable the 
+
+source system to 
+identify the line that 
+is being responded 
+on by SARS. 
+
+SARS_External BRS_2022_IT3s_v4.0.0T-9 Page 214 of 282
+
+
+
+ 
+No Field Description Required Bulk Data Length Length Data Validations Logic Validations 
+
+Name (B) or Type Type 
+real (Min:Max) 
+
+Type Condition Rule 
+time 
+(R)  
+
+305 Row Number of the row M  B/R N VAR 1:10  An incrementing number  Must be greater than or equal to 1 and 
+Number in the file, per record beginning at 1 smaller than or equal to the total number 
+
+sequential number for each file of rows in the file with Section Identifier = 
+starting at 1 for B 
+every file submitted 
+to SARS. In the 
+response file, this 
+must be the 
+rejected row(s) 
+from the incoming 
+file. 
+The row number 
+field must start at 1 
+for every new file 
+and must increment 
+by 1 for every new 
+row added that is 
+classed as a body 
+record in the file. 
+The last body 
+record row number 
+in the file must be 
+equal to the total 
+records supplied in 
+the trailer.  This 
+would imply that for 
+every file the body 
+records start at 1 
+and increment by 1 
+for each record 
+regardless of how 
+many different 
+sections there 
+might be in the 
+body, for files 
+where there are 
+multiple sections in 
+the body. 
+
+SARS_External BRS_2022_IT3s_v4.0.0T-9 Page 215 of 282
+
+
+
+ 
+No Field Description Required Bulk Data Length Length Data Validations Logic Validations 
+
+Name (B) or Type Type 
+real (Min:Max) 
+
+Type Condition Rule 
+time 
+(R)  
+
+306 Nature of The type/ category M  B/R FT VAR 4:33  Refer to Appendix A for  Value must = PARTNERSHIP / 
+Person of the Reporting code table FOREIGN_COMPANY / OTHER_CO /
+
+Institution INTERVIVOS_TRUST / 
+GOVERNMENT_ENTITY / 
+UNINCORPORATED_BODY_OF_PERSO
+NS / ASSOC_NOT_FOR_GAIN 
+
+307 Registered Registered name of M  B/R FT VAR 1:78   
+Name the Reporting 
+
+Institution 
+308 Registratio The registration M  B/R FT VAR 1:15   
+
+n Number number of the 
+Reporting 
+Institution   
+
+309 Date Date registered at M  B/R FT FIX 8:8  Format CCYYMMDD  
+Registered  
+Masters 
+Office  
+
+310 Tax Tax Reference M  B/R N FIX 10:10  Refer to Appendix I -  Tax reference number can only start with 
+Reference Number as Modulus 10 Validation 0, 1, 2, 3, 7 or 9 
+Number registered at SARS  
+
+311 Unique Trust Unique O  B/R AN FIX 16:16    
+Registratio Registration 
+n Number Number (URN) as 
+
+issued by the 
+ 
+
+312 Residency Residency for M  B/R A FIX 3:3 2:2  Refer to Appendix Q F for  
+Tax income tax code table 
+Purposes purposes 
+
+313 Masters M  B/R A VAR 1:3   
+Office trust registration  
+Registratio  
+n 
+
+314 Trust Type Trust Type M  B/R FT VAR 1:35   Trust Type values must = 
+ Non Resident  
+ Exempt Institution  
+ Testamentary  
+ Inter vivos  
+
+SARS_External BRS_2022_IT3s_v4.0.0T-9 Page 216 of 282
+
+
+
+ 
+No Field Description Required Bulk Data Length Length Data Validations Logic Validations 
+
+Name (B) or Type Type 
+real (Min:Max) 
+
+Type Condition Rule 
+time 
+(R)  
+
+ Special Trust par.(a) 
+ Special Trust par.(b) 
+ Personal Service Provider 
+
+315 Address Indicates unit O  B/R AN VAR 0:8   
+Details - number of the 
+Physical: Physical address 
+Unit 
+number 
+
+316 Address Indicates the O  B/R FT VAR 0:27   
+Details - complex name of 
+Physical:  the Physical 
+Complex address 
+
+317 Address Indicates the street O  B/R AN VAR 0:8   
+Details - number of the 
+Physical: Physical address 
+Street 
+Number 
+
+318 Address Indicates the street C  At least one, B/R FT VAR  0:27  no   
+Details - / name of farm of Physical condition 
+Physical:  the Physical address or met 
+Street / address Postal  1:27 
+Name of address must condition 
+Farm be completed met 
+
+ If Postal 
+Address Line 
+1 is not 
+completed 
+this field is 
+Mandatory 
+
+319 Address Indicates the C  If Address B/R FT VAR  0:36  no   
+Details - suburb / district of Details - condition 
+Physical:  Physical address Physical:  met 
+Suburb/ Street/Name  1:36  
+District of Farm is condition 
+
+completed met 
+this field is 
+
+SARS_External BRS_2022_IT3s_v4.0.0T-9 Page 217 of 282
+
+
+
+ 
+No Field Description Required Bulk Data Length Length Data Validations Logic Validations 
+
+Name (B) or Type Type 
+real (Min:Max) 
+
+Type Condition Rule 
+time 
+(R)  
+
+conditional  
+at least one 
+the Suburb/ 
+District field 
+or the 
+City/Town 
+fields must 
+be completed 
+
+320 Address Indicates the city / C  If Address B/R FT VAR  0:36  no   
+Details - town of Physical Details - condition 
+Physical: address Physical:  met 
+City/Town Street/Name  1:36  
+
+of Farm is condition 
+completed met 
+this field is 
+conditional  
+at least one 
+the Suburb/ 
+District field 
+or the 
+City/Town 
+fields must 
+be completed 
+
+321 Address Indicates the postal C  If Address B/R ANS VAR  0:10  no   
+Details - code of the Details - condition 
+Physical: Physical address Physical:  met 
+Postal Street/Name  1:10  
+Code of Farm is condition 
+
+completed, met 
+this field is 
+Mandatory 
+
+ Else field 
+Optional 
+
+322 Postal Indicates if the O  B/R A VAR 0:1   
+Address Postal Address is = Yes and N = No 
+
+SARS_External BRS_2022_IT3s_v4.0.0T-9 Page 218 of 282
+
+
+
+ 
+No Field Description Required Bulk Data Length Length Data Validations Logic Validations 
+
+Name (B) or Type Type 
+real (Min:Max) 
+
+Type Condition Rule 
+time 
+(R)  
+
+same as the same as the 
+Physical physical address 
+Address 
+indicator 
+
+323 Postal Line 1 of the Postal C  At least one B/R FT VAR  0:100    
+Address address Physical no 
+Line 1 address or condition 
+
+Postal met 
+address field  1:100  
+must be condition 
+completed met 
+
+ If Address 
+Details - 
+Physical:  
+Street/Name 
+of Farm is 
+not 
+completed 
+this field is 
+Mandatory 
+
+324 Postal Line 2 of the Postal O  B/R FT VAR 0:100   
+Address address  
+Line 2 
+
+325 Postal Line 3 of the Postal O  B/R FT VAR 0:100   
+Address address  
+Line 3 
+
+326 Postal Line 4 of the Postal O  B/R FT VAR 0:100   
+Address address  
+Line 4 
+
+327 Postal Postal code r C  If Postal B/R ANS VAR  0:10  no   
+Code Address Line condition 
+
+1 is met 
+completed  1:10  
+this field is condition 
+Mandatory met 
+
+SARS_External BRS_2022_IT3s_v4.0.0T-9 Page 219 of 282
+
+
+
+ 
+No Field Description Required Bulk Data Length Length Data Validations Logic Validations 
+
+Name (B) or Type Type 
+real (Min:Max) 
+
+Type Condition Rule 
+time 
+(R)  
+
+ Else field is 
+Optional 
+
+328 Telephone Telephone number  O  B/R AN VAR  0:0  if  Only numeric values are  
+Number this field is allowed 
+
+Include country blank  No spaces are allowed 
+code if not South  9:15  if  + is not allowed 
+African number this field is  Value must not contain a 
+(e.g. 0044 for the completed decimal point 
+United Kingdom).  National numbers must 
+
+start with 0 
+ International numbers 
+
+must start with 00 
+329 Cell Phone Cell phone number  M  B/R AN VAR 9:15  Only numeric values are  
+
+Number allowed 
+Include country  No spaces are allowed 
+code if not South  + is not allowed 
+African number  Value must not contain a 
+(e.g. 0044 for the decimal point 
+United Kingdom).  National numbers must 
+
+start with 0 
+ International numbers 
+
+must start with 00 
+ Insert 
+
+information available. 
+330 Contact Contact Email M  B/R FT VAR 5:80  Must contain one @ sign  
+
+Email  Must contain a domain 
+ which must be indicated 
+
+with a dot (.) 
+ 
+
+if no information available. 
+
+SARS_External BRS_2022_IT3s_v4.0.0T-9 Page 220 of 282
+
+
+
+ 
+No Field Description Required Bulk Data Length Length Data Validations Logic Validations 
+
+Name (B) or Type Type 
+real (Min:Max) 
+
+Type Condition Rule 
+time 
+(R)  
+
+6.5.4 DETAILS OF PERSON / BENEFICIARY (Mandatory Record 1:
+throughout reporting period.  If there was no reportable financial information to / from the Reporting Institution for the reporting period, then financial 
+records will contain R 0.00 values for the Mandatory fields (e.g. The Trust Financial Flow (TFF) section will contain R 0.00 values etc.). 
+ 
+Note: NULL return Field 332 was removed  Provide ALL Persons / Beneficiaries. 
+ 
+
+401 Section To identify the start M  B/R A FIX 1:1  Must = B, where B = Body  
+Identifier of the section as 
+
+well as identifying 
+the type of section 
+
+402 Record Type of transaction M  B/R AN VAR 1:6  Must = DPB, where DPB  
+Type = Details Person 
+
+Beneficiary 
+403 Record Indicates the status M B/R A FIX 1:1  Record status can only be  
+
+Status of the record, one of: 
+whether it is a new  N = New Record; 
+record, an adjusted  C = Correction 
+record or a record  D = Delete record 
+that must be  
+deleted Note: The statuses must be 
+
+used as follows: 
+ N  Indicate a new record 
+
+that has not been 
+submitted before; 
+
+ C  Indicate that a 
+previously submitted 
+record is amended; 
+
+ D  Indicate that a 
+previously submitted 
+record must be deleted. 
+
+404 Unique M B/R FT VAR 1:100   If the record status (Field 403) = C or D, 
+Number system must then this number must contain the number 
+
+generate a unique that was originally submitted 
+
+SARS_External BRS_2022_IT3s_v4.0.0T-9 Page 221 of 282
+
+
+
+ 
+No Field Description Required Bulk Data Length Length Data Validations Logic Validations 
+
+Name (B) or Type Type 
+real (Min:Max) 
+
+Type Condition Rule 
+time 
+(R)  
+
+number for each  Must be unique within the section across
+record. all files 
+In the response file, 
+the unique number 
+would be the 
+number specified in 
+the file submitted to 
+SARS to enable the 
+
+source system to 
+identify the line that 
+is being responded 
+on by SARS. 
+
+405 Row Number of the row M B N VAR 1:10  An incrementing number  Must be greater than or equal to 1 and 
+Number in the file, per record beginning at 1 smaller than or equal to the total number 
+
+sequential number for each file of rows in the file with Section Identifier = 
+starting at 1 for B 
+every file submitted 
+to SARS. In the 
+response file, this 
+must be the 
+rejected row(s) 
+from the incoming 
+file. 
+The row number 
+field must start at 1 
+for every new file 
+and must increment 
+by 1 for every new 
+row added that is 
+classed as a body 
+record in the file. 
+The last body 
+record row number 
+in the file must be 
+equal to the total 
+
+SARS_External BRS_2022_IT3s_v4.0.0T-9 Page 222 of 282
+
+
+
+ 
+No Field Description Required Bulk Data Length Length Data Validations Logic Validations 
+
+Name (B) or Type Type 
+real (Min:Max) 
+
+Type Condition Rule 
+time 
+(R)  
+
+records supplied in 
+the trailer.  This 
+would imply that for 
+every file the body 
+records start at 1 
+and increment by 1 
+for each record 
+regardless of how 
+many different 
+sections there 
+might be in the 
+body, for files 
+where there are 
+multiple sections in 
+the body. 
+
+406 I3T Unique IT3(t) unique M  B FT VAR 1:100   Must be equal to a Unique Number (Field 
+Number number 304) where Record Type = RI 
+
+407 Connected Is this person / M  B/R A FIX 1:1   
+Person to beneficiary a  
+Trust connected person 
+
+in relation to this 
+trust? 
+
+408 Person Is this person / M  B/R A FIX 1:1  Must =  
+Beneficiary beneficiary a  
+of This beneficiary of this 
+Trust trust? 
+
+409 Founder of Is this person / M  B/R A FIX 1:1   
+Trust beneficiary a  
+
+founder of this 
+trust? 
+
+410 Natural Is this person / M  B/R A FIX 1:1   
+Person beneficiary a  
+
+natural person? 
+411 Donor of Is this person / M  B/R A FIX 1:1   
+
+Trust beneficiary a donor  or 
+of this trust?  
+
+SARS_External BRS_2022_IT3s_v4.0.0T-9 Page 223 of 282
+
+
+
+ 
+No Field Description Required Bulk Data Length Length Data Validations Logic Validations 
+
+Name (B) or Type Type 
+real (Min:Max) 
+
+Type Condition Rule 
+time 
+(R)  
+
+412 Non Is this person / M  B/R A FIX 1:1   
+Resident beneficiary a non-  
+
+resident? 
+413 Individual SARS assigned C  If Natural B/R N FIX  0:0  if  Modulus 10 check for IT  
+
+Person Income tax Person (Field this field is reference number.  
+Beneficiary reference number - 410) = Y, blank 
+Income Personal particulars  Refer to Appendix I for the 
+Tax And  10:10  if modulus 10 check 
+Reference Individual this field is  The first character can 
+Number Person completed only be 0, 1, 2, 3, or 9 
+
+Beneficiary   
+ID Number 
+(Field 419) 
+completed, 
+Then this 
+field is 
+Mandatory 
+
+ Else this field 
+is NULL 
+
+414 Individual Individual person / C  If Natural B/R FT VAR  0:0  No   
+Person beneficiary Person (Field condition 
+Beneficiary Surname 410) = Y, is met 
+Surname Mandatory  1:50  
+
+ Else this field Condition 
+is NULL met 
+
+415 Individual Individual person / C  If Natural B/R FT VAR  0:0  No   
+Person beneficiary First Person (Field condition 
+Beneficiary Name 410) = Y, is met 
+First Name Mandatory  1:50  
+
+ Else this field Condition 
+is NULL met 
+
+416 Individual Individual person / C  If Natural B/R FT VAR  0:0  No   
+Person beneficiary Other Person (Field condition 
+Beneficiary Name 410) = Y, is met 
+Other 
+Name Optional 
+
+SARS_External BRS_2022_IT3s_v4.0.0T-9 Page 224 of 282
+
+
+
+ 
+No Field Description Required Bulk Data Length Length Data Validations Logic Validations 
+
+Name (B) or Type Type 
+real (Min:Max) 
+
+Type Condition Rule 
+time 
+(R)  
+
+ Else this field  0:50  
+is NULL Condition 
+
+met 
+417 Individual Individual person / C  If Natural B/R AN VAR  0:0 - No   
+
+Person beneficiary Initials Person (Field condition 
+Beneficiary 410) = Y, is met 
+Initials Mandatory  1:5  
+
+ Else this field Condition 
+is NULL met 
+
+418 Individual Individual person / C  If Natural B/R FT FIX  0:0  no  Format CCYYMMDD   
+Person beneficiary Date of Person (Field condition  Date must not be greater 
+Beneficiary Birth 410) = Y, is met  
+Date of than the current date 
+Birth Mandatory  8:8  
+
+ Else this field condition 
+is NULL met  
+
+419 Individual Individual person / C  If Natural B/R N VAR  0:13  no  Even positions of the ID  
+Person beneficiary ID Person (Field condition number (2, 4, 6, 8, 10, 12) 
+Beneficiary Number  410) = Y And met  are multiplied by 2. If the 
+ID Number  
+
+ Individual  13:13  answer is greater than 10 
+Beneficiary condition the digits are added 
+Passport met together to get the 
+Number calculated value.   
+(Field 420)  Add these calculated 
+does not values and the odd 
+contain a positions of the ID number 
+value, Then (1, 3, 5, 7, 9, 11) together. 
+this field is Subtract the last character 
+Mandatory of this calculation from 10 
+
+ If Natural to get the check digit. If 
+Person (Field this is not equal to the last 
+410) = Y And character of the ID as 
+Individual entered, then this does 
+Beneficiary not pass the modulus 10 
+Passport test. 
+Country 
+
+SARS_External BRS_2022_IT3s_v4.0.0T-9 Page 225 of 282
+
+
+
+ 
+No Field Description Required Bulk Data Length Length Data Validations Logic Validations 
+
+Name (B) or Type Type 
+real (Min:Max) 
+
+Type Condition Rule 
+time 
+(R)  
+
+(Field 421) = 
+ZA, Then this 
+field is 
+Mandatory 
+
+ Else this field 
+is Optional 
+
+420 Individual Individual person / C  If Natural B/R AN VAR  0:18  no   
+Person beneficiary Person (Field condition 
+Beneficiary Passport Number  410) = Y And met  
+Passport  
+Number  Individual  18:18  
+
+Person condition 
+Beneficiary met 
+ID Number 
+(Field 419) 
+does not 
+contain a 
+value, Then 
+this field is 
+Mandatory 
+
+ Else this field 
+is Optional 
+
+421 Individual Individual person / C  If Individual B/R AN FIX  0:0  No  Refer to Appendix F  
+Person beneficiary Person condition Country Codes Table 
+Beneficiary Passport Country Beneficiary met 
+Passport 
+Country Passport  2:2 - 
+
+Number Condition 
+(Field 420) met 
+contains a 
+value, Then 
+this field is 
+Mandatory 
+
+ Else this field 
+is NULL 
+
+SARS_External BRS_2022_IT3s_v4.0.0T-9 Page 226 of 282
+
+
+
+ 
+No Field Description Required Bulk Data Length Length Data Validations Logic Validations 
+
+Name (B) or Type Type 
+real (Min:Max) 
+
+Type Condition Rule 
+time 
+(R)  
+
+422 Individual Individual person / C  If Individual B/R FT FIX  0:8  no  Format CCYYMMDD   
+Person beneficiary Person condition  Date must not be greater 
+Beneficiary Passport Issue Beneficiary met  
+Passport Date than the current date  
+Issue Date Passport  8:8   
+
+Number condition 
+(Field 420) met  
+contains a 
+value, Then 
+this field is 
+Mandatory 
+
+ Else this field 
+is NULL 
+
+423 Company SARS assigned C  If Natural B/R N FIX  0:0  if  Modulus 10 check for IT  
+Trust Income tax Person (Field this field is reference number.  
+Person reference number - 410) = N, blank 
+Beneficiary Personal particulars  Refer to Appendix I for the 
+Income Then this  10:10  if modulus 10 check 
+Tax field is this field is  The first character can 
+Reference Mandatory completed only be 0, 1, 2, 3, or 9 
+Number  Else this field   
+
+is NULL 
+424 Company Company Trust C  If Natural B/R AN VAR  0:0  no   
+
+CC Trust Registration Person (Field condition 
+Person Number 410) = N, met  
+Beneficiary 
+Registratio Then this  1:15  
+n Number field is condition 
+
+Mandatory met 
+ Else this field 
+
+is NULL 
+425 Company Company Trust C  If Natural B/R FT VAR  0:0  no   
+
+Trust  Registered Name Person (Field condition 
+Person 410) = N, met  
+Beneficiary 
+Registered Then this  1:78  
+Name field is condition 
+
+Mandatory met 
+
+SARS_External BRS_2022_IT3s_v4.0.0T-9 Page 227 of 282
+
+
+
+ 
+No Field Description Required Bulk Data Length Length Data Validations Logic Validations 
+
+Name (B) or Type Type 
+real (Min:Max) 
+
+Type Condition Rule 
+time 
+(R)  
+
+ Else this field 
+is NULL 
+
+426 Address Indicates unit O  B/R AN VAR 0:8   
+Details - number of the 
+Physical: Person Beneficiary 
+Unit Physical address. 
+number 
+
+427 Address Indicates the O  B/R FT VAR 0:27   
+Details - complex name of 
+Physical:  the Person 
+Complex Beneficiary 
+
+Physical address. 
+428 Address Indicates the street O  B/R AN VAR 0:8   
+
+Details - number of the 
+Physical: Person Beneficiary 
+Street Physical address. 
+Number 
+
+429 Address Indicates the street C  At least one, B/R FT VAR  0:27  no   
+Details - / name of farm of Physical condition 
+Physical:  the Person address or met 
+Street/Nam Beneficiary 
+e of Farm Physical address. Postal  1:27 
+
+address must condition 
+be completed met 
+
+ If Postal 
+Address Line 
+1 is not 
+completed 
+this field is 
+Mandatory 
+
+430 Address Indicates the C  If Address B/R FT VAR  0:36  no   
+Details - suburb / district of Details - condition 
+Physical:  Person Beneficiary Physical:  met 
+Suburb/ Physical address 
+District Street/Name  1:36  
+
+of Farm is condition 
+completed met 
+this field is 
+conditional  
+
+SARS_External BRS_2022_IT3s_v4.0.0T-9 Page 228 of 282
+
+
+
+ 
+No Field Description Required Bulk Data Length Length Data Validations Logic Validations 
+
+Name (B) or Type Type 
+real (Min:Max) 
+
+Type Condition Rule 
+time 
+(R)  
+
+at least one 
+the Suburb/ 
+District field 
+or the 
+City/Town 
+fields must 
+be completed 
+
+431 Address Indicates the city / C  If Address B/R FT VAR  0:36  no   
+Details - town of Person Details - condition 
+Physical: Beneficiary Physical:  met 
+City/Town Physical address Street/Name  1:36  
+
+of Farm is condition 
+completed met 
+this field is 
+conditional  
+at least one 
+the Suburb/ 
+District field 
+or the 
+City/Town 
+fields must 
+be completed 
+
+432 Address Indicates the postal C  If Address B/R ANS VAR  0:10  no   
+Details - code of Person Details - condition 
+Physical: Beneficiary Physical:  met 
+Postal Physical address 
+Code Street /  1:10  
+
+Name of condition 
+Farm is met 
+completed, 
+this field is 
+Mandatory 
+
+ Else field 
+Optional 
+
+433 Postal Indicates if the M  B/R A VAR 0:1   
+Address Person Beneficiary = Yes and N = No 
+same as Postal Address is 
+
+SARS_External BRS_2022_IT3s_v4.0.0T-9 Page 229 of 282
+
+
+
+ 
+No Field Description Required Bulk Data Length Length Data Validations Logic Validations 
+
+Name (B) or Type Type 
+real (Min:Max) 
+
+Type Condition Rule 
+time 
+(R)  
+
+Physical the same as the 
+Address physical address 
+indicator 
+
+434 Postal Line 1 of the Postal C  At least one B/R FT VAR  0:100    
+Address address of Person Physical no 
+Line 1 Beneficiary address or condition 
+
+Postal met 
+address field  1:100  
+must be condition 
+completed met 
+
+ If Address 
+Details - 
+Physical:  
+Street / 
+Name of 
+Farm is not 
+completed 
+this field is 
+Mandatory 
+
+435 Postal Line 2 of the Postal O  B/R FT VAR 0:100   
+Address address of Person 
+Line 2 Beneficiary 
+
+436 Postal Line 3 of the Postal O  B/R FT VAR 0:100   
+Address address of Person 
+Line 3 Beneficiary 
+
+437 Postal Line 4 of the Postal O  B/R FT VAR 0:100   
+Address address of Person 
+Line 4 Beneficiary 
+
+438 Postal Postal code of C  If Postal B/R ANS VAR  0:10  no   
+Code Person Beneficiary Address Line condition 
+
+1 is met 
+completed  1:10  
+this field is condition 
+Mandatory met 
+
+ Else field 
+Optional 
+
+SARS_External BRS_2022_IT3s_v4.0.0T-9 Page 230 of 282
+
+
+
+ 
+No Field Description Required Bulk Data Length Length Data Validations Logic Validations 
+
+Name (B) or Type Type 
+real (Min:Max) 
+
+Type Condition Rule 
+time 
+(R)  
+
+439 Telephone Telephone number O  B/R AN VAR  0:0  if  Only numeric values are  
+Number for Person this field is allowed 
+
+Beneficiary blank  No spaces are allowed 
+ 9:15  if  + is not allowed 
+
+Include country this field is 
+code if not South  Value must not contain a 
+African number completed decimal point 
+(e.g. 0044 for the  National numbers must 
+United Kingdom). start with 0 
+
+ International numbers 
+must start with 00 
+
+440 Cell Phone Cell phone number M  B/R AN VAR 9:15  Only numeric values are  
+Number for Person allowed 
+
+Beneficiary  No spaces are allowed 
+ + is not allowed 
+
+Include country 
+code if not South  Value must not contain a 
+African number decimal point 
+(e.g. 0044 for the  National numbers must 
+United Kingdom). start with 0 
+
+ International numbers 
+must start with 00 
+
+ Insert 
+
+information available. 
+441 Contact Email for Person M  B/R FT VAR 5:80  Must contain one @ sign  
+
+Email Beneficiary   Must contain a domain 
+which must be indicated 
+
+ with a dot (.) 
+ 
+
+if no information available. 
+442 Taxable on Was taxable on M  B/R A FIX 1:1   
+
+amounts amounts distributed 
+distributed to / vested in 
+to vested Person / 
+
+Beneficiary or 
+taxable i.t.o. s7 or 
+
+SARS_External BRS_2022_IT3s_v4.0.0T-9 Page 231 of 282
+
+
+
+ 
+No Field Description Required Bulk Data Length Length Data Validations Logic Validations 
+
+Name (B) or Type Type 
+real (Min:Max) 
+
+Type Condition Rule 
+time 
+(R)  
+
+par. 68  72 of the 
+Eighth schedule 
+
+443 Received Details of M  B/R A FIX 1:1   
+accrued transactions 
+non- applicable to this 
+taxable Person / 
+
+Beneficiary: 
+amounts Received / accrued 
+
+non-taxable 
+amounts form this 
+trust 
+
+444 Received Details of M  B/R A FIX 1:1   
+accrued transactions 
+capital or applicable to this 
+asset Person / 
+
+Beneficiary: 
+distribution Received / accrued 
+
+a capital or asset 
+distribution from 
+this trust 
+
+445 Held loans Details of M  B/R A FIX 1:1   
+granted transactions 
+
+applicable to this 
+Person / 
+Beneficiary: Held 
+loan(s) granted to 
+this trust 
+
+446 Held loans Details of M  B/R A FIX 1:1   
+from transactions 
+
+applicable to this 
+Person / 
+Beneficiary: Held 
+loan(s) from this 
+trust 
+
+447 Made Details of M  B/R A FIX 1:1   
+donations transactions 
+to applicable to this 
+
+Person / 
+Beneficiary: Made 
+donation(s) to this 
+trust 
+
+SARS_External BRS_2022_IT3s_v4.0.0T-9 Page 232 of 282
+
+
+
+ 
+No Field Description Required Bulk Data Length Length Data Validations Logic Validations 
+
+Name (B) or Type Type 
+real (Min:Max) 
+
+Type Condition Rule 
+time 
+(R)  
+
+448 Made Details of M  B/R A FIX 1:1   
+contributio transactions 
+ns to applicable to this 
+
+Person / 
+Beneficiary: Made 
+contribution(s) to 
+this trust 
+
+449 Received Details of M  B/R A FIX 1:1   
+donations transactions 
+from applicable to this 
+
+Person / 
+Beneficiary: 
+Received 
+donation(s) from 
+this trust 
+
+450 Received Details of M  B/R A FIX 1:1   
+contributio transactions 
+ns from applicable to this 
+
+Person / 
+Beneficiary: 
+Received 
+contribution(s) from 
+this trust 
+
+451 Made Details of M  B/R A FIX 1:1   
+distribution transactions 
+s to applicable to this 
+
+Person / 
+Beneficiary: Made 
+distribution(s) to 
+this trust (only 
+applicable if the 
+related party is a 
+trust or foundation) 
+
+452 Received Details of M  B/R A FIX 1:1   
+refunds on transactions 
+contributio applicable to this 
+ns Person / 
+
+Beneficiary: 
+Received refund(s) 
+on contribution(s) to 
+this trust 
+
+SARS_External BRS_2022_IT3s_v4.0.0T-9 Page 233 of 282
+
+
+
+ 
+No Field Description Required Bulk Data Length Length Data Validations Logic Validations 
+
+Name (B) or Type Type 
+real (Min:Max) 
+
+Type Condition Rule 
+time 
+(R)  
+
+453 Right of Details of M  B/R A FIX 1:1   
+use of transactions 
+assets applicable to this 
+
+Person / 
+Beneficiary: 
+Enjoyed the right of 
+use of asset(s) 
+retained in this trust 
+
+6.5.5 TAXABLE AMOUNTS DISTRIBUTED / VESTED IN BENEFICIARIES 
+442) = Y Then Mandatory Record, Else must not provide this section) 
+
+501 Section To identify the start M  B A FIX 1:1  Must = B, where B = Body  
+Identifier of the section as 
+
+well as identifying 
+the type of section 
+
+502 Record Type of transaction M  B/R AN VAR 1:6  Must = TAD, where TAD =  
+Type Taxable Amounts 
+
+Distributed 
+503 Record Indicates the status M B/R A FIX 1:1  Record status can only be  
+
+Status of the record, one of: 
+whether it is a new N = New Record; 
+record, an adjusted C = Correction 
+record or a record D = Delete record 
+that must be  
+deleted Note: The statuses must be 
+
+used as follows: 
+ N  Indicate a new record 
+
+that has not been 
+submitted before; 
+
+ C  Indicate that a 
+previously submitted 
+record is amended; 
+
+ D  Indicate that a 
+previously submitted 
+record must be deleted. 
+
+SARS_External BRS_2022_IT3s_v4.0.0T-9 Page 234 of 282
+
+
+
+ 
+No Field Description Required Bulk Data Length Length Data Validations Logic Validations 
+
+Name (B) or Type Type 
+real (Min:Max) 
+
+Type Condition Rule 
+time 
+(R)  
+
+504 Unique M B/R FT VAR 1:100   If the record status (Field 503) = C or D, 
+Number system must then this number must contain the number 
+
+generate a unique that was originally submitted 
+number for each  Must be unique within the section across
+record. all files 
+In the response file, 
+the unique number 
+would be the 
+number specified in 
+the file submitted to 
+SARS to enable the 
+
+source system to 
+identify the line that 
+is being responded 
+on by SARS 
+
+505 Row Number of the row M B N VAR 1:10  An incrementing number  Must be greater than or equal to 1 and 
+Number in the file, per record beginning at 1 smaller than or equal to the total number 
+
+sequential number for each file of rows in the file with Section Identifier = 
+starting at 1 for  Value must not contain a B 
+every file submitted decimal point 
+to SARS. In the 
+response file, this 
+must be the 
+rejected row(s) 
+from the incoming 
+file. 
+The row number 
+field must start at 1 
+for every new file 
+and must increment 
+by 1 for every new 
+row added that is 
+classed as a body 
+record in the file. 
+The last body 
+
+SARS_External BRS_2022_IT3s_v4.0.0T-9 Page 235 of 282
+
+
+
+ 
+No Field Description Required Bulk Data Length Length Data Validations Logic Validations 
+
+Name (B) or Type Type 
+Type Condition Rule real (Min:Max) 
+
+time 
+(R)  
+
+record row number 
+in the file must be 
+equal to the total 
+records supplied in 
+the trailer.  This 
+would imply that for 
+every file the body 
+records start at 1 
+and increment by 1 
+for each record 
+regardless of how 
+many different 
+sections there 
+might be in the 
+body, for files 
+where there are 
+multiple sections in 
+the body 
+
+506 I3T Unique IT3(t) unique M B/R FT VAR 1:100   Must be equal to a Unique Number (Field 
+Number number 404) where Record Type = DPB 
+
+507 Amount Amount Subject to M  B/R N VAR 0:15  Must be greater than or  
+Subject to Tax equal to 0 and smaller 
+Tax  than or equal to 
+
+Note: Details of 999999999999999 
+Taxable amounts  No decimal value  no 
+distributed to / cent value 
+vested in person / 
+beneficiaries or 
+taxable i.t.o. s7 or 
+par. 68 of the 
+Eighth schedule 
+ 
+Net amount 
+distributed / vested 
+
+SARS_External BRS_2022_IT3s_v4.0.0T-9 Page 236 of 282
+
+
+
+ 
+No Field Description Required Bulk Data Length Length Data Validations Logic Validations 
+
+Name (B) or Type Type 
+real (Min:Max) 
+
+Type Condition Rule 
+time 
+(R)  
+
+508 Source The source code M  B/R N FIX 4:4  List of valid source codes that must be within 
+Code indicating the the following ranges: 
+
+nature of income  All profit trade source codes (ending 
+paid to Client   
+ with an even digit) between ranges 
+Note: Details of  
+Taxable amounts  
+distributed to / 3006 which is valid from YOA 1999  
+vested in 2006 and 3025 which is valid from 
+beneficiaries or YOA 2007 onwards  
+taxable i.t.o. s7 or 
+par. 68 of the  I  Local 
+Eighth schedule remuneration and annuities  include 
+
+3601-3606, 3610, 3611, 3616, 3617, 
+3667, (3719, 3720, 3721, 3620, 3670, 
+3621(only from YOA  2017 onwards)) 
+
+  
+Investment, capital gains, rental, 
+royalties and other income - 4201, 
+4210, 4212, 4214, 4216, 4218, 4220, 
+4238 ((only from YOA  2015 onwards), 
+4250, 4252), 4292 (only from YOA  
+2017 onwards), 4276 (from 2018 YOA 
+onwards) 
+
+509 Foreign Foreign Tax Credits C  If Source B/R N VAR 0:15  Must be greater than or  
+Tax  Code (Field equal to 0 and smaller 
+Credits Note: Details of 508) = 0192, than or equal to 
+
+Taxable amounts 
+distributed to / 0193, 4216- 999999999999999 
+vested in 4218, 4220,  No decimal value  no 
+beneficiaries or 4221, 4252, cent value 
+taxable i.t.o. s7 or 4253 or 
+par. 68 of the 4276, then 
+Eighth schedule this field is 
+
+Mandatory, 
+ Else field = 
+
+NULL 
+ 
+
+SARS_External BRS_2022_IT3s_v4.0.0T-9 Page 237 of 282
+
+
+
+ 
+No Field Description Required Bulk Data Length Length Data Validations Logic Validations 
+
+Name (B) or Type Type 
+real (Min:Max) 
+
+Type Condition Rule 
+time 
+(R)  
+
+6.5.6 DETAILS OF NON-TAXABLE INCOME DISTRIBUTED (Conditional Record 0:1, If Received Accrued Non-Taxable Amounts (Field 443) = Y Then 
+Mandatory Only One Record, Else must not provide this section) 
+601 Section To identify the start M  B A FIX 1:1 Must = B, where B = Body  
+
+Identifier of the section as 
+well as identifying 
+the type of section 
+
+602 Record Type of transaction M  B/R AN VAR 1:6 Must = DNT, where DNT =  
+Type Details of Non Taxable 
+
+603 Record Indicates the status M  B/R A FIX 1:1  Record status can only be  
+Status of the record, one of: 
+
+whether it is a new N = New Record; 
+record, an adjusted 
+record or a record C = Correction 
+that must be D = Delete record 
+deleted  
+
+Note: The statuses must be 
+used as follows: 
+ N  Indicate a new record 
+
+that has not been 
+submitted before; 
+
+ C  Indicate that a 
+previously submitted 
+record is amended; 
+
+ D  Indicate that a 
+previously submitted 
+record must be deleted. 
+
+604 Unique The M  B/R FT VAR 1:100   If the record status (Field 603) = C or D, 
+Number system must then this number must contain the number 
+
+generate a unique that was originally submitted 
+number for each  Must be unique within the section across
+record. all files 
+In the response file, 
+the unique number 
+would be the 
+number specified in 
+the file submitted to 
+
+SARS_External BRS_2022_IT3s_v4.0.0T-9 Page 238 of 282
+
+
+
+ 
+No Field Description Required Bulk Data Length Length Data Validations Logic Validations 
+
+Name (B) or Type Type 
+real (Min:Max) 
+
+Type Condition Rule 
+time 
+(R)  
+
+SARS to enable the 
+
+source system to 
+identify the line that 
+is being responded 
+on by SARS 
+
+605 Row Number of the row M  B N VAR 1:10  An incrementing number  Must be greater than or equal to 1 and 
+Number in the file, per record beginning at 1 smaller than or equal to the total number 
+
+sequential number for each file of rows in the file with Section Identifier = 
+starting at 1 for  Value must not contain a B 
+every file submitted decimal point 
+to SARS. In the 
+response file, this 
+must be the 
+rejected row(s) 
+from the incoming 
+file. 
+The row number 
+field must start at 1 
+for every new file 
+and must increment 
+by 1 for every new 
+row added that is 
+classed as a body 
+record in the file. 
+The last body 
+record row number 
+in the file must be 
+equal to the total 
+records supplied in 
+the trailer.  This 
+would imply that for 
+every file the body 
+records start at 1 
+and increment by 1 
+for each record 
+regardless of how 
+many different 
+sections there 
+
+SARS_External BRS_2022_IT3s_v4.0.0T-9 Page 239 of 282
+
+
+
+ 
+No Field Description Required Bulk Data Length Length Data Validations Logic Validations 
+
+Name (B) or Type Type 
+real (Min:Max) 
+
+Type Condition Rule 
+time 
+(R)  
+
+might be in the 
+body, for files 
+where there are 
+multiple sections in 
+the body 
+
+606 I3T Unique IT3(t) unique M  B/R FT VAR 1:100   Must be equal to a Unique Number (Field 
+Number number 404) where Record Type = DPB 
+
+607 Local Local Dividends M  B/R N VAR 0:15  Must be greater than or  
+Dividends  equal to 0 and smaller 
+
+Note: Details of than or equal to 
+Non-Taxable 
+Income distributed 999999999999999 
+
+ No decimal value  no 
+cent value 
+
+608 Exempt Exempt foreign M  B/R N VAR 0:15  Must be greater than or  
+foreign dividends (excl. equal to 0 and smaller 
+dividends s10B(3) exemption) than or equal to 
+
+ 
+Note: Details of 999999999999999 
+Non-Taxable  No decimal value  no 
+Income distributed cent value 
+
+609 Other Non- Other Non-Taxable M  B/R N VAR 0:15  Must be greater than or  
+Taxable income equal to 0 and smaller 
+income  than or equal to 
+
+Note: Details of 
+Non-Taxable 999999999999999 
+Income distributed  No decimal value  no 
+
+cent value 
+
+6.5.7 TRUST FINANCIAL FLOWS (Mandatory Record 1:1 Provide One and Only One Record) 
+701 Section To identify the start M  B A FIX 1:1 Must = B, where B = Body  
+
+Identifier of the section as 
+well as identifying 
+the type of section 
+
+702 Record Type of transaction M  B/R AN VAR 1:6 Must = TFF, where TFF =  
+Type Trust Financial Flows 
+
+703 Record Indicates the status M  B/R A FIX 1:1  Record status can only be  
+Status of the record, one of: 
+
+whether it is a new N = New Record; 
+
+SARS_External BRS_2022_IT3s_v4.0.0T-9 Page 240 of 282
+
+
+
+ 
+No Field Description Required Bulk Data Length Length Data Validations Logic Validations 
+
+Name (B) or Type Type 
+real (Min:Max) 
+
+Type Condition Rule 
+time 
+(R)  
+
+record, an adjusted C = Correction 
+record or a record D = Delete record 
+that must be  
+deleted Note: The statuses must be 
+
+used as follows: 
+ N  Indicate a new record 
+
+that has not been 
+submitted before; 
+
+ C  Indicate that a 
+previously submitted 
+record is amended; 
+
+ D  Indicate that a 
+previously submitted 
+record must be deleted. 
+
+704 Unique The M  B/R FT VAR 1:100   If the record status (Field 703) = C or D, 
+Number system must then this number must contain the number 
+
+generate a unique that was originally submitted 
+number for each  Must be unique within the section across
+record. all files 
+In the response file, 
+the unique number 
+would be the 
+number specified in 
+the file submitted to 
+SARS to enable the 
+
+source system to 
+identify the line that 
+is being responded 
+on by SARS 
+
+705 Row Number of the row M  B N VAR 1:10  An incrementing number  Must be greater than or equal to 1 and 
+Number in the file, per record beginning at 1 smaller than or equal to the total number 
+
+sequential number for each file of rows in the file with Section Identifier = 
+starting at 1 for  Value must not contain a B 
+every file submitted decimal point 
+to SARS. In the 
+response file, this 
+
+SARS_External BRS_2022_IT3s_v4.0.0T-9 Page 241 of 282
+
+
+
+ 
+No Field Description Required Bulk Data Length Length Data Validations Logic Validations 
+
+Name (B) or Type Type 
+real (Min:Max) 
+
+Type Condition Rule 
+time 
+(R)  
+
+must be the 
+rejected row(s) 
+from the incoming 
+file. 
+The row number 
+field must start at 1 
+for every new file 
+and must increment 
+by 1 for every new 
+row added that is 
+classed as a body 
+record in the file. 
+The last body 
+record row number 
+in the file must be 
+equal to the total 
+records supplied in 
+the trailer.  This 
+would imply that for 
+every file the body 
+records start at 1 
+and increment by 1 
+for each record 
+regardless of how 
+many different 
+sections there 
+might be in the 
+body, for files 
+where there are 
+multiple sections in 
+the body 
+
+706 I3T Unique IT3(t) unique M  B/R FT VAR 1:100   Must be equal to a Unique Number (Field 
+Number number 404) where Record Type = DPB 
+
+707 Total value Total value of MW  B/R N VAR  0:15  Must be greater than or  If Received accrued capital or asset 
+of capital capital distributed equal to 0 and smaller 
+distributed to this person than or equal to 
+
+during the year of  If Received accrued capital or asset 
+assessment 999999999999999 distribution (Field 444) = N Then must = 0 
+  No decimal value  no  
+
+cent value 
+
+SARS_External BRS_2022_IT3s_v4.0.0T-9 Page 242 of 282
+
+
+
+ 
+No Field Description Required Bulk Data Length Length Data Validations Logic Validations 
+
+Name (B) or Type Type 
+real (Min:Max) 
+
+Type Condition Rule 
+time 
+(R)  
+
+Note: Details of 
+Capital 
+Distribution(s) 
+
+708 Total Total expenses M  B/R N VAR  0:15  Must be greater than or  If Right of use of assets (Field 453) = Y 
+expenses incurred by this equal to 0 and smaller  
+incurred trust in respect of than or equal to 
+
+right of usage of  If Right of use of assets (Field 453) = N 
+trust assets by this 999999999999999 Then must = 0 
+person during the  No decimal value  no  
+year of assessment cent value 
+ 
+Note: Details of 
+expenses incurred 
+i.r.o usage of trust 
+assets 
+
+709 Total  Total value donated M  B/R N VAR  0:15  Must be greater than or  If Made donation(s) to this trust (Field 447) 
+Donations by this person to equal to 0 and smaller = Y Then  
+to Trust the trust during the than or equal to 
+
+year of assessment  If Made donation(s) to this trust (Field 447) 
+999999999999999 = N Then must = 0 
+
+ No decimal value  no  
+cent value 
+
+710 Total Total value M  B/R N VAR  0:15  Must be greater than or  If Made contribution(s) to the trust (Field 
+Contributio contributed by this equal to 0 and smaller  
+ns to Trust person to the trust than or equal to 
+
+during the year of  If Made contribution(s) to the trust (Field 
+assessment 999999999999999 448) = N Then must = 0 
+
+ No decimal value  no  
+cent value 
+
+711 Total Total value donated M  B/R N VAR  0:15  Must be greater than or  If Received donation(s) from the trust 
+Donations by the trust to this equal to 0 and smaller  
+Received person during the than or equal to 
+from Trust year of assessment  If Received donation(s) from the trust 
+
+999999999999999 (Field 449) = N Then must = 0 
+ No decimal value  no  
+
+cent value 
+712 Total Total value M  B/R N VAR  0:15  Must be greater than or  If Received contribution(s) from the trust 
+
+Contributio contributed by the equal to 0 and smaller  
+ns trust to this person than or equal to 
+Received during the year of  If Received contribution(s) from the trust 
+from Trust assessment 999999999999999 (Field 450) = N Then must = 0 
+
+SARS_External BRS_2022_IT3s_v4.0.0T-9 Page 243 of 282
+
+
+
+ 
+No Field Description Required Bulk Data Length Length Data Validations Logic Validations 
+
+Name (B) or Type Type 
+real (Min:Max) 
+
+Type Condition Rule 
+time 
+(R)  
+
+ No decimal value  no  
+cent value 
+
+713 Total Total value M  B/R N VAR  0:15  Must be greater than or  If Made distribution(s) to (Field 451) = Y 
+Distribution distributed by this equal to 0 and smaller  
+s to Trust person to the trust than or equal to 
+
+during the year of  If Made distribution(s) to (Field 451) = N 
+assessment 999999999999999 Then must = 0 
+
+ No decimal value  no  
+cent value 
+
+714 Total Total value of M  B/R N VAR  0:15  Must be greater than or  If Received refund(s) on contribution (Field 
+Contributio contribution(s) equal to 0 and smaller  
+ns refunded by the than or equal to 
+Refunded trust to this person  If Received refund(s) on contribution (Field 
+by Trust during the year of 999999999999999 452) = N Then must = 0 
+
+assessment  No decimal value  no  
+cent value 
+
+6.5.8 FILE TRAILER (Mandatory Record 1:1) 
+1001 Section To identify the start M  B A FIX 1:1    
+
+Identifier of the section as 
+well as identifying 
+the type of section. 
+
+1002 Total This is the sum of M  B N VAR 1:15  Value must not contain a  Must be greater than or equal to 1 and 
+Number of all records decimal point less than or equal to 999999999999999 
+Records contained in the  Must be equal to the total of all lines with a 
+ body of the section identifier of B 
+
+delimited file. This 
+sum excludes the 
+header and the 
+trailer records 
+
+1003 File Hash Calculation based MW  B AN FIX 32:32   Must use MD5 calculation  
+Total on all the  Use all sections, except those where the 
+
+characters in the section identifier = T. 
+file. Must use MD5  File hash total calculation must equal this 
+calculation. field value 
+  Note  If you do not provide this field, the 
+
+file will be accepted with warning, however 
+
+SARS_External BRS_2022_IT3s_v4.0.0T-9 Page 244 of 282
+
+
+
+ 
+No Field Description Required Bulk Data Length Length Data Validations Logic Validations 
+
+Name (B) or Type Type 
+real (Min:Max) 
+
+Type Condition Rule 
+time 
+(R)  
+
+Note  If you do not SARS will not be able to confirm the 
+provide this field, integrity of the contents of the file 
+the file will be submitted. 
+accepted with 
+warning, however 
+SARS will not be 
+able to confirm the 
+integrity of the 
+contents of the file 
+submitted. 
+
+1004 Sum of all Sum of monetary M  B N VAR 4:33  No leading zeros allowed  Must be greater than or equal to 0.01 and 
+monetary fields contained in  Must be greater than or smaller than or equal to 
+fields the file equal to 0.00 and smaller 999999999999999999999999999999.99
+
+than or equal to  The value of this field must be equal to the 
+999999999999999999999 sum of all values entered into the following 
+999999999.99 fields:  
+
+ Must always have 2 o Field 507  Amount Subject to 
+values after the point to Tax 
+denote cent o Field 509  Foreign Tax Credits 
+
+ Allow negative and o Field 607  Local Dividends 
+positive values. For o Field 608  Exempt Foreign 
+negative values, the  Dividends 
+sign must display before o Field 609  Other Non Taxable 
+the value Income 
+
+o Field 707  Total Value of Capital 
+Distributed 
+
+o Field 708  Total Expenses 
+Incurred 
+
+o Field 709  Total Donations to 
+Trust 
+
+o Field 710  Total Contributions to 
+Trust 
+
+o Field 711  Total Donations 
+Received from Trust 
+
+SARS_External BRS_2022_IT3s_v4.0.0T-9 Page 245 of 282
+
+
+
+ 
+No Field Description Required Bulk Data Length Length Data Validations Logic Validations 
+
+Name (B) or Type Type 
+real (Min:Max) 
+
+Type Condition Rule 
+time 
+(R)  
+
+o Field 712  Total Contributions 
+Received from Trust 
+
+o Field 713  Total Distributions to 
+Trust 
+
+o Field 714  Total Contributions 
+Refunded by Trust 
+
+SARS_External BRS_2022_IT3s_v4.0.0T-9 Page 246 of 282
+
+
+
+ 
+
+6.6 File Layout: 2. Response 
+The table below lists all the fields that are required for the file containing the response to supporting data files submitted to SARS. The table 
+specifies for each field, the required length, provides a description and also indicates the relevant validation rules. 
+ 
+Note: The number column is used to reference fields in the table for ease of use in this specification document. 
+ 
+Below is the layout of the PSV response file header that is submitted from SARS to the taxpayer. 
+ 
+
+No Field Name Description Required Data Length Length Data Validations Logic Validations 
+Type Type (Min:Max) 
+
+Type Condition Rule 
+
+6.6.1 REQUEST / RESPONSE FILE HEADER 
+1 Section Identifier To identify the start of the M  A FIX 1:1  Must = H, where  
+
+section as well as identifying H = Header 
+the type of section 
+
+2 Header Type To indicate the type of M  A VAR 1:3  Must = GH,  
+header in order to where GH = 
+differentiate between various General Header 
+types 
+
+3 Message Create Date and time that the M  FT FIX 19:19  Format must be:  Must be less than or equal 
+Date message was created CCYY-MM- to today  date 
+
+DDThh:mm:ss 
+ 24h time format 
+
+must be used 
+4 File Layout The version of the delimited M  N VAR 1:4  Must = 3  Must be greater than or 
+
+Version file layout that is being  Value must not equal to 1 and less than 
+submitted.  contain a decimal or equal to 9999 
+Sequential number, which point 
+increments with one every  Note  SARS will 
+time that the file layout only support the 
+version changes once files version(s) 
+are being submitted to the specified above 
+production environment. This 
+number is provided by SARS 
+
+SARS_External BRS_2022_IT3s_v4.0.0T-9 Page 247 of 282
+
+
+
+ 
+No Field Name Description Required Data Length Length Data Validations Logic Validations 
+
+Type Type (Min:Max) 
+Type Condition Rule 
+
+5 Unique File ID The submitting source must C  If File AN VAR  0:0  No  Value must not  Must equal the Unique 
+create this field when data is Response condition contain a decimal File ID of the submitted 
+submitted to SARS. This Code = 001, met point file 
+field will uniquely identify this 
+file when coupled with the 002, 003,  1:64   
+source. This value must not 004, 005, Condition 
+be repeated by the 006, 011 or met 
+submitting source (e.g. use 012 then this 
+the date time with some field is 
+other unique number). This mandatory 
+field will also be used to link 
+the records to the original 
+file. The field must be 
+generated by the software 
+from which the entity is 
+submitting the data to SARS. 
+When SARS sends the 
+response file, the Unique File 
+ID in the response file must 
+be equal to the Unique File 
+ID obtained from the file 
+name of the submitted file 
+
+6 SARS Request In the scenario where SARS C  If Data Type AN VAR  0:0  If   
+Reference sends a request file to the Being this field is 
+
+entity requesting data, SARS Supplied = left blank 
+provides this reference 
+number to use in the file to I3B, I3C or  1:64 if this 
+be submitted to SARS. I3E, then this field is 
+SARS also uses this field must be completed 
+reference number when left blank 
+responding to the taxpayer 
+on files submitted to SARS 
+
+SARS_External BRS_2022_IT3s_v4.0.0T-9 Page 248 of 282
+
+
+
+ 
+No Field Name Description Required Data Length Length Data Validations Logic Validations 
+
+Type Type (Min:Max) 
+Type Condition Rule 
+
+7 Test Data This should be used to M  A FIX 1:1  Must = T or L,  
+Indicator indicate if the data is for where T = Test 
+
+testing or is live data and and L = Live 
+should be processed. The 
+purpose of the field is to 
+avoid test data accidentally 
+being processed in 
+production and allow the 
+source to test their 
+submission without it being 
+processed. 
+
+Note  If SARS receives a 
+value = T in the production 
+environment or a value = L in 
+the test environment, then 
+the file will be rejected in its 
+entirety 
+
+8 Data Type Being When data is submitted to C  If File AN FIX  0:0  No  Must = I3B, I3Cor  
+Supplied SARS, this field indicates the Response condition I3E, where I3B = 
+
+type of data that can be Code = 001, met IT3(b) supporting 
+found in the file, e.g. 
+Dividends tax, VAT 002, 003,  3:3  data, I3C = IT3(c) 
+supporting data. When 004, 005, Condition supporting data, 
+SARS sends a response on 006, 011 or met I3E = IT3(e) 
+a file submitted, SARS uses 012 then this supporting data, 
+the field is and I3S = IT3(s) 
+Data_Type_Being_Supplied mandatory supporting data 
+from the file name of the file 
+submitted to SARS 
+
+9 Source Identifier This identifies the file C  If File AN FIX  0:0  no   Validate that this value = 
+submitter and contains the Response condition the value supplied by 
+security token. This value will Code = 001, met SARS 
+be supplied by SARS 003, 004,  144:144  
+
+005, 006, 011 condition 
+or 012 then met 
+this field is 
+mandatory 
+
+SARS_External BRS_2022_IT3s_v4.0.0T-9 Page 249 of 282
+
+
+
+ 
+No Field Name Description Required Data Length Length Data Validations Logic Validations 
+
+Type Type (Min:Max) 
+Type Condition Rule 
+
+10 Group ID If the amount of data C  If File AN VAR  0:0  no   
+requires that it be sent in Response condition 
+multiple files, a unique Group Code = 001, met 
+ID must be created on the 003, 004,  1:64  
+submitting entity's system to 005, 006 or condition 
+be able to link the multiple 012 then this met 
+files to the one group field is  
+
+mandatory 
+11 Group Total Number of files that make up C  If File N VAR  0:0  no  Value must not  Must be greater than or 
+
+a group,  Response condition contain a decimal equal to 1 and less than 
+e.g. if the amount of data Code = 001, met point or equal to 9999 
+requires three files to be 003, 004,  1:4  
+submitted, then the Group 005, 006 or condition 
+Total must be 3. 012, then this met 
+
+field is  
+For example, where it is mandatory 
+required for data to be 
+submitted in one file and the 
+file is too large to 
+accommodate the 
+submission in a single file, 
+the file can be split into 
+smaller more manageable 
+files and this field must then 
+indicate the total number of 
+files that make up the 
+submission 
+
+12 Unique Group The number of this file in the C  If File N VAR  0:0  no  Value must not  Must be equal to or 
+Item ID group. This number must be Response condition contain a decimal greater than 1  
+
+an incrementing number Code = 001, met point 
+beginning at one for each  Must be less than or equal 
+group submission, and 003, 004,  1:4  to the Group Total 
+incrementing by 1 for each 005, 006 or condition  Must be submitted in 
+file in the group. 012, then this met sequence 
+
+field is  
+E.g. if this is the second file mandatory 
+of the group this field must 
+be 2 
+
+SARS_External BRS_2022_IT3s_v4.0.0T-9 Page 250 of 282
+
+
+
+ 
+No Field Name Description Required Data Length Length Data Validations Logic Validations 
+
+Type Type (Min:Max) 
+Type Condition Rule 
+
+13 File Response This is the status for the M  N FIX 3:3  Refer to  
+Code entire submitted file, Appendix H for 
+
+reflecting the result of the valid code 
+technical and business 
+validations performed on the table 
+incoming file 
+
+14 File Response File response reason M  FT VAR 1:100   
+Reason supplied 
+
+15 Transaction The date for which C  If Data Type FT FIX  0:0  if  Format CCYY-  Must be less than or equal 
+Date data is required Being this field is MM-DD  
+
+Supplied = left blank  
+I3B, I3C, I3E,  10:10  if 
+the field must this field is 
+be left blank completed 
+
+16 Tax Period This is the period for which C  If Data Type N FIX  0:0  if  Format  Must be greater than or 
+data is required Being this field is CCYYMM equal to 190001 and less 
+
+Supplied = left blank  than or equal to current 
+I3B, I3C, I3E,  6:6  if tax period  
+the field must this field is 
+be left blank completed 
+
+ 
+17 Transaction The transaction year for O  N FIX  0:0  if  Format CCYY  Must be greater than or 
+
+Year which the data is required this field is equal to 1900 and less 
+blank than or equal to current 
+
+ 4:4  if this year 
+field is 
+completed 
+
+18 SLA This is the date by which the C  If Data Type FIX  0:0  if  Format CCYY-  Must be less than or equal 
+Requirement taxpayer has to submit the Being this field is MM-DD  
+Date required data Supplied = left blank 
+
+I3B, I3C, I3E,  10:10  if 
+the field must this field is 
+be left blank completed 
+
+SARS_External BRS_2022_IT3s_v4.0.0T-9 Page 251 of 282
+
+
+
+ 
+No Field Name Description Required Data Length Length Data Validations Logic Validations 
+
+Type Type (Min:Max) 
+Type Condition Rule 
+
+6.6.2 REQUEST / RESPONSE FILE BODY (This section must only be completed if File Response Code = 004, 005 or 006) 
+19 Section Identifier To identify the start of the M  A FIX 1:1  Must = B, where  
+
+section as well as identifying B = Body 
+the type of section. 
+
+20 Row Number Number of the row in the file, M  N VAR 1:10  Value must not  Must be greater than or 
+sequential number starting at contain a decimal equal to 1 and less than 
+1 for every file submitted to point or equal to 9999999999 
+SARS. In the response file, 
+this must be the rejected  If the Section Identifier of 
+row(s) from the incoming file. the section within which 
+ the record from the 
+The row number field must submission file resides is 
+start at 1 for every new file 
+and must increment by 1 for Number must = zero (0) 
+every new row added that is 
+classed as a body record in  If the Section Identifier of 
+the file. The last body record the section within which 
+row number in the file must the record from the 
+be equal to the total records 
+supplied in the trailer.  This Row Number must equal 
+would imply that for every file the Row Number of the 
+the body records start at 1 
+and increment by 1 for each record to be responded on 
+record regardless of how from the submission file
+many different sections there 
+might be in the body, for files 
+where there are multiple 
+sections in the body 
+
+SARS_External BRS_2022_IT3s_v4.0.0T-9 Page 252 of 282
+
+
+
+ 
+No Field Name Description Required Data Length Length Data Validations Logic Validations 
+
+Type Type (Min:Max) 
+Type Condition Rule 
+
+21 Unique Number M  FT VAR 1:100   If the Section Identifier of 
+generate a unique number the section within which 
+for each record. the record from the 
+ 
+In the response file, the submission file resides is 
+unique number would be the not equal 
+number specified in the file 
+submitted to SARS to enable Number must contain the 
+
+value contained in the 
+system to identify the line corresponding Header 
+that is being responded on 
+by SARS.  
+
+ If the Section Identifier of 
+the section within which 
+the record from the 
+submission file resides is 
+
+he Unique 
+ 
+
+ If the Section Identifier of 
+the section within which 
+the record from the 
+
+Unique Number must 
+equal the Unique Number 
+of the record to be 
+responded on from the 
+submission file 
+
+22 Field Name For fields that are rejected or C  If Response FT VAR  0:0  No   
+accepted with a warning, this Code = 001, condition 
+field must display the field 002, 003, met 
+that failed validation 004, 005 or  1:100  
+
+006, this field Condition 
+is mandatory met 
+
+SARS_External BRS_2022_IT3s_v4.0.0T-9 Page 253 of 282
+
+
+
+ 
+No Field Name Description Required Data Length Length Data Validations Logic Validations 
+
+Type Type (Min:Max) 
+Type Condition Rule 
+
+23 Overall Field To indicate the status of the C  If Field Name A FIX  0:0  No  Must = R or W,  
+Status field as specified per data contains a condition where R = 
+
+type. A field may be rejected value, this met Rejected and W 
+or accepted with warning field is  1:1  = Accepted with 
+
+mandatory Condition a warning 
+met 
+
+24 Response Code Indicating the status of a field M  AN FIX 3:3  Refer to  
+after validations were applied Appendix M for 
+
+the valid code 
+table 
+
+25 Response For fields that are rejected or M  FT VAR 1:300   
+Reason accepted with a warning, this 
+
+field must display the reason 
+for the failed validation 
+
+26 Field Value For fields that are rejected or C  If Start Range FT VAR  0:0  No   
+accepted with a warning, this and End condition 
+field must display the value Range is met 
+of the field that was 
+submitted to SARS. empty and if  1:120  
+
+Response Condition 
+Code met 
+contains a 
+value, this 
+field is 
+mandatory 
+
+27 Start Range Where the response applies C  If the N VAR  0:0  No  Value must not  Must be greater than or 
+to multiple lines, this field will Response condition contain a decimal equal to 1 and less than 
+indicate the start of the range Code, Field met point or equal to 9999999999 
+of applicable rows. Name and  1:10  
+
+Response Condition 
+Reason met 
+repeat for 
+more than 10 
+sequential 
+rows, this 
+field is 
+mandatory 
+
+SARS_External BRS_2022_IT3s_v4.0.0T-9 Page 254 of 282
+
+
+
+ 
+No Field Name Description Required Data Length Length Data Validations Logic Validations 
+
+Type Type (Min:Max) 
+Type Condition Rule 
+
+28 End Range Where the response applies C  If the N VAR  0:0  No  Value must not  Must be greater than or 
+to multiple lines, this field will Response condition contain a decimal equal to 1 and less than 
+indicate the end of the range Code, Field met point or equal to 9999999999 
+of applicable rows. Name and  1:10  
+
+Response Condition 
+Reason met 
+repeat for 
+more than 10 
+sequential 
+rows, this 
+field is 
+mandatory 
+
+6.6.3 REQUEST / RESPONSE FILE TRAILER (This section must only be completed if File Response Code = 004, 005 or 006) 
+29 Section To identify the start of the M  A FIX 1:1  Must = T, where  
+
+Identifier section as well as identifying T = Trailer 
+the type of section. 
+
+30 Total Number of This is the sum of all records M  N VAR 1:15  Value must not  Must be greater than or 
+Records contained in the body of the contain a decimal equal to 1 and less than 
+ delimited file. This sum point or equal to 9999999999 
+
+excludes the header and the 
+trailer records  Must be equal to the total 
+
+of all lines with a section 
+identifier of B 
+
+31 File Hash Total Calculation based on all the M  AN FIX 32:32   Must use MD5 calculation  
+characters in the file. Must  Use all sections, except 
+use MD5 calculation. where Section Identifier = 
+
+T 
+ File hash total calculation 
+
+must equal this field value
+ 
+ 
+
+SARS_External BRS_2022_IT3s_v4.0.0T-9 Page 255 of 282
+
+
+
+7. CODES 
+
+7.1 Appendix A  Nature of Person 
+Code Description 
+INDIVIDUAL Individual 
+FOREIGN_INDIVIDUAL Foreign Individual 
+INDIVIDUAL_ESTATE Individual Estates (including late Estates) 
+PARTNERSHIP Partnerships 
+PUBLIC_CO Listed company  
+PRIVATE_CO Unlisted company  
+CLOSE_CORPORATION Close Corporation 
+FOREIGN_COMPANY Foreign Company 
+OTHER_CO Other Company 
+CORP_ESTATE Corporate: Estate / Liquidation 
+INTERVIVOS_TRUST Trust (any type) 
+GOVERNMENT_ENTITY RSA Government, Provincial Administration, Municipalities 
+RETIREMENT_FUND Retirement Fund (Pension, Provident, Benefit, RA etc) 
+CLUB Clubs 
+UNINCORPORATED_BODY_OF_PERSONS Other entity not covered by the list provided (including a 
+
+portfolio of a Collective Investment Scheme in Securities) 
+ASSOC_NOT_FOR_GAIN Association not for gain 
+STOKVEL Stokvel 
+SOCIETY Society 
+
+ 
+
+SARS_External BRS_2022_IT3s_v4.0.0T-9                                                                                                 Page 256 of 282     
+
+
+
+7.2 Appendix B - IT3(b) Source Codes Table
+This table provides income source codes that are used for the purpose of IT3(b) extracts.  
+
+Income Source Code  Description  
+4201  Local interest (including amounts received / accrued in respect of 
+
+Sharia compliant finance arrangements under section 24JA)  
+4202 Dividends and foreign dividends subject to dividends tax (only to be 
+
+used for dividends declared prior to 1 April 2012) 
+4210  Rental income  
+4212  Royalty income  
+4214 Other income 
+4216 Dividends from a foreign source subject to SA normal tax 
+4218  Interest from a foreign source 
+4237 SARS paid interest (where SARS pays interest to a Taxpayer) (for 
+
+exclusive use by SARS, when SARS has to submit IT3(b) data files to 
+itself  SARS acts as a payer of interest and as a revenue collection 
+agency). 
+
+4238 REIT distributions / Taxable local dividends 
+4292 Dividends deemed to be income in terms of s8E and s8EA 
+4112 Foreign tax paid on foreign dividends 
+4113 Foreign tax paid on foreign interest 
+
+7.3 Appendix C - IT3(c) Source Codes Table 
+This table provides income source codes that are used for the purpose of IT3(c) extracts.  
+
+Income Source Code  Description  
+
+4250 Local gains - Profit 
+
+4251 Local gains - Loss 
+
+4252 Foreign gains - Profit 
+
+4253 Foreign gains - Loss 
+
+4114 Tax credit on gains  foreign tax credits  foreign gains 
+
+SARS_External BRS_2022_IT3s_v4.0.0T-9                                                                                                 Page 257 of 282     
+
+
+
+ 
+
+7.5 Appendix D - IT3(e) Source Codes Table 
+Table below provides a list of income source codes that are used for the IT3(e) extracts.   
+
+Income Description  Income Description  Income Description  
+Source Source Source 
+Code Code Code 
+
+0102 Pig farming  1422 Air conditioning and ventilation machinery  2316 Other accommodation, e.g. furnished flats 
+(holiday), rooms without meals, caravans and 
+mobile homes  
+
+0104 Livestock farming  1424 Other specialised machinery and parts for 2398 Other not specified  
+specific industries  
+
+0106 Crop farming  1426 Other machinery and machine spares for 2402 Railway transport and services  
+general purposes  
+
+0108 Production of milk  1428 Electrical machinery and apparatus for 2404 Bus transport (excluding taxis)  
+generation and control (including electric 
+motors)  
+
+0110 Bee keeper  1430 Radio and electronic components  2406 Taxis  
+0112 Mixed farming (no more than 50% in any of 1432 Gramophone records and tape recordings  2408 Renting of trucks, cars, trailers and containers 
+
+above)  (except caravans)  
+
+0114 Poultry farming  1434 Other broadcast receiving and sound 2410 Road haulage  
+reproducing equipment  
+
+0116 Ostrich farming  1436 Telegraph, telephone and signalling 2412 Sea transport and supporting services  
+apparatus and equipment  
+
+0118 Breeding of non-food producing animals 1438 Electronic computers  2414 Air transport and supporting services  
+(excluding horses)  
+
+0120 Horse breeder  1440 Insulated wires and cables  2416 Renting of aircraft  
+0122 Agricultural services (excluding veterinary 1442 Batteries  2418 Shipping, clearing and forwarding agents  
+
+services; see 2958)  
+
+0124 Vegetable farmer  1444 Electric bulbs and fluorescent tubes  2420 Travel agents  
+0126 Wine farmer  1446 Other electrical and electronic goods  2422 Operation of car parks and toll roads  
+0128 Fruit farming  1498 Other not specified  2424 Storage and warehousing  
+
+SARS_External BRS_2022_IT3s_v4.0.0T-9                                                                                                                                                                                Page 258 of 282     
+
+
+
+ 
+Income Description  Income Description  Income Description  
+Source Source Source 
+Code Code Code 
+
+0130 Flower and seed growers  1502 Motor vehicles  2426 Postal services and telecommunications  
+0132 Forestry and logging (plantations)  1504 Caravans, trailers and vehicle bodies  2498 Other not specified  
+0134 Sugar farming  1506 Tractors  2502 Discount houses  
+0136 Fish breeder  1508 Motor vehicles parts and accessories 2504 Commercial banks  
+
+(excluding tires and tubes, glass and 
+electrical equipment)  
+
+0138 Tobacco farming  1510 Specialised automotive engineering 2506 Building societies  
+workshops working primarily for the motor 
+trade  
+
+0140 Wool farming  1598 Other not specified  2508 Merchant banks  
+0142 Game farming  1602 Ship and boat building and repairs  2510 Hire-purchase, savings and general banks  
+
+0192 Foreign farming 1604 Locomotives  2512 Land and Agricultural Bank of South Africa  
+
+0198 Other not specified  1606 Railway carriages and wagons  2514 Stockbrokers  
+0202 Coal  1608 Motor cycles, pedal cycles and relevant parts  2516 Unit trust schemes  
+
+0204 Crude petroleum and natural gas production  1610 Aircraft manufacture and repair  2518 Other financial institutions (including buying 
+associations)  
+
+0206 Iron ore  1698 Other not specified  2520 Financial services  
+0208 Chrome  1702 Scientific, laboratory and industrial 2522 Short-term insurance  
+
+instruments and systems  
+
+0210 Copper  1704 Orthopaedic appliances and supplies  2524 Registered pension/provident funds  
+0212 Manganese  1706 Surgical, medical and dental instruments and 2526 Medical benefit/aid societies  
+
+appliances  
+
+0214 Platinum  1708 Photographic, optical and document copying 2528 Insurance brokers and other insurance 
+equipment  services (including insurance agents on 
+
+commission basis)  
+
+SARS_External BRS_2022_IT3s_v4.0.0T-9                                                                                                                                                                                Page 259 of 282     
+
+
+
+ 
+Income Description  Income Description  Income Description  
+Source Source Source 
+Code Code Code 
+
+0216 Gold and uranium  1710 Watches and clocks  2530 Property letting: business premises  
+0218 Other metal ore mining  1798 Other not specified  2532 Property letting: residential accommodation  
+
+0220 Diamond mining  1802 Jewellery and related articles  2534 Township developers  
+0222 Stone quarrying, clay and sand-pits  1804 Musical instruments  2536 Estate agents  
+0224 Chemical and fertiliser mineral mining  1806 Sporting and athletic equipment  2538 Rent collectors, appraisers and valuators  
+0226 Asbestos  1808 Toys and games  2540 Attorneys, notaries and conveyances  
+0298 Other not specified  1810 Brushes and brooms  2542 Advocates  
+0302 Slaughtering, preparing and preserving meat  1812 Miscellaneous stationers goods (e.g. crayons, 2544 Registered accountants and auditors  
+
+pens and pencils)  
+
+0304 Dairy products (except processing of milk for 1814 Signs and advertising displays  2546 Cost and management accountants  
+retail sale; see 2204)  
+
+0306 Canning and preserving of fruit and 1816 Other miscellaneous manufacturing industries 2548 Bookkeeping services  
+vegetables  (including number plates, lamps, paper 
+
+patterns, etc.)  
+
+0308 Canning, preserving and processing of fish 1898 Other not specified  2550 Programming and data processing services  
+and related products  
+
+0310 Vegetable and animal oils and fats  1902 Electricity generation and distribution  2552 Consulting engineers  
+0312 Grain mill products  1904 Gas manufacture and distribution  2554 Constructional engineers  
+0314 Bakery products  1906 Water collection, purification and distribution  2556 Architects  
+
+0316 Sugar factories and refineries  1998 Other not specified  2558 Quantity surveyors  
+0318 Cocoa, chocolate and sugar confectionery  2002 Home buildings engaged in family housing  2560 Land surveyors  
+
+0320 Prepared animal feeds  2004 Other building construction by general 2562 Geological and prospecting services  
+contractors  
+
+0322 Brewing and malting  2006 Painters and decorators  2564 Tracers and draughtsmen  
+
+SARS_External BRS_2022_IT3s_v4.0.0T-9                                                                                                                                                                                Page 260 of 282     
+
+
+
+ 
+Income Description  Income Description  Income Description  
+Source Source Source 
+Code Code Code 
+
+0324 Soft drinks  2008 Plumbers  2566 Advertising and market research services  
+
+0326 Spirit distilling and compounding  2010 Electrical contractors  2568 Security services  
+0328 Wine (including blending)  2012 Joiners and carpenters  2570 Renting or leasing of machinery and 
+
+equipment without operators (excluding 
+computers; see 2028)  
+
+0330 Tobacco products  2014 Shop fittings  2598 Other not specified  
+0398 Other not specified  2016 Roofing contractors  2602  
+0402 Spinning, weaving and finishing of textiles  2018 Plastering contractors  2604 Corporate fund  
+
+0404 Made-up textile goods (except clothing)  2020 Glazing contractors  2606  
+0406 Hosiery and other knitted goods  2022 Demolition contractors  2608 Untaxed policy holder fund  
+0408 Carpets and rugs  2024 Heating and ventilating  2698 Other not specified  
+0410 Rope, twine, net and related products  2026 Asphalt and tar spraying contractors  2702 Pre-primary schools and crèches  
+0498 Other not specified  2028 Plant hiring with operators (see 2570)  2704 Primary schools  
+0502  2030 Flooring contractors  2706 Secondary schools  
+0504  2032 Insulating specialists  2708 Schools for special education  
+0506 Tailoring  2034 Suspended ceiling specialists  2710 Technical colleges and technikons 
+0508 Furriers  2036 Wall and floor tiling specialists  2712 Teachers training colleges  
+0510 Millinery  2038 Civil engineering contractors  2714 Universities  
+0512 Footwear  2040 Swimming pool and similar contractors  2716 Correspondence and private colleges  
+0598 Other not specified  2042 Paving  2718 Other educational services (including driving 
+
+schools, ballet and music teachers)  
+
+0602 Leather, fur (tanning and dressing) and 2098 Other not specified  2798 Other not specified  
+fellmongery 
+
+0604 Travel goods (including goods of plastic and 2102 Fresh meat  2802 General, e.g. CSIR  
+imitation leather)  
+
+SARS_External BRS_2022_IT3s_v4.0.0T-9                                                                                                                                                                                Page 261 of 282     
+
+
+
+ 
+Income Description  Income Description  Income Description  
+Source Source Source 
+Code Code Code 
+
+0606 Handbags (including handbags of plastic and 2104 Fresh fruit and vegetables  2804 Agricultural and livestock  
+imitation leather)  
+
+0608 Other leather goods (including imitation 2106 Dairy products  2806 Medical and veterinary  
+leather)  
+
+0698 Other not specified  2108 Bakery products  2808 Industrial  
+0702 Sawmills and other wood mills  2110 Alcoholic drink (including bottling but 2898 Other not specified  
+
+excluding blending)  
+
+0704 Wood and cane containers  2112 Other food and drink  2902 Paediatrician  
+0706 Home furniture (except primarily of metal)  2114 Tobacco  2904 General practitioner  
+
+0708 Office furniture (except primarily of metal))  2116 Agricultural and pastoral products (including 2906 Dentists  
+livestock)  
+
+0710 Other miscellaneous wood and cork 2118 Textiles, rugs and carpets  2908 Orthopaedic surgeon  
+manufacturing  
+
+0798 Other not specified  2120 Clothing  2910 Dental technician  
+0802 Pulp, paper and cardboard  2122 Footwear  2912 Plastic surgeon  
+0804 Packaging products of paper, board and 2124 Furniture and household requisites  2914 Optometrists (including optical dispensers)  
+
+associated materials  
+
+0806 Manufactured stationery  2126 Electrical goods (including household 2916 Urologist  
+appliances)  
+
+0808 Manufacture of paper and board not 2128 Books  2918 Other supplementary health services or para-
+elsewhere specified  medical personnel  
+
+0810 Printing and publishing of newspapers  2130 Stationery  2920 Podiatrist  
+0812 Printing and publishing of periodicals  2132 Office and shop equipment  2922 Nursing services  
+0814 Publishing of books  2134 Jewellery  2924 Homeopath  
+0816 Prints and reproductions  2136 Industrial and heavy chemicals  2926 Radiographer  
+0818 Bookbinding  2138 Pharmaceuticals  2928 Physiotherapists  
+0898 Other not specified  2140 Toiletries  2930 Psychiatrist  
+
+SARS_External BRS_2022_IT3s_v4.0.0T-9                                                                                                                                                                                Page 262 of 282     
+
+
+
+ 
+Income Description  Income Description  Income Description  
+Source Source Source 
+Code Code Code 
+
+0902 Industrial chemicals (except fertilisers)  2142 Construction and building materials  2932 Radiologist  
+0904 Fertilisers  2144 Petroleum products  2934 Chiropractors  
+0906 Pesticides  2146 Mining, industrial and agricultural machinery 2936 Gynaecologist  
+
+and equipment  
+
+0908 Synthetic resins and plastic materials  2148 Computers (including leasing and repairs)  2938 Midwife  
+
+0910 Paint  2150 General wholesalers  2940 General hospitals  
+0912 Medicinal and pharmaceutical preparations  2152 Motor vehicles and accessories  2942 Pathologist  
+
+0914 Soap and detergents  2154 Scrap and waste merchants (including 2944 Maternity homes  
+collection and distribution)  
+
+0916 Perfumes, cosmetics and other toilet 2198 Other not specified  2946 Psychiatric hospitals  
+preparations  
+
+0918 Tyres and tubes (including retreating)  2202 Butchers  2948 Other hospitals  
+0920 Other rubber products (including synthetic 2204 Dairies and dairy products  2950 Optician  
+
+rubber)  
+
+0922 Plastic products not elsewhere specified  2206 Greengrocers and fruitier  2952 Veterinarians  
+0998 Other not specified  2208 Fishmongers  2954 Eye surgeon  
+1002 Manufactured fuel  2210 Bakers and confectioners (solely for sale on 2956 Veterinary services (including kennels)  
+
+the premises)  
+
+1004 Mineral oil refining  2212 Grocers  2958 Orthodontist  
+1006 Lubricating oils and greases  2214 Bottle stores  2960 Prosthetics  
+1098 Other not specified  2216  2998 Other not specified  
+1102 Ceramics  2218  3102 Motion picture production  
+1104 Glass and glass products  2220 General outfitters  3104 Motion picture distribution and projection  
+
+1106 Bricks, tiles and refractory goods  2222 Household textiles  3106 Radio and television broadcasting  
+
+SARS_External BRS_2022_IT3s_v4.0.0T-9                                                                                                                                                                                Page 263 of 282     
+
+
+
+ 
+Income Description  Income Description  Income Description  
+Source Source Source 
+Code Code Code 
+
+1108 Cement  2224 Shoe stores  3108 Theatrical productions and entertainment 
+services  
+
+1110 Abrasives and building materials not specified  2226 Domestic furniture and household appliances  3110 Authors, composers of music and 
+independent artists  
+
+1198 Other not specified  2228 Antique dealers, second-hand furniture 3112 Libraries, museums, botanical/zoological 
+shops, art dealers, picture framers, etc.  gardens & other cultural services  
+
+1202 Iron and steel  2230 Book stores and stationers  3114 Professional sports promotion  
+1204 Steel tubes  2232 Jewellery, watch and clock retailers and 3116 Turf clubs (horse racing)  
+
+repairers  
+
+1206 Iron castings, etc. 2234 Chemists  3118 Dancing studios  
+1208 Aluminium and aluminium alloys  2236 Photographic shops  3120 Sport and games clubs  
+1210 Copper, brass and other copper alloys  2238 Building material and hardware merchants  3122 Roller skating rinks  
+
+1212 Precious metals  2240 Bicycle dealers  3124 Putt-putt course  
+1298 Other not specified  2242 Fuel and coal merchants (excluding petrol 3126 Amusement parks  
+
+filling stations)  
+
+1302 Cutlery, hand tools and general hardware  2244 Garages, filling stations and workshops  3198 Other not specified  
+
+1304 Furniture and fixtures primarily of metal  2246 Used motor vehicles  3202 Laundries, laundry services and cleaning and 
+dyeing plants  
+
+1306 Building hardware  2248 Caravans and trailers  3204 Hairdressing saloons  
+1308 Prefabricated steel buildings  2250 Motor cycle dealers  3206 Photographic studios (including commercial 
+
+photography)  
+
+1310 Boiler manufacture  2252 Spares and accessories dealers  3208 Undertakers and crematoriums  
+1312 Sheet metal products  2254 Motor scrap-yards  3210 Gardening services  
+
+SARS_External BRS_2022_IT3s_v4.0.0T-9                                                                                                                                                                                Page 264 of 282     
+
+
+
+ 
+Income Description  Income Description  Income Description  
+Source Source Source 
+Code Code Code 
+
+1314 Bolts, nuts, screws, rivets, etc. 2256 Retail tyre dealers  3212 Personal services not elsewhere specified, 
+e.g. massage parlours, weight control studios, 
+etc.  
+
+1316 Cables, wire, wire products and gates 2258 Sport and recreational equipment  3298 Other not specified  
+(excluding insulated wires and cables; 
+see1440)  
+
+1318 Tinware 2260 Department stores and general dealers  3302 Typewriters and other office equipment  
+1320 Electroplating, galvanising, enamelling, etc. 2262 Florists and garden shops (except growers; 3304 Agricultural machinery and implements and 
+
+see 0150)  farm tractors  
+
+1322 Engineering workshops (excluding special 2264 Pet and pet food shops  3306 Footwear and other leather goods  
+auto engineering workshops primarily for the 
+motor trade; see 1510)  
+
+1398 Other not specified  2266 Dealers in radio, TV and electrical goods 3308 Servicing and installation of electrical and 
+(excluding radio and TV rental)  non electrical household and personal 
+
+Appliances  
+
+1402 Pumps, valves and compressors  2268 Radio and TV shops  3310 Other specialised automotive repair services 
+(inc. towing and vehicle washing and cleaning  
+
+1404 Industrial engines  2270 Dealers in miscellaneous goods  3312 Panel beaters and spray-painters  
+1406 Agricultural machinery (except tractors)  2298 Other not specified  3398 Other not specified  
+1408 Metal and woodworking machinery  2302 Bars and beer gardens  3402 Auctioneers  
+1410 Textile machinery and accessories  2304 Restaurants or tea-rooms selling food for 3404 Market agents  
+
+consumption mainly on the premises  
+
+1412 Construction and earth moving equipment  2306 Caterers  3406 Representatives of manufacturing & trading 
+establishments on commission basis  
+
+1414 Mechanical handling equipment  2308 Fish and chips shops, sandwich and snack 3408 Import/export agents  
+bars and other establishments  
+
+SARS_External BRS_2022_IT3s_v4.0.0T-9                                                                                                                                                                                Page 265 of 282     
+
+
+
+ 
+Income Description  Income Description  Income Description  
+Source Source Source 
+Code Code Code 
+
+1416 Computers and office, calculating and 2310 Registered hotels and motels  3410 Hide and skin brokers  
+accounting machinery  
+
+1418 Refrigerators, washing machines, stoves and 2312 Boarding houses  3412 Wool and mohair brokers  
+ovens  
+
+1420 Other electric appliances primarily for 2314 Caravan parks  3414 Sanitation, garbage and sewage disposal  
+domestic use  
+
+    
+3416 Cleaning (buildings), exterminating, 
+
+fumigating, disinfecting & other services  
+    
+
+3418 Agricultural control boards  
+    
+
+3420 Bookmakers and betting  
+    
+
+3498 Other not specified  
+    
+
+3605 Annual payment  Taxable (bonus, leave pay, 
+merit awards etc.)  
+
+ 
+
+SARS_External BRS_2022_IT3s_v4.0.0T-9                                                                                                                                                                                Page 266 of 282     
+
+
+
+7.6 Appendix E - Account Type Table 
+Account Type Description  
+1 Current Account 
+2 Transmission Account  
+3 Savings Account 
+4 Credit Card Account 
+5 Fixed Deposit Account 
+6 Notice Account 
+7 Unit Trust Account 
+8 Bankers Acceptance Bearer Instrument 
+9 Negotiable certificate of deposit bearer instrument 
+10 Other bearer instrument 
+11 Loan account within a company 
+12 Money market investment instrument 
+13 Garage card account 
+14 RSA government bond 
+15 RSA treasury bills 
+16 Other bonds 
+17 Other investment 
+18 Other loans 
+19 Tax Free Investment Account 
+20 SARS Account  This option is for exclusive use by SARS only.  In 
+
+certain instances, SARS could pay interest to a Taxpayer.  In such a 
+case SARS acts as a third party account provider and has to submit 
+IT3(b) Interest Certificate data to SARS that also acts as the tax 
+collection agency.  This option is only to be used by SARS.  If entities 
+other than SARS use this code the entire file will be rejected.  
+
+21 Foreign currency trading account  Not related to non-ZAR 
+denominated currency accounts held by Banks 
+
+22 Crypto account 
+23 No account type available 
+24 Account for stock broking purposes 
+25 Other account type not listed 
+
+SARS_External BRS_2022_IT3s_v4.0.0T-9                                                                                                 Page 267 of 282     
+
+
+
+7.7 Appendix F  Country Codes  
+The Country Codes are aligned with the ISO3166 standard. 
+
+ 
+
+SARS_External BRS_2022_IT3s_v4.0.0T-9                                                                                                 Page 268 of 282     
+
+
+
+ 
+ 
+
+SARS_External BRS_2022_IT3s_v4.0.0T-9                                                                                                 Page 269 of 282     
+
+
+
+Country Alphabetic Code
+Heard Island and McDonald Islands HM
+Holy See (the) VA
+Honduras HN
+Hong Kong HK
+Hungary HU
+Iceland IS
+India IN
+Indonesia ID
+Iran (Islamic Republic of) IR
+Iraq IQ
+Ireland IE
+Isle of Man IM
+Israel IL
+Italy IT
+Jamaica JM
+Japan JP
+Jersey JE
+Jordan JO
+Kazakhstan KZ
+Kenya KE
+Kiribati KI
+Korea (the Democratic People's Republic of) KP
+Korea (the Republic of) KR
+Kosovo XK
+Kuwait KW
+Kyrgyzstan KG
+Lao People's Democratic Republic (the) LA
+Latvia LV
+Lebanon LB
+Lesotho LS
+Liberia LR
+Libya LY
+Liechtenstein LI
+Lithuania LT
+Luxembourg LU
+Macao MO
+North Macedonia MK
+Madagascar MG
+Malawi MW
+Malaysia MY
+Maldives MV
+Mali ML
+Malta MT
+Marshall Islands (the) MH
+Martinique MQ
+Mauritania MR
+Mauritius MU
+Mayotte YT
+Mexico MX
+Micronesia (Federated States of) FM
+Moldova (the Republic of) MD  
+
+SARS_External BRS_2022_IT3s_v4.0.0T-9                                                                                                 Page 270 of 282     
+
+
+
+Country Alphabetic Code
+Monaco MC
+Mongolia MN
+Montenegro ME
+Montserrat MS
+Morocco MA
+Mozambique MZ
+Myanmar MM
+Namibia NA
+Nauru NR
+Nepal NP
+Netherlands (the) NL
+New Caledonia NC
+New Zealand NZ
+Nicaragua NI
+Niger (the) NE
+Nigeria NG
+Niue NU
+Norfolk Island NF
+Northern Mariana Islands (the) MP
+Norway NO
+Oman OM
+Pakistan PK
+Palau PW
+Palestine, State of PS
+Panama PA
+Papua New Guinea PG
+Paraguay PY
+Peru PE
+Philippines (the) PH
+Pitcairn PN
+Poland PL
+Portugal PT
+Puerto Rico PR
+Qatar QA
+Réunion RE
+Romania RO
+Russian Federation (the) RU
+Rwanda RW
+Saint Barthélemy BL
+Saint Helena, Ascension and Tristan da Cunha SH
+Saint Kitts and Nevis KN
+Saint Lucia LC
+Saint Martin (French part) MF
+Saint Pierre and Miquelon PM
+Saint Vincent and the Grenadines VC
+Samoa WS
+San Marino SM
+Sao Tome and Principe ST
+Saudi Arabia SA
+Senegal SN
+Serbia RS  
+
+ 
+
+SARS_External BRS_2022_IT3s_v4.0.0T-9                                                                                                 Page 271 of 282     
+
+
+
+ 
+
+SARS_External BRS_2022_IT3s_v4.0.0T-9                                                                                                 Page 272 of 282     
+
+
+
+7.8 Appendix G - Identification Type Code Table 
+Code Description 
+001 South African ID number 
+002 Foreign ID number 
+003 Foreign Passport number 
+004 South African company/ close corporation registration number 
+005 Foreign company registration number 
+007 South African trust registration number 
+008 Foreign trust registration number 
+009 Internal identification number 
+
+7.9 Appendix H - File Response Codes 
+Code Description 
+001 Acknowledgement of receipt 
+002 Rejected: Entire file rejected as contains critical errors. The file must be corrected 
+
+and resubmitted to enable processing 
+003 Successfully uploaded: all records accepted and processed. 
+004 Accepted with warnings: This can be any combination of accepted fields, fields 
+
+accepted with a warning and duplicate records. 
+005 Rejected: Entire file rejected as it contains file structure errors. The file must be 
+
+corrected and resubmitted to enable processing. 
+006 Partial upload: This can be any combination of accepted fields, rejected fields, 
+
+fields accepted with a warning or duplicate records. 
+011 Rejected: Entire file rejected as the file was submitted as part of a group and one 
+
+or more of the files in the group failed the validations associated with the 
+submission of a file as part of a group. 
+
+012 Rejected: Group submission incomplete and service level agreement expired for 
+SARS to wait for all files in a group to be submitted 
+
+ 
+
+SARS_External BRS_2022_IT3s_v4.0.0T-9                                                                                                 Page 273 of 282     
+
+
+
+7.10 Appendix I - Modulus 10 Validation
+7.10.1 Income Tax and Value Added 
+
+The last character is a check digit, calculated by applying the following algorithm: 
+
+Digit Formula 
+Digit 1 Multiply by 2 (Add result to total)*  See below 
+Digit 2 Add to total 
+Digit 3 Multiply by 2 (Add result to total)*  See below 
+Digit 4 Add to total 
+Digit 5 Multiply by 2 (Add result to total)*  See below 
+Digit 6 Add to total 
+Digit 7 Multiply by 2 (Add result to total)*  See below 
+Digit 8 Add to total 
+Digit 9 Multiply by 2 (Add result to total)*  See below 
+
+* When the result of the line item calculation exceeds 9, add the individual digits together to obtain a 
+single digit result (e.g. 18 = 1+ 8 = 9) 
+
+Digit 10:  Check digit 
+If the last digit of Total > 0 Then 
+
+The Check Digit should be equal to the result of 10  (Total MOD 10) 
+If the last digit of Total = 0 Then 
+
+The Check Digit should be equal to zero 
+
+Example: 
+Tax Reference Number = 0001339050 
+
+Digit Formula Result 
+Digit 1 0 x 2 0 
+Digit 2 0 + 0 
+Digit 3 0 x 2 + 0 
+Digit 4 1 + 1 
+Digit 5 3 x 2 + 6 
+Digit 6 3 + 3 
+Digit 7 9 x 2 = 18 (1 + 8 = 9) + 9 
+Digit 8 0 + 0 
+Digit 9 5 x 2 = 10 (1 + 0 = 1) + 1 
+Total 20 
+
+Last Digit of Total is not greater than zero 0 so the check digit equal 0 and the number is therefore 
+valid. 
+7.10.2 Pay As You Earn 
+
+The last character is a check digit, calculated by applying the following algorithm: 
+ 
+
+SARS_External BRS_2022_IT3s_v4.0.0T-9                                                                                                 Page 274 of 282     
+
+
+
+Digit Formula
+Digit 1 Replace character 1 with a 4, then multiply by 2 (Add 
+
+result to total)*  See below 
+Digit 2 Add to total 
+Digit 3 Multiply by 2 (Add result to total)*  See below 
+Digit 4 Add to total 
+Digit 5 Multiply by 2 (Add result to total)*  See below 
+Digit 6 Add to total 
+Digit 7 Multiply by 2 (Add result to total)*  See below 
+Digit 8 Add to total 
+Digit 9 Multiply by 2 (Add result to total)*  See below 
+
+ 
+* When the result of the line item calculation exceeds 9, add the individual digits together to obtain a 
+single digit result (e.g. 18 = 1+ 8 = 9) and add this to this to the total (See example below) 
+
+Digit 10:  Check digit 
+Then determine the value of 90 minus the Total value calculated above, then 
+The Check Digit (character 10) equals the right most value of the number  
+
+Example: 
+
+PAYE Reference Number = 7020705408 
+ 
+
+Digit Formula Result 
+Digit 1 4 x 2 8 
+Digit 2 0 + 0 
+Digit 3 2 x 2 + 4 
+Digit 4 0 + 0 
+Digit 5 7 x 2 = 14 (1+4 = 5) + 5 
+Digit 6 0 + 0 
+Digit 7 5 x 2 = 10 (1 + 0 = 1) + 1 
+Digit 8 4 + 4 
+Digit 9 0 x 2 + 0 
+Total 22 
+
+ 
+90  22 = 68. Therefore the right most value equals 8. The check digit (character 10) equals 8; 
+therefore the PAYE reference number is valid. 
+
+ 
+
+SARS_External BRS_2022_IT3s_v4.0.0T-9                                                                                                 Page 275 of 282     
+
+
+
+7.11 Appendix J ID Validation
+Format: 
+{YYMMDD}{G}{SSS}{C}{A}{Z} 
+YYMMDD : Date of birth. 
+G  : Gender. 0-4 Female; 5-9 Male. 
+SSS  : Sequence No. for DOB/G combination. 
+C  : Citizenship. 0 SA; 1 Other. 
+A  : Usually 8, or 9 [can be other values] 
+Z  : Control digit 
+
+Formula to calculate the check digit for a 13 digit identity number: 
+According to the provisions of the Identification Amendment Act, 2000 (Act No. 28 of 2000, which 
+was promulgated on 13 October 2000) all forms of identity documents other than the green bar-
+coded identity document are invalid.   In accordance with the legislation, the control figure which is 
+the 13th digit of all identity numbers which is calculated as follows using ID Number 800101 5009 
+087 as an example: 
+Add all the digits in the odd positions (excluding last digit).  8 + 0 + 0 + 5 + 0 + 0 = 13...................[1]  
+Move the even positions into a field and multiply the number by 2. 
+
+011098 x 2 = 22196  
+Add the digits of the result in b). 
+
+2 + 2 + 1 + 9 + 6 = 20.........................[2]  
+Add the answer in [2] to the answer in [1]. 
+
+13 + 20 = 33  
+Subtract the second digit (i.e. 3) from 10.  The number must tally with the last number in the ID 
+Number. If the result is 2 digits, the last digit is used to compare against the last number in the ID 
+Number.  If the answer differs, the ID number is invalid 
+
+ 
+
+SARS_External BRS_2022_IT3s_v4.0.0T-9                                                                                                 Page 276 of 282     
+
+
+
+7.12 Appendix K Company registration number validation
+CCYY/NNNNNN/NN, where the CCYY must be validated to be from 1800 and up and including the 
+current calendar year. The last two digits of this number must be validated to be either of the 
+following: 
+06, 07, 08, 09, 10, 11, 20, 21, 22, 23, 24, 25, 26, 30, 31 
+
+SARS_External BRS_2022_IT3s_v4.0.0T-9                                                                                                 Page 277 of 282     
+
+
+
+7.13 Appendix L - MD5 Calculation
+The following calculation must be used for determining the file hash total.
+
+Figure 1.One MD5 operation. MD5 consists of 64 of these operations, grouped in four rounds of 16 
+operations. F is a nonlinear function; one function is used in each round. Mi denotes a 32-bit block 
+of the message input, and Ki denotes a 32-bit constant, different for each operation. s denotes a 
+left bit rotation by s places; s varies for each operation. denotes addition modulo 232.
+
+MD5 processes a VAR-length message into a FIX-length output of 128 bits. The input message is 
+broken up into chunks of 512-bit blocks (sixteen 32-bit little endian integers); the message is padded
+so that its length is divisible by 512. The padding works as follows: first a single bit, 1, is appended 
+to the end of the message. This is followed by as many zeros as are required to bring the length of 
+the message up to 64 bits fewer than a multiple of 512. The remaining bits are filled up with a 64-bit 
+little endian integer representing the length of the original message, in bits.
+
+The main MD5 algorithm operates on a 128-bit state, divided into four 32-bit words, denoted A, B, C
+and D. These are initialized to certain FIX constants. The main algorithm then operates on each 
+512-bit message block in turn, each block modifying the state. The processing of a message block 
+consists of four similar stages, termed rounds; each round is composed of 16 similar operations 
+based on a non-linear function F, modular addition, and left rotation. Figure 1 illustrates one 
+operation within a round. There are four possible functions F; a different one is used in each round:
+
+denote the XOR, AND, OR and NOT operations respectively.
+
+The MD5 hash is calculated according to this algorithm:
+
+SARS_External BRS_2022_IT3s_v4.0.0T-9                                                                                                 Page 278 of 282    
+
+
+
+//Note: All VARs are unsigned 32 bits and wrap modulo 2^32 when calculating
+varint[64] r, k 
+//r specifies the per-round shift amounts 
+r[ 0..15] := {7, 12, 17, 22, 7, 12, 17, 22, 7, 12, 17, 22, 7, 12, 17, 22} 
+r[16..31] := {5,  9, 14, 20, 5,  9, 14, 20, 5,  9, 14, 20, 5,  9, 14, 20} 
+r[32..47] := {4, 11, 16, 23, 4, 11, 16, 23, 4, 11, 16, 23, 4, 11, 16, 23} 
+r[48..63] := {6, 10, 15, 21, 6, 10, 15, 21, 6, 10, 15, 21, 6, 10, 15, 21} 
+//Use binary integer part of the sines of integers (Radians) as constants: 
+forifrom 0 to 63 
+k[i] := floor(abs(sin(i + 1)) × (2 pow 32)) 
+end for 
+//(Or just use the following table): 
+k[ 0.. 3] := { 0xd76aa478, 0xe8c7b756, 0x242070db, 0xc1bdceee } 
+k[ 4.. 7] := { 0xf57c0faf, 0x4787c62a, 0xa8304613, 0xfd469501 } 
+k[ 8..11] := { 0x698098d8, 0x8b44f7af, 0xffff5bb1, 0x895cd7be } 
+k[12..15] := { 0x6b901122, 0xfd987193, 0xa679438e, 0x49b40821 } 
+k[16..19] := { 0xf61e2562, 0xc040b340, 0x265e5a51, 0xe9b6c7aa } 
+k[20..23] := { 0xd62f105d, 0x02441453, 0xd8a1e681, 0xe7d3fbc8 } 
+k[24..27] := { 0x21e1cde6, 0xc33707d6, 0xf4d50d87, 0x455a14ed } 
+k[28..31] := { 0xa9e3e905, 0xfcefa3f8, 0x676f02d9, 0x8d2a4c8a } 
+k[32..35] := { 0xfffa3942, 0x8771f681, 0x6d9d6122, 0xfde5380c } 
+k[36..39] := { 0xa4beea44, 0x4bdecfa9, 0xf6bb4b60, 0xbebfbc70 } 
+k[40..43] := { 0x289b7ec6, 0xeaa127fa, 0xd4ef3085, 0x04881d05 } 
+k[44..47] := { 0xd9d4d039, 0xe6db99e5, 0x1fa27cf8, 0xc4ac5665 } 
+k[48..51] := { 0xf4292244, 0x432aff97, 0xab9423a7, 0xfc93a039 } 
+k[52..55] := { 0x655b59c3, 0x8f0ccc92, 0xffeff47d, 0x85845dd1 } 
+k[56..59] := { 0x6fa87e4f, 0xfe2ce6e0, 0xa3014314, 0x4e0811a1 } 
+k[60..63] := { 0xf7537e82, 0xbd3af235, 0x2ad7d2bb, 0xeb86d391 } 
+//Initialize VARs: 
+varint h0 := 0x67452301 
+varint h1 := 0xEFCDAB89 
+varint h2 := 0x98BADCFE 
+varint h3 := 0x10325476 
+//Pre-processing: 
+append "1" bit to message 
+append "0" bits until  
+append length to message 
+
+/* bit (not byte) length of unpadded message as64-bit little-endian integer */ 
+//Process the message in successive 512-bit chunks: 
+for each512-bit chunk of message 
+break chunk into sixteen 32-bit little-  
+//Initialize hash value for this chunk: 
+varint a := h0 
+varint b := h1 
+varint c := h2 
+varint d := h3 
+//Main loop: 
+forifrom 0 to 63 
+if then 
+
+SARS_External BRS_2022_IT3s_v4.0.0T-9                                                                                                 Page 279 of 282     
+
+
+
+f := (b and c) or ((not b) and d)
+g := i 
+else if  
+f := (d and b) or ((not d) and c) 
+g := (5×i + 1) mod 16 
+else if  
+f := b xor c xor d 
+g := (3×i + 5) mod 16 
+else if  
+f := c xor (b or (not d)) 
+g := (7×i) mod 16 
+temp := d 
+d := c 
+c := b 
+b := b + leftrotate((a + f + k[i] + w[g]) , r[i]) 
+a := temp 
+end for 
+//Add this chunk's hash to result so far: 
+h0 := h0 + a 
+h1 := h1 + b 
+h2 := h2 + c 
+h3 := h3 + d 
+end for 
+varchar digest[16] := h0 append h1 append h2 append h3 //(expressed as little-endian) 
+//leftrotate function definition 
+leftrotate (x, c) 
+return (x << c) or (x >> (32-c)); 
+
+Note: Instead of the formulation from the original RFC 1321 shown, the following may be used for 
+improved efficiency (useful if assembly language is being used - otherwise, the compiler will 
+generally optimize the above code. Since each computation is dependent on another in these 
+formulations, this is often slower than the above method where the nand/and can be parallelised): 
+
+xor (b and (c xor d)) 
+xor (d and (b xor c)) 
+
+Source: http://en.wikipedia.org/wiki/MD5 
+ 
+
+SARS_External BRS_2022_IT3s_v4.0.0T-9                                                                                                 Page 280 of 282     
+
+
+
+7.14 Appendix M - Response Codes
+Code Description 
+001  Mandatory field left blank  Mandatory field does not contain a value.  
+002  Incorrect field length  Field length does not comply with the specification.  
+003  Incorrect field format  Field format does not comply with the specification.  
+004  Invalid field value  Field can only have a defined set of values. The value 
+
+supplied in the field does not appear in the defined set of values.  
+005  Invalid Logic  Field value does not meet a logic rule i.e. A + B must be equal to 
+
+this field or Field does not pass Mod 10 test  
+006  SARS System Rejection  Field failed because it does not meet a data or 
+
+business rule requirement within a SARS system i.e. Tax Reference number does 
+not exist  
+
+500  Duplicate Record already existing  
+
+7.15 Appendix N - IT3(s) ITS Source Codes Table 
+This table provides income source codes that are used for the purpose of IT3(s) extracts.  
+
+Code  Transaction Type 
+4239 Tax free investment account  net return on investment profit 
+4240 Tax free investment account  net return on investment loss 
+4219 Tax free investment account  contribution 
+4246 Tax free investment account  transfer in 
+4247 Tax free investment account  transfer out 
+4248 Tax free investment account  withdrawal 
+4241 Tax free investment account  interest 
+4242 Tax free investment account  dividends 
+4243 Tax free investment account  capital gain 
+4244 Tax free investment account  capital loss 
+4257 Tax free investment account  other 
+
+7.16 Appendix O - IT3(s) Transaction Types 
+
+Code  Transaction Type 
+01 Contribution 
+02 Transfer In 
+03 Transfer Out 
+04 Withdrawal 
+
+SARS_External BRS_2022_IT3s_v4.0.0T-9                                                                                                 Page 281 of 282     
+
+
+
+7.17 Appendix P - IT3(b) Withholding Tax on Interest Exemption 
+Codes 
+The interest payment is exempt from WTI in terms of: 
+
+Code  Exemption Description 
+F S. 50D(3)(a)  Foreign (natural) person physically present in SA for 
+
+more than 183 days in aggregate during the twelve months prior to 
+payment 
+
+G S. 50D(3)(b)  Debt claim connected with a permanent establishment in 
+the Republic (and the foreign person is registered as a taxpayer in SA) 
+
+H Exempt / Not taxable in terms of a Double Taxation Agreement 
+I Exempt / Not taxable in terms of another international agreement 
+X Other / Composite 
+
+SARS_External BRS_2022_IT3s_v4.0.0T-9                                                                                                 Page 282 of 282

@@ -1,0 +1,967 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Beneficiary</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <script>
+        function updateNaturalPersonCheckbox() {
+            const taxInput = document.getElementById('taxReferenceNumber');
+            const naturalPersonCheckbox = document.getElementById('isNaturalPerson');
+            const naturalPersonLabel = document.getElementById('naturalPersonLabel');
+            if (taxInput.value && taxInput.value.startsWith('9')) {
+                naturalPersonCheckbox.checked = false;
+                naturalPersonCheckbox.disabled = true;
+                naturalPersonLabel.title = 'Entities with Tax Numbers starting with 9 are not natural persons';
+            } else {
+                naturalPersonCheckbox.disabled = false;
+                naturalPersonLabel.title = '';
+            }
+        }
+    </script>
+</head>
+<body class="bg-gray-100 p-6">
+<div class="max-w-4xl mx-auto bg-white p-6 rounded-lg shadow-md">
+    <!-- Debug Section -->
+    {% if request.args.get('debug') == 'true' %}
+    <details class="mb-6 border border-gray-300 rounded-md">
+        <summary class="bg-gray-200 p-2 cursor-pointer font-semibold">Debug Information</summary>
+        <div class="p-4 bg-gray-50">
+            <h3 class="text-lg font-semibold mb-2">Beneficiary Data</h3>
+            <pre class="bg-gray-100 p-2 rounded-md text-sm overflow-auto">
+{
+    "BeneficiaryID": "{{ beneficiary.BeneficiaryID }}",
+    "TrustID": "{{ beneficiary.TrustID }}",
+    "TaxReferenceNumber": "{{ beneficiary.TaxReferenceNumber or 'None' }}",
+    "IsNaturalPerson": "{{ beneficiary.IsNaturalPerson }}",
+    "LastName": "{{ beneficiary.LastName or 'None' }}",
+    "FirstName": "{{ beneficiary.FirstName or 'None' }}",
+    "OtherName": "{{ beneficiary.OtherName or 'None' }}",
+    "Initials": "{{ beneficiary.Initials or 'None' }}",
+    "DateOfBirth": "{{ beneficiary.DateOfBirth or 'None' }}",
+    "IdentificationType": "{{ beneficiary.IdentificationType or 'None' }}",
+    "IDNumber": "{{ beneficiary.IDNumber or 'None' }}",
+    "PassportNumber": "{{ beneficiary.PassportNumber or 'None' }}",
+    "PassportCountry": "{{ beneficiary.PassportCountry or 'None' }}",
+    "PassportIssueDate": "{{ beneficiary.PassportIssueDate or 'None' }}",
+    "CompanyIncomeTaxRefNo": "{{ beneficiary.CompanyIncomeTaxRefNo or 'None' }}",
+    "CompanyRegistrationNumber": "{{ beneficiary.CompanyRegistrationNumber or 'None' }}",
+    "CompanyRegisteredName": "{{ beneficiary.CompanyRegisteredName or 'None' }}",
+    "NatureOfPerson": "{{ beneficiary.NatureOfPerson or 'None' }}",
+    "Boolean Flags": {
+        "IsConnectedPerson": "{{ beneficiary.IsConnectedPerson }}",
+        "IsBeneficiary": "{{ beneficiary.IsBeneficiary }}",
+        "IsFounder": "{{ beneficiary.IsFounder }}",
+        "IsDonor": "{{ beneficiary.IsDonor }}",
+        "IsNonResident": "{{ beneficiary.IsNonResident }}",
+        "IsTaxableOnDistributed": "{{ beneficiary.IsTaxableOnDistributed }}",
+        "HasNonTaxableAmounts": "{{ beneficiary.HasNonTaxableAmounts }}",
+        "HasCapitalDistribution": "{{ beneficiary.HasCapitalDistribution }}",
+        "MadeDonations": "{{ beneficiary.MadeDonations }}",
+        "MadeContributions": "{{ beneficiary.MadeContributions }}",
+        "ReceivedDonations": "{{ beneficiary.ReceivedDonations }}",
+        "ReceivedContributions": "{{ beneficiary.ReceivedContributions }}",
+        "MadeDistributions": "{{ beneficiary.MadeDistributions }}",
+        "ReceivedRefunds": "{{ beneficiary.ReceivedRefunds }}",
+        "HasRightOfUse": "{{ beneficiary.HasRightOfUse }}"
+    },
+    "Address": {
+        "PhysicalUnitNumber": "{{ beneficiary.PhysicalUnitNumber or 'None' }}",
+        "PhysicalComplex": "{{ beneficiary.PhysicalComplex or 'None' }}",
+        "PhysicalStreetNumber": "{{ beneficiary.PhysicalStreetNumber or 'None' }}",
+        "PhysicalStreet": "{{ beneficiary.PhysicalStreet or 'None' }}",
+        "PhysicalSuburb": "{{ beneficiary.PhysicalSuburb or 'None' }}",
+        "PhysicalCity": "{{ beneficiary.PhysicalCity or 'None' }}",
+        "PhysicalPostalCode": "{{ beneficiary.PhysicalPostalCode or 'None' }}",
+        "PostalSameAsPhysical": "{{ beneficiary.PostalSameAsPhysical }}",
+        "PostalAddressLine1": "{{ beneficiary.PostalAddressLine1 or 'None' }}",
+        "PostalAddressLine2": "{{ beneficiary.PostalAddressLine2 or 'None' }}",
+        "PostalAddressLine3": "{{ beneficiary.PostalAddressLine3 or 'None' }}",
+        "PostalAddressLine4": "{{ beneficiary.PostalAddressLine4 or 'None' }}",
+        "PostalCode": "{{ beneficiary.PostalCode or 'None' }}"
+    },
+    "Contact": {
+        "ContactNumber": "{{ beneficiary.ContactNumber or 'None' }}",
+        "CellNumber": "{{ beneficiary.CellNumber or 'None' }}",
+        "Email": "{{ beneficiary.Email or 'None' }}"
+    }
+}
+                </pre>
+            <h3 class="text-lg font-semibold mb-2 mt-4">Trust Data</h3>
+            <pre class="bg-gray-100 p-2 rounded-md text-sm overflow-auto">
+{
+    "TrustID": "{{ trust.TrustID }}",
+    "TrustRegNumber": "{{ trust.TrustRegNumber }}",
+    "TrustName": "{{ trust.TrustName }}",
+    "TaxNumber": "{{ trust.TaxNumber or 'None' }}",
+    "MastersOffice": "{{ trust.MastersOffice or 'None' }}"
+}
+                </pre>
+            <h3 class="text-lg font-semibold mb-2 mt-4">TAD Records</h3>
+            <pre class="bg-gray-100 p-2 rounded-md text-sm overflow-auto">
+[
+    {% for tad in tad_records %}
+    {
+        "SourceCode": "{{ tad.SourceCode }}",
+        "AmountSubjectToTax": "{{ tad.AmountSubjectToTax }}",
+        "ForeignTaxCredits": "{{ tad.ForeignTaxCredits }}"
+    }{% if not loop.last %},{% endif %}
+    {% else %}
+    []
+    {% endfor %}
+]
+                </pre>
+            <h3 class="text-lg font-semibold mb-2 mt-4">DNT Data</h3>
+            <pre class="bg-gray-100 p-2 rounded-md text-sm overflow-auto">
+{
+    "LocalDividends": "{{ dnt_data.LocalDividends }}",
+    "ExemptForeignDividends": "{{ dnt_data.ExemptForeignDividends }}",
+    "OtherNonTaxableIncome": "{{ dnt_data.OtherNonTaxableIncome }}"
+}
+                </pre>
+            <h3 class="text-lg font-semibold mb-2 mt-4">TFF Data</h3>
+            <pre class="bg-gray-100 p-2 rounded-md text-sm overflow-auto">
+{
+    "TotalValueOfCapitalDistributed": "{{ tff_data.TotalValueOfCapitalDistributed or 'None' }}",
+    "TotalExpensesIncurred": "{{ tff_data.TotalExpensesIncurred or 'None' }}",
+    "TotalDonationsToTrust": "{{ tff_data.TotalDonationsToTrust or 'None' }}",
+    "TotalContributionsToTrust": "{{ tff_data.TotalContributionsToTrust or 'None' }}",
+    "TotalDonationsReceivedFromTrust": "{{ tff_data.TotalDonationsReceivedFromTrust or 'None' }}",
+    "TotalContributionsReceivedFromTrust": "{{ tff_data.TotalContributionsReceivedFromTrust or 'None' }}",
+    "TotalDistributionsToTrust": "{{ tff_data.TotalDistributionsToTrust or 'None' }}",
+    "TotalContributionsRefundedByTrust": "{{ tff_data.TotalContributionsRefundedByTrust or 'None' }}"
+}
+                </pre>
+        </div>
+    </details>
+    {% endif %}
+
+    <h1 class="text-2xl font-bold mb-6">Edit Beneficiary</h1>
+    <form id="beneficiaryForm" method="POST" class="space-y-6">
+        <!-- Trust Details -->
+        <div class="border-t pt-4">
+            <h2 class="text-xl font-semibold mb-4">Trust Details</h2>
+            <div class="mb-4">
+                <label class="block text-sm font-medium text-gray-700">Trust Name</label>
+                <input type="text" name="trustName" value="{{ trust.TrustName }}" readonly
+                       class="mt-1 block w-full border-gray-300 rounded-md shadow-sm bg-gray-100"/>
+            </div>
+        </div>
+
+        <!-- Personal Details -->
+        <div class="border-t pt-4">
+            <h2 class="text-xl font-semibold mb-4">Personal Details</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <label for="taxReferenceNumber" class="block text-sm font-medium text-gray-700">Tax Reference
+                        Number</label>
+                    <input type="text" id="taxReferenceNumber" name="taxReferenceNumber"
+                           value="{{ beneficiary.TaxReferenceNumber or '' }}" oninput="updateNaturalPersonCheckbox()"
+                           class="mt-1 block w-full border-gray-300 rounded-md shadow-sm"/>
+                </div>
+                <div>
+                    <label for="lastName" class="block text-sm font-medium text-gray-700">Last Name</label>
+                    <input type="text" id="lastName" name="lastName" value="{{ beneficiary.LastName or '' }}"
+                           class="mt-1 block w-full border-gray-300 rounded-md shadow-sm"/>
+                </div>
+                <div>
+                    <label for="firstName" class="block text-sm font-medium text-gray-700">First Name</label>
+                    <input type="text" id="firstName" name="firstName" value="{{ beneficiary.FirstName or '' }}"
+                           class="mt-1 block w-full border-gray-300 rounded-md shadow-sm"/>
+                </div>
+                <div>
+                    <label for="otherName" class="block text-sm font-medium text-gray-700">Other Name</label>
+                    <input type="text" id="otherName" name="otherName" value="{{ beneficiary.OtherName or '' }}"
+                           class="mt-1 block w-full border-gray-300 rounded-md shadow-sm"/>
+                </div>
+                <div>
+                    <label for="initials" class="block text-sm font-medium text-gray-700">Initials</label>
+                    <input type="text" id="initials" name="initials" value="{{ beneficiary.Initials or 'None' }}"
+                           class="mt-1 block w-full border-gray-300 rounded-md shadow-sm"/>
+                </div>
+                <div>
+                    <label for="dateOfBirth" class="block text-sm font-medium text-gray-700">Date of Birth</label>
+                    <input type="date" id="dateOfBirth" name="dateOfBirth" value="{{ beneficiary.DateOfBirth or '' }}"
+                           class="mt-1 block w-full border-gray-300 rounded-md shadow-sm"/>
+                </div>
+                <div>
+                    <label for="identificationType" class="block text-sm font-medium text-gray-700">Identification
+                        Type</label>
+                    <select id="identificationType" name="identificationType"
+                            class="mt-1 block w-full border-gray-300 rounded-md shadow-sm">
+                        <option value="South African ID" {% if beneficiary.IdentificationType==
+                        'South African ID' %}selected{% endif %}>South African ID</option>
+                        <option value="Passport" {% if beneficiary.IdentificationType==
+                        'Passport' %}selected{% endif %}>Passport</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="idNumber" class="block text-sm font-medium text-gray-700">ID Number</label>
+                    <input type="text" id="idNumber" name="idNumber" value="{{ beneficiary.IDNumber or '' }}"
+                           class="mt-1 block w-full border-gray-300 rounded-md shadow-sm"/>
+                </div>
+                <div>
+                    <label for="passportNumber" class="block text-sm font-medium text-gray-700">Passport Number</label>
+                    <input type="text" id="passportNumber" name="passportNumber"
+                           value="{{ beneficiary.PassportNumber or '' }}"
+                           class="mt-1 block w-full border-gray-300 rounded-md shadow-sm"/>
+                </div>
+                <div>
+                    <label for="passportCountry" class="block text-sm font-medium text-gray-700">Passport
+                        Country</label>
+                    <input type="text" id="passportCountry" name="passportCountry"
+                           value="{{ beneficiary.PassportCountry or '' }}"
+                           class="mt-1 block w-full border-gray-300 rounded-md shadow-sm"/>
+                </div>
+                <div>
+                    <label for="passportIssueDate" class="block text-sm font-medium text-gray-700">Passport Issue
+                        Date</label>
+                    <input type="date" id="passportIssueDate" name="passportIssueDate"
+                           value="{{ beneficiary.PassportIssueDate or '' }}"
+                           class="mt-1 block w-full border-gray-300 rounded-md shadow-sm"/>
+                </div>
+            </div>
+        </div>
+
+        <!-- Company Details -->
+        <div class="border-t pt-4">
+            <h2 class="text-xl font-semibold mb-4">Company Details</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <label for="companyIncomeTaxRefNo" class="block text-sm font-medium text-gray-700">Company Income
+                        Tax Ref No</label>
+                    <input type="text" id="companyIncomeTaxRefNo" name="companyIncomeTaxRefNo"
+                           value="{{ beneficiary.CompanyIncomeTaxRefNo or '' }}"
+                           class="mt-1 block w-full border-gray-300 rounded-md shadow-sm"/>
+                </div>
+                <div>
+                    <label for="companyRegistrationNumber" class="block text-sm font-medium text-gray-700">Company
+                        Registration Number</label>
+                    <input type="text" id="companyRegistrationNumber" name="companyRegistrationNumber"
+                           value="{{ beneficiary.CompanyRegistrationNumber or '' }}"
+                           class="mt-1 block w-full border-gray-300 rounded-md shadow-sm"/>
+                </div>
+                <div>
+                    <label for="companyRegisteredName" class="block text-sm font-medium text-gray-700">Company
+                        Registered Name</label>
+                    <input type="text" id="companyRegisteredName" name="companyRegisteredName"
+                           value="{{ beneficiary.CompanyRegisteredName or '' }}"
+                           class="mt-1 block w-full border-gray-300 rounded-md shadow-sm"/>
+                </div>
+            </div>
+        </div>
+
+
+                <div class="border-t pt-4">
+            <h2 class="text-xl font-semibold mb-4">Address Details</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <label for="physicalUnitNumber" class="block text-sm font-medium text-gray-700">Physical Unit
+                        Number</label>
+                    <input type="text" id="physicalUnitNumber" name="physicalUnitNumber"
+                           value="{{ beneficiary.PhysicalUnitNumber or '' }}"
+                           class="mt-1 block w-full border-gray-300 rounded-md shadow-sm"/>
+                </div>
+                <div>
+                    <label for="physicalComplex" class="block text-sm font-medium text-gray-700">Physical
+                        Complex</label>
+                    <input type="text" id="physicalComplex" name="physicalComplex"
+                           value="{{ beneficiary.PhysicalComplex or '' }}"
+                           class="mt-1 block w-full border-gray-300 rounded-md shadow-sm"/>
+                </div>
+                <div>
+                    <label for="physicalStreetNumber" class="block text-sm font-medium text-gray-700">Physical Street
+                        Number</label>
+                    <input type="text" id="physicalStreetNumber" name="physicalStreetNumber"
+                           value="{{ beneficiary.PhysicalStreetNumber or '' }}"
+                           class="mt-1 block w-full border-gray-300 rounded-md shadow-sm"/>
+                </div>
+                <div>
+                    <label for="physicalStreet" class="block text-sm font-medium text-gray-700">Physical Street</label>
+                    <input type="text" id="physicalStreet" name="physicalStreet"
+                           value="{{ beneficiary.PhysicalStreet or '' }}"
+                           class="mt-1 block w-full border-gray-300 rounded-md shadow-sm"/>
+                </div>
+                <div>
+                    <label for="physicalSuburb" class="block text-sm font-medium text-gray-700">Physical Suburb</label>
+                    <input type="text" id="physicalSuburb" name="physicalSuburb"
+                           value="{{ beneficiary.PhysicalSuburb or '' }}"
+                           class="mt-1 block w-full border-gray-300 rounded-md shadow-sm"/>
+                </div>
+                <div>
+                    <label for="physicalCity" class="block text-sm font-medium text-gray-700">Physical City</label>
+                    <input type="text" id="physicalCity" name="physicalCity"
+                           value="{{ beneficiary.PhysicalCity or '' }}"
+                           class="mt-1 block w-full border-gray-300 rounded-md shadow-sm"/>
+                </div>
+                <div>
+                    <label for="physicalPostalCode" class="block text-sm font-medium text-gray-700">Physical Postal
+                        Code</label>
+                    <input type="text" id="physicalPostalCode" name="physicalPostalCode"
+                           value="{{ beneficiary.PhysicalPostalCode or '' }}"
+                           class="mt-1 block w-full border-gray-300 rounded-md shadow-sm"/>
+                </div>
+                <div>
+                    <label for="postalSameAsPhysical" class="inline-flex items-center">
+                        <input type="checkbox" id="postalSameAsPhysical" name="postalSameAsPhysical" {% if
+                               beneficiary.PostalSameAsPhysical== 1 %}checked{% endif %} class="mr-2"/>
+                        Postal Address Same as Physical
+                    </label>
+                </div>
+                <div>
+                    <label for="postalAddressLine1" class="block text-sm font-medium text-gray-700">Postal Address Line
+                        1</label>
+                    <input type="text" id="postalAddressLine1" name="postalAddressLine1"
+                           value="{{ beneficiary.PostalAddressLine1 or '' }}"
+                           class="mt-1 block w-full border-gray-300 rounded-md shadow-sm"/>
+                </div>
+                <div>
+                    <label for="postalAddressLine2" class="block text-sm font-medium text-gray-700">Postal Address Line
+                        2</label>
+                    <input type="text" id="postalAddressLine2" name="postalAddressLine2"
+                           value="{{ beneficiary.PostalAddressLine2 or '' }}"
+                           class="mt-1 block w-full border-gray-300 rounded-md shadow-sm"/>
+                </div>
+                <div>
+                    <label for="postalAddressLine3" class="block text-sm font-medium text-gray-700">Postal Address Line
+                        3</label>
+                    <input type="text" id="postalAddressLine3" name="postalAddressLine3"
+                           value="{{ beneficiary.PostalAddressLine3 or '' }}"
+                           class="mt-1 block w-full border-gray-300 rounded-md shadow-sm"/>
+                </div>
+                <div>
+                    <label for="postalAddressLine4" class="block text-sm font-medium text-gray-700">Postal Address Line
+                        4</label>
+                    <input type="text" id="postalAddressLine4" name="postalAddressLine4"
+                           value="{{ beneficiary.PostalAddressLine4 or '' }}"
+                           class="mt-1 block w-full border-gray-300 rounded-md shadow-sm"/>
+                </div>
+                <div>
+                    <label for="postalCode" class="block text-sm font-medium text-gray-700">Postal Code</label>
+                    <input type="text" id="postalCode" name="postalCode" value="{{ beneficiary.PostalCode or '' }}"
+                           class="mt-1 block w-full border-gray-300 rounded-md shadow-sm"/>
+                </div>
+            </div>
+        </div>
+
+        <!-- Contact Details -->
+        <div class="border-t pt-4">
+            <h2 class="text-xl font-semibold mb-4">Contact Details</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <label for="contactNumber" class="block text-sm font-medium text-gray-700">Telephone Number</label>
+                    <input type="text" id="contactNumber" name="contactNumber"
+                           value="{{ beneficiary.ContactNumber or '' }}"
+                           class="mt-1 block w-full border-gray-300 rounded-md shadow-sm"/>
+                </div>
+                <div>
+                    <label for="cellNumber" class="block text-sm font-medium text-gray-700">Cell Phone Number</label>
+                    <input type="text" id="cellNumber" name="cellNumber" value="{{ beneficiary.CellNumber or '' }}"
+                           class="mt-1 block w-full border-gray-300 rounded-md shadow-sm"/>
+                </div>
+                <div>
+                    <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
+                    <input type="email" id="email" name="email" value="{{ beneficiary.Email or '' }}"
+                           class="mt-1 block w-full border-gray-300 rounded-md shadow-sm"/>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- Relationship and Financial Flags -->
+        <div class="border-t pt-4">
+            <h1 class="text-xl font-semibold mb-4">Relationship Flags</h1>
+            <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+                <div>
+                    <label id="naturalPersonLabel" for="isNaturalPerson" class="inline-flex items-center">
+                        <input type="checkbox" id="isNaturalPerson" name="isNaturalPerson" {% if
+                               beneficiary.IsNaturalPerson== 1 %}checked{% endif %} class="mr-2"/>
+                        Natural Person
+                    </label>
+                </div>
+                <div>
+                    <label for="isConnectedPerson" class="inline-flex items-center">
+                        <input type="checkbox" id="isConnectedPerson" name="isConnectedPerson" {% if
+                               beneficiary.IsConnectedPerson== 1 %}checked{% endif %} class="mr-2"/>
+                        Connected Person
+                    </label>
+                </div>
+                <div>
+                    <label for="isBeneficiary" class="inline-flex items-center">
+                        <input type="checkbox" id="isBeneficiary" name="isBeneficiary" {% if beneficiary.IsBeneficiary==
+                               1 %}checked{% endif %} class="mr-2"/>
+                        Beneficiary
+                    </label>
+                </div>
+                <div>
+                    <label for="isFounder" class="inline-flex items-center">
+                        <input type="checkbox" id="isFounder" name="isFounder" {% if beneficiary.IsFounder== 1
+                               %}checked{% endif %} class="mr-2"/>
+                        Founder
+                    </label>
+                </div>
+                <div>
+                    <label for="isDonor" class="inline-flex items-center">
+                        <input type="checkbox" id="isDonor" name="isDonor" {% if beneficiary.IsDonor== 1 %}checked{%
+                               endif %} class="mr-2"/>
+                        Donor
+                    </label>
+                </div>
+                <div>
+                    <label for="isNonResident" class="inline-flex items-center">
+                        <input type="checkbox" id="isNonResident" name="isNonResident" {% if beneficiary.IsNonResident==
+                               1 %}checked{% endif %} class="mr-2"/>
+                        Non Resident
+                    </label>
+                </div>
+            </div>
+
+            <h1 class="text-xl font-semibold mb-4"/>
+            <h1 class="text-xl font-semibold mb-4">Financial Flags</h1>
+            <div class="grid grid-cols-2 md:grid-cols-1 gap-4">
+                <div>
+                    <label for="isTaxableOnDistributed" class="inline-flex items-center">
+                        <input type="checkbox" id="isTaxableOnDistributed" name="isTaxableOnDistributed" {% if
+                               beneficiary.IsTaxableOnDistributed== 1 %}checked{% endif %} class="mr-2"/>
+                        Was taxable on amounts distributed to / vested in beneficiaries or taxable i.t.o. s 7(8) or par.
+                        68 - 72 of the Fifth Schedule
+                    </label>
+                </div>
+                <div>
+                    <label for="hasNonTaxableAmounts" class="inline-flex items-center">
+                        <input type="checkbox" id="hasNonTaxableAmounts" name="hasNonTaxableAmounts" {% if
+                               beneficiary.HasNonTaxableAmounts== 1 %}checked{% endif %} class="mr-2"/>
+                        Received / accrued non-taxable amounts from this trust
+                    </label>
+                </div>
+                <div>
+                    <label for="hasCapitalDistribution" class="inline-flex items-center">
+                        <input type="checkbox" id="hasCapitalDistribution" name="hasCapitalDistribution" {% if
+                               beneficiary.HasCapitalDistribution== 1 %}checked{% endif %} class="mr-2"/>
+                        Received / accrued a capital or asset distribution from this trust
+                    </label>
+                </div>
+                <div>
+                    <label for="madeDonations" class="inline-flex items-center">
+                        <input type="checkbox" id="madeDonations" name="madeDonations" {% if beneficiary.MadeDonations==
+                               1 %}checked{% endif %} class="mr-2"/>
+                        Made donation(s) to this trust
+                    </label>
+                </div>
+                <div>
+                    <label for="madeContributions" class="inline-flex items-center">
+                        <input type="checkbox" id="madeContributions" name="madeContributions" {% if
+                               beneficiary.MadeContributions== 1 %}checked{% endif %} class="mr-2"/>
+                        Made contribution(s) to this trust
+                    </label>
+                </div>
+                <div>
+                    <label for="receivedDonations" class="inline-flex items-center">
+                        <input type="checkbox" id="receivedDonations" name="receivedDonations" {% if
+                               beneficiary.ReceivedDonations== 1 %}checked{% endif %} class="mr-2"/>
+                        Received donation(s) from this trust
+                    </label>
+                </div>
+                <div>
+                    <label for="receivedContributions" class="inline-flex items-center">
+                        <input type="checkbox" id="receivedContributions" name="receivedContributions" {% if
+                               beneficiary.ReceivedContributions== 1 %}checked{% endif %} class="mr-2"/>
+                        Received contribution(s) from this trust
+                    </label>
+                </div>
+                <div>
+                    <label for="madeDistributions" class="inline-flex items-center">
+                        <input type="checkbox" id="madeDistributions" name="madeDistributions" {% if
+                               beneficiary.MadeDistributions== 1 %}checked{% endif %} class="mr-2"/>
+                        Made distribution(s) to this trust (only applicable if the related party is a trust or
+                        foundation)</label>
+                </div>
+                <div>
+                    <label for="receivedRefunds" class="inline-flex items-center">
+                        <input type="checkbox" id="receivedRefunds" name="receivedRefunds" {% if
+                               beneficiary.ReceivedRefunds== 1 %}checked{% endif %} class="mr-2"/>
+                        Received refund(s) on contribution(s) to this trust
+                    </label>
+                </div>
+                <div>
+                    <label for="hasRightOfUse" class="inline-flex items-center">
+                        <input type="checkbox" id="hasRightOfUse" name="hasRightOfUse" {% if beneficiary.HasRightOfUse==
+                               1 %}checked{% endif %} class="mr-2"/>
+                        Enjoyed the right of use of asset(s) retained in this trust (Total Expenses Incurred)
+                    </label>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- TAD Records (Distributions) -->
+        <div class="border-t pt-4">
+            <h2 class="text-xl font-semibold mb-4">TAD Records (Distributions)</h2>
+            <table class="w-full border-collapse">
+                <thead>
+                <tr class="bg-gray-200">
+                    <th class="border p-2">Source Code</th>
+                    <th class="border p-2">Distributed Amount</th>
+                    <th class="border p-2">Foreign Tax Credit</th>
+                    <th class="border p-2">Action</th>
+                </tr>
+                </thead>
+                <tbody id="tadTableBody">
+                {% for tad in tad_records %}
+                <tr>
+                    <td class="border p-2">
+                        <input type="text" name="tad_source_code[]" value="{{ tad.SourceCode }}"
+                               class="w-full border-gray-300 rounded-md"/>
+                    </td>
+                    <td class="border p-2">
+                        <input type="number" name="tad_amount[]" value="{{ tad.AmountSubjectToTax }}" required min="0" step="0.01"
+                               class="w-full border-gray-300 rounded-md"/>
+                    </td>
+                    <td class="border p-2">
+                        <input type="number" name="tad_foreign_tax[]" value="{{ tad.ForeignTaxCredits }}" required min="0" step="0.01"
+                               class="w-full border-gray-300 rounded-md"/>
+                    </td>
+                    <td class="border p-2">
+                        <button type="button" onclick="this.parentElement.parentElement.remove()"
+                                class="text-red-600 hover:text-red-800">Delete
+                        </button>
+                    </td>
+                </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+            <button type="button" onclick="addTadRow()"
+                    class="mt-2 bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600">Add Row
+            </button>
+            <script>
+                function addTadRow() {
+                    const tbody = document.getElementById('tadTableBody');
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td class="border p-2"><input type="text" name="tad_source_code[]" class="w-full border-gray-300 rounded-md" /></td>
+                        <td class="border p-2"><input type="number" name="tad_amount[]" step="0.01" class="w-full border-gray-300 rounded-md" /></td>
+                        <td class="border p-2"><input type="number" name="tad_foreign_tax[]" step="0.01" class="w-full border-gray-300 rounded-md" /></td>
+                        <td class="border p-2"><button type="button" onclick="this.parentElement.parentElement.remove()" class="text-red-600 hover:text-red-800">Delete</button></td>
+                    `;
+                    tbody.appendChild(row);
+                }
+            </script>
+        </div>
+
+        <!-- DNT Records -->
+        <div class="border-t pt-4">
+            <h2 class="text-xl font-semibold mb-4">Details of Non-Taxable Income Distributed (DNT)</h2>
+            <p class="text-sm text-gray-600 mb-4">This section is required if "Has Non-Taxable Amounts" is selected (BRS
+                Field 443).</p>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <label for="local_dividends" class="block text-sm font-medium text-gray-700">Local Dividends (BRS
+                        Field 607)</label>
+                    <input type="number" id="local_dividends" name="local_dividends"
+                           value="{{ dnt_data.LocalDividends or '0.00' }}" step="0.01"
+                           class="mt-1 block w-full border-gray-300 rounded-md shadow-sm"/>
+                </div>
+                <div>
+                    <label for="exempt_foreign_dividends" class="block text-sm font-medium text-gray-700">Exempt Foreign
+                        Dividends (BRS Field 608)</label>
+                    <input type="number" id="exempt_foreign_dividends" name="exempt_foreign_dividends"
+                           value="{{ dnt_data.ExemptForeignDividends or '0.00' }}" step="0.01"
+                           class="mt-1 block w-full border-gray-300 rounded-md shadow-sm"/>
+                </div>
+                <div>
+                    <label for="other_non_taxable" class="block text-sm font-medium text-gray-700">Other Non-Taxable
+                        Income (BRS Field 609)</label>
+                    <input type="number" id="other_non_taxable" name="other_non_taxable"
+                           value="{{ dnt_data.OtherNonTaxableIncome or '0.00' }}" step="0.01"
+                           class="mt-1 block w-full border-gray-300 rounded-md shadow-sm"/>
+                </div>
+            </div>
+        </div>
+
+        <!-- TFF Financial Flows -->
+        <div class="border-t pt-4">
+            <h2 class="text-xl font-semibold mb-4">TFF Financial Flows</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <label for="total_value_of_capital_distributed" class="block text-sm font-medium text-gray-700">Total
+                        Value Of Capital Distributed</label>
+                    <input type="number" id="total_value_of_capital_distributed"
+                           name="total_value_of_capital_distributed"
+                           value="{{ tff_data.TotalValueOfCapitalDistributed or '0.00' }}" step="0.01"
+                           class="mt-1 block w-full border-gray-300 rounded-md shadow-sm"/>
+                </div>
+                <div>
+                    <label for="total_expenses_incurred" class="block text-sm font-medium text-gray-700">Total Expenses Incurred</label>
+                    <input type="number" id="total_expenses_incurred" name="total_expenses_incurred"
+                           value="{{ tff_data.TotalExpensesIncurred or '0.00' }}" step="0.01"
+                           class="mt-1 block w-full border-gray-300 rounded-md shadow-sm"/>
+                </div>
+                <div>
+                    <label for="donations_made" class="block text-sm font-medium text-gray-700">Total Donations to Trust</label>
+                    <input type="number" id="donations_made" name="donations_made"
+                           value="{{ tff_data.TotalDonationsToTrust or '0.00' }}" step="0.01"
+                           class="mt-1 block w-full border-gray-300 rounded-md shadow-sm"/>
+                </div>
+                <div>
+                    <label for="total_value_of_contributions_made" class="block text-sm font-medium text-gray-700">Total Contributions to Trust</label>
+                    <input type="number" id="total_value_of_contributions_made" name="total_value_of_contributions_made"
+                           value="{{ tff_data.TotalContributionsToTrust or '0.00' }}" step="0.01"
+                           class="mt-1 block w-full border-gray-300 rounded-md shadow-sm"/>
+                </div>
+                <div>
+                    <label for="donations_received" class="block text-sm font-medium text-gray-700">Total Donations Received from Trust</label>
+                    <input type="number" id="donations_received" name="donations_received"
+                           value="{{ tff_data.TotalDonationsReceivedFromTrust or '0.00' }}" step="0.01"
+                           class="mt-1 block w-full border-gray-300 rounded-md shadow-sm"/>
+                </div>
+                <div>
+                    <label for="contributions_received" class="block text-sm font-medium text-gray-700">Total Contributions Received from Trust</label>
+                    <input type="number" id="contributions_received" name="contributions_received"
+                           value="{{ tff_data.TotalContributionsReceivedFromTrust or '0.00' }}" step="0.01"
+                           class="mt-1 block w-full border-gray-300 rounded-md shadow-sm"/>
+                </div>
+                <div>
+                    <label for="distributions_made" class="block text-sm font-medium text-gray-700">Total Distributions to Trust</label>
+                    <input type="number" id="distributions_made" name="distributions_made"
+                           value="{{ tff_data.TotalDistributionsToTrust or '0.00' }}" step="0.01"
+                           class="mt-1 block w-full border-gray-300 rounded-md shadow-sm"/>
+                </div>
+                <div>
+                    <label for="refunds_received" class="block text-sm font-medium text-gray-700">Total Contributions Refunded by Trust</label>
+                    <input type="number" id="refunds_received" name="refunds_received"
+                           value="{{ tff_data.TotalContributionsRefundedByTrust or '0.00' }}" step="0.01"
+                           class="mt-1 block w-full border-gray-300 rounded-md shadow-sm"/>
+                </div>
+            </div>
+        </div>
+
+        <!-- Form Actions -->
+        <div class="mt-6 flex space-x-4">
+            <a href="{{ url_for('view_beneficiaries', trust_id=beneficiary.TrustID) }}"
+               class="bg-gray-500 text-white px-4 py-2 rounded-md hover:bg-gray-600">Cancel</a>
+            <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600">Submit</button>
+        </div>
+    </form>
+</div>
+<script>
+    // Run on page load and input change for taxReferenceNumber
+    document.addEventListener('DOMContentLoaded', updateNaturalPersonCheckbox);
+    document.getElementById('taxReferenceNumber').addEventListener('input', updateNaturalPersonCheckbox);
+
+    // Helper functions
+    function modulus10Check(num) {
+        if (!/^[01239]\d{9}$/.test(num)) return false;
+        let total = 0;
+        for (let i = 0; i < 9; i++) {
+            let digit = parseInt(num[i]);
+            total += (i % 2 === 0) ? digit * 2 : digit;
+            if (i % 2 === 0 && digit * 2 > 9) total += -9;
+        }
+        let checkDigit = (10 - (total % 10)) % 10;
+        return checkDigit === parseInt(num[9]);
+    }
+
+    function saIdCheck(dob, idNum) {
+        if (!idNum || !dob || !/^\d{13}$/.test(idNum)) return false;
+        try {
+            const dobDate = new Date(dob);
+            const yy = String(dobDate.getFullYear() % 100).padStart(2, '0');
+            const mm = String(dobDate.getMonth() + 1).padStart(2, '0');
+            const dd = String(dobDate.getDate()).padStart(2, '0');
+            const expected = yy + mm + dd;
+            return idNum.substring(0, 6) === expected;
+        } catch (e) {
+            return false;
+        }
+    }
+
+    function luhnCheck(num) {
+        let sum = 0;
+        for (let i = 0; i < 13; i++) {
+            let digit = parseInt(num[i]);
+            let addend = digit * (i % 2 === 0 ? 1 : 2);
+            sum += addend > 9 ? addend - 9 : addend;
+        }
+        return (sum % 10 === 0);
+    }
+
+<!--    // Function to calculate and update distributions_made-->
+<!--    function updateDistributionsMade() {-->
+<!--        let tadSum = 0;-->
+<!--        document.querySelectorAll('input[name="tad_amount[]"]').forEach(input => {-->
+<!--            const value = parseFloat(input.value) || 0;-->
+<!--            tadSum += value;-->
+<!--        });-->
+
+<!--        const localDividends = parseFloat(document.getElementById('local_dividends').value) || 0;-->
+<!--        const exemptForeignDividends = parseFloat(document.getElementById('exempt_foreign_dividends').value) || 0;-->
+<!--        const otherNonTaxable = parseFloat(document.getElementById('other_non_taxable').value) || 0;-->
+<!--        const dntSum = localDividends + exemptForeignDividends + otherNonTaxable;-->
+
+<!--        const totalSum = tadSum + dntSum;-->
+<!--        document.getElementById('distributions_made').value = totalSum.toFixed(2);-->
+<!--    }-->
+
+    // Add event listeners for TAD and DNT changes
+    document.addEventListener('DOMContentLoaded', function() {
+        updateDistributionsMade();
+        document.querySelectorAll('input[name="tad_amount[]"], #local_dividends, #exempt_foreign_dividends, #other_non_taxable').forEach(input => {
+            input.addEventListener('input', updateDistributionsMade);
+        });
+    });
+
+    // Override addTadRow to add listener to new inputs
+    function addTadRow() {
+        const tbody = document.getElementById('tadTableBody');
+        const row = document.createElement('tr');
+        row.innerHTML = `
+            <td class="border p-2"><input type="text" name="tad_source_code[]" class="w-full border-gray-300 rounded-md" /></td>
+            <td class="border p-2"><input type="number" name="tad_amount[]" step="0.01" class="w-full border-gray-300 rounded-md" /></td>
+            <td class="border p-2"><input type="number" name="tad_foreign_tax[]" step="0.01" class="w-full border-gray-300 rounded-md" /></td>
+            <td class="border p-2"><button type="button" onclick="this.parentElement.parentElement.remove()" class="text-red-600 hover:text-red-800">Delete</button></td>
+        `;
+        tbody.appendChild(row);
+        row.querySelector('input[name="tad_amount[]"]').addEventListener('input', updateDistributionsMade);
+    }
+
+    document.getElementById('beneficiaryForm').addEventListener('submit', function(e) {
+        const isNatural = document.getElementById('isNaturalPerson').checked;
+
+        // Tax Reference Number
+        const taxRef = document.getElementById('taxReferenceNumber').value.trim();
+        const idNum = document.getElementById('idNumber').value.trim();
+        if (isNatural && idNum && (!taxRef || !/^[01239]\d{9}$/.test(taxRef) || !modulus10Check(taxRef))) {
+            alert('Invalid Tax Reference Number');
+            e.preventDefault();
+            return;
+        }
+
+        // Last Name
+        const lastName = document.getElementById('lastName').value.trim();
+        if (isNatural && (!lastName || lastName.length > 50)) {
+            alert('Last Name is required and must be 1-50 characters');
+            e.preventDefault();
+            return;
+        }
+
+        // First Name
+        const firstName = document.getElementById('firstName').value.trim();
+        if (isNatural && (!firstName || firstName.length > 50)) {
+            alert('First Name is required and must be 1-50 characters');
+            e.preventDefault();
+            return;
+        }
+
+        // Other Name
+        const otherName = document.getElementById('otherName').value.trim();
+        if (isNatural && otherName.length > 50) {
+            alert('Other Name must not exceed 50 characters');
+            e.preventDefault();
+            return;
+        }
+
+        // Initials
+        const initials = document.getElementById('initials').value.trim();
+        if (isNatural && (!initials || initials.length > 5)) {
+            alert('Initials are required and must be 1-5 characters');
+            e.preventDefault();
+            return;
+        }
+
+        // Date of Birth
+        const dob = document.getElementById('dateOfBirth').value;
+        if (isNatural && (!dob || new Date(dob) > new Date() || (idNum && !saIdCheck(dob, idNum)))) {
+            alert('Invalid Date of Birth');
+            e.preventDefault();
+            return;
+        }
+
+        // ID Number
+        const passport = document.getElementById('passportNumber').value.trim();
+        if (isNatural && !passport && (!idNum || !/^\d{13}$/.test(idNum) || !luhnCheck(idNum) || !saIdCheck(dob, idNum))) {
+            alert('Invalid ID Number');
+            e.preventDefault();
+            return;
+        }
+
+        // Company Income Tax Ref No
+        const companyTaxRef = document.getElementById('companyIncomeTaxRefNo').value.trim();
+        if (!isNatural && (!companyTaxRef || !/^[01239]\d{9}$/.test(companyTaxRef) || !modulus10Check(companyTaxRef))) {
+            alert('Invalid Company Income Tax Ref No');
+            e.preventDefault();
+            return;
+        }
+
+        // Company Registration Number
+        const regNum = document.getElementById('companyRegistrationNumber').value.trim();
+        if (!isNatural && (!regNum || regNum.length > 15)) {
+            alert('Invalid Company Registration Number');
+            e.preventDefault();
+            return;
+        }
+
+        // Company Registered Name
+        const regName = document.getElementById('companyRegisteredName').value.trim();
+        if (!isNatural && (!regName || regName.length > 78)) {
+            alert('Invalid Company Registered Name');
+            e.preventDefault();
+            return;
+        }
+
+        // Physical Address Sub-fields
+        const physicalUnitNumber = document.getElementById('physicalUnitNumber').value.trim();
+        const physicalComplex = document.getElementById('physicalComplex').value.trim();
+        const physicalStreetNumber = document.getElementById('physicalStreetNumber').value.trim();
+        const physicalStreet = document.getElementById('physicalStreet').value.trim();
+        const physicalSuburb = document.getElementById('physicalSuburb').value.trim();
+        const physicalCity = document.getElementById('physicalCity').value.trim();
+        const physicalPostalCode = document.getElementById('physicalPostalCode').value.trim();
+        if (physicalUnitNumber.length > 8 || !/^[a-zA-Z0-9]*$/.test(physicalUnitNumber)) {
+            alert('Physical Unit Number must not exceed 8 alphanumeric characters');
+            e.preventDefault();
+            return;
+        }
+        if (physicalComplex.length > 27) {
+            alert('Physical Complex must not exceed 27 characters');
+            e.preventDefault();
+            return;
+        }
+        if (physicalStreetNumber.length > 8 || !/^[a-zA-Z0-9]*$/.test(physicalStreetNumber)) {
+            alert('Physical Street Number must not exceed 8 alphanumeric characters');
+            e.preventDefault();
+            return;
+        }
+        if (physicalStreet.length > 27) {
+            alert('Physical Street must not exceed 27 characters');
+            e.preventDefault();
+            return;
+        }
+        if (physicalSuburb.length > 36) {
+            alert('Physical Suburb must not exceed 36 characters');
+            e.preventDefault();
+            return;
+        }
+        if (physicalCity.length > 36) {
+            alert('Physical City must not exceed 36 characters');
+            e.preventDefault();
+            return;
+        }
+        if (physicalPostalCode.length > 10) {
+            alert('Physical Postal Code must not exceed 10 characters');
+            e.preventDefault();
+            return;
+        }
+
+        // Postal Address Sub-fields
+        const postalLine1 = document.getElementById('postalAddressLine1').value.trim();
+        const postalLine2 = document.getElementById('postalAddressLine2').value.trim();
+        const postalLine3 = document.getElementById('postalAddressLine3').value.trim();
+        const postalLine4 = document.getElementById('postalAddressLine4').value.trim();
+        const postalCode = document.getElementById('postalCode').value.trim();
+        const physicalFilled = [physicalStreet, physicalSuburb, physicalCity, physicalPostalCode].some(f => f.trim() !== '');
+        if (postalLine1.length > 100) {
+            alert('Postal Address Line 1 must not exceed 100 characters');
+            e.preventDefault();
+            return;
+        }
+        if (postalLine2.length > 100) {
+            alert('Postal Address Line 2 must not exceed 100 characters');
+            e.preventDefault();
+            return;
+        }
+        if (postalLine3.length > 100) {
+            alert('Postal Address Line 3 must not exceed 100 characters');
+            e.preventDefault();
+            return;
+        }
+        if (postalLine4.length > 100) {
+            alert('Postal Address Line 4 must not exceed 100 characters');
+            e.preventDefault();
+            return;
+        }
+        if (!physicalFilled && (!postalLine1 || postalLine1.length > 100 || postalCode.length > 10)) {
+            alert('Postal Address Line 1 and Postal Code are required if no physical address is provided');
+            e.preventDefault();
+            return;
+        }
+
+        // Telephone Number
+        const tel = document.getElementById('contactNumber').value.trim();
+        if (tel && !/^(0|00)[0-9]{8,13}$/.test(tel)) {
+            alert('Invalid Telephone Number');
+            e.preventDefault();
+            return;
+        }
+
+        // Cell Number
+        const cell = document.getElementById('cellNumber').value.trim();
+        if (!cell || !/^(0|00)[0-9]{8,13}$/.test(cell) && cell !== '999999999999999') {
+            alert('Invalid Cell Number');
+            e.preventDefault();
+            return;
+        }
+
+        // Email
+        const email = document.getElementById('email').value.trim();
+        if (!email || !/^.+@.+\..+$/.test(email) && email.toUpperCase() !== 'NO@EMAIL.COM' || email.length < 5 || email.length > 80) {
+            alert('Invalid Email');
+            e.preventDefault();
+            return;
+        }
+
+        // TFF validation against checkboxes
+        function validateTFF(checkboxId, fieldId, fieldLabel) {
+            const checkbox = document.getElementById(checkboxId);
+            const field = document.getElementById(fieldId);
+            const value = parseFloat(field.value) || 0;
+            if (checkbox.checked && value === 0) {
+                alert(`${fieldLabel} must be greater than 0 when the corresponding checkbox is checked.`);
+                e.preventDefault();
+                return false;
+            }
+            if (!checkbox.checked && value !== 0) {
+                alert(`${fieldLabel} must be 0 when the corresponding checkbox is not checked.`);
+                e.preventDefault();
+                return false;
+            }
+            return true;
+        }
+
+        if (!validateTFF('hasCapitalDistribution', 'total_value_of_capital_distributed', 'Total Value Of Capital Distributed')) return;
+        if (!validateTFF('hasRightOfUse', 'total_expenses_incurred', 'Total Expenses Incurred')) return;
+        if (!validateTFF('madeDonations', 'donations_made', 'Total Donations to Trust')) return;
+        if (!validateTFF('madeContributions', 'total_value_of_contributions_made', 'Total Contributions to Trust')) return;
+        if (!validateTFF('receivedDonations', 'donations_received', 'Total Donations Received from Trust')) return;
+        if (!validateTFF('receivedContributions', 'contributions_received', 'Total Contributions Received from Trust')) return;
+        if (!validateTFF('madeDistributions', 'distributions_made', 'Total Distributions to Trust')) return;
+        if (!validateTFF('receivedRefunds', 'refunds_received', 'Total Contributions Refunded by Trust')) return;
+
+        // Validation for Has Non-Taxable Amounts
+        const hasNonTaxableAmounts = document.getElementById('hasNonTaxableAmounts').checked;
+        const localDividends = parseFloat(document.getElementById('local_dividends').value) || 0;
+        const exemptForeignDividends = parseFloat(document.getElementById('exempt_foreign_dividends').value) || 0;
+        const otherNonTaxable = parseFloat(document.getElementById('other_non_taxable').value) || 0;
+        if (hasNonTaxableAmounts && localDividends === 0 && exemptForeignDividends === 0 && otherNonTaxable === 0) {
+            alert('At least one of Local Dividends, Exempt Foreign Dividends, or Other Non-Taxable Income must be non-zero when Has Non-Taxable Amounts is checked.');
+            e.preventDefault();
+            return;
+        }
+
+        // Validation for Taxable On Distributed
+        const isTaxableOnDistributed = document.getElementById('isTaxableOnDistributed').checked;
+        const tadAmounts = Array.from(document.querySelectorAll('input[name="tad_amount[]"]')).map(input => parseFloat(input.value) || 0);
+        if (isTaxableOnDistributed && tadAmounts.every(amount => amount === 0)) {
+            alert('At least one TAD Records Distributed Amount must be non-zero when Taxable On Distributed is checked.');
+            e.preventDefault();
+            return;
+        }
+
+        const confirmed = confirm('Are you sure you want to update this beneficiary information?');
+        if (!confirmed) {
+            e.preventDefault();
+        }
+    });
+</script>
+</body>
+</html>
