@@ -1,7 +1,7 @@
 import webbrowser
 import threading
 from flask import Flask, render_template, request, redirect, url_for, flash
-import sqlite3
+import pymssql
 import os
 import io
 from datetime import datetime
@@ -16,7 +16,7 @@ from reportlab.lib.styles import getSampleStyleSheet
 app = Flask(__name__)
 app.secret_key = os.getenv('FLASK_SECRET_KEY', 'fallback-secret-key')
 
-logging.basicConfig(filename=os.path.join(os.path.dirname(__file__), 'app_errors.log'), level=logging.DEBUG)
+logging.basicConfig(filename=os.path.join(os.getcwd(), os.path.dirname(__file__), 'app_errors.log'), level=logging.DEBUG)
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 DB_PATH = os.path.join(BASE_DIR, 'beneficial_ownership.db')
@@ -89,16 +89,27 @@ from flask import g
 
 def get_db_connection():
     if 'db' not in g:
-        g.db = sqlite3.connect(DB_PATH, timeout=10)  # Set timeout to 10 seconds
-        g.db.row_factory = sqlite3.Row
+        conn_str = os.getenv('AZURE_SQL_CONNECTION_STRING')
+        if conn_str:
+            params = dict(param.split('=') for param in conn_str.split(';') if param)
+            g.db = pymssql.connect(
+                server=params['server'],
+                user=params['user'],
+                password=params['password'],
+                database=params['database'],
+                charset='utf8'
+            )
+            g.db.autocommit(True)
+        else:
+            # Fallback to SQLite for local testing
+            g.db = sqlite3.connect(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'beneficial_ownership.db'), timeout=10)
+            g.db.row_factory = sqlite3.Row
     return g.db
-
 
 @app.teardown_appcontext
 def close_db(error):
     if hasattr(g, 'db'):
         g.db.close()
-
 
 def modulus_10_check(number):
     if not number.isdigit() or len(number) != 10:
@@ -1230,7 +1241,10 @@ def generate_i3t_direct(trust_id):
         filename, file_content, trust, dpb_count, tad_count, tff_count, total_amount = generate_file_content(trust_id,
                                                                                                              gh_unique_id)
         submission_tax_year = trust['SubmissionTaxYear'] or datetime.now().strftime('%Y')
-        folder = os.path.join('IT3(t)', submission_tax_year, trust['TrustName'].replace(' ', '_'))
+        folder = os.path.join(os.getcwd(),'IT3(t)', submission_tax_year, trust['TrustName'].replace(' ', '_'))
+
+
+
         os.makedirs(folder, exist_ok=True)
 
         # Save flatfile
