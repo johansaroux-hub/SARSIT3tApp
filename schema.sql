@@ -1,3 +1,4 @@
+-- Tables required for the application
 CREATE TABLE Beneficiaries
 (
    BeneficiaryID integer PRIMARY KEY,
