@@ -1,4 +1,4 @@
--- Tables required for the application
+-- Tables required for the application jdlsoft
 CREATE TABLE Beneficiaries
 (
    BeneficiaryID integer PRIMARY KEY,
