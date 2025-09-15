@@ -9,7 +9,7 @@ import uuid
 import json
 import hashlib
 
-app = Flask(__name__)
+app = Flask(__name__) ##
 app.secret_key = os.getenv('FLASK_SECRET_KEY', 'fallback-secret-key')
 
 def sanitize(value):
