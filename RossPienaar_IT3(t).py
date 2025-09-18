@@ -12,10 +12,13 @@ import hashlib
 app = Flask(__name__)
 app.secret_key = os.getenv('FLASK_SECRET_KEY', 'fallback-secret-key')
 
+
 def sanitize(value):
     return '' if value in (None, 'None', 'none') else str(value)
 
+
 from flask import g
+
 
 def get_db_connection():
     if 'db' not in g:
@@ -38,14 +41,17 @@ def get_db_connection():
         g.db = pyodbc.connect(odbc_conn_str, autocommit=True)
     return g.db
 
+
 @app.teardown_appcontext
 def close_db(error):
     if hasattr(g, 'db'):
         g.db.close()
 
+
 def dictfetchall(cursor):
     columns = [col[0] for col in cursor.description]
     return [dict(zip(columns, row)) for row in cursor.fetchall()]
+
 
 def dictfetchone(cursor):
     row = cursor.fetchone()
@@ -53,6 +59,7 @@ def dictfetchone(cursor):
         return None
     columns = [col[0] for col in cursor.description]
     return dict(zip(columns, row))
+
 
 def modulus_10_check(number):
     if not number.isdigit() or len(number) != 10:
@@ -64,6 +71,7 @@ def modulus_10_check(number):
     sum_double = sum(doubled_even)
     total = sum_no_double + sum_double
     return total % 10 == 0
+
 
 def sa_id_check(id_number, date_of_birth):
     if not id_number.isdigit() or len(id_number) != 13:
@@ -80,6 +88,7 @@ def sa_id_check(id_number, date_of_birth):
     except ValueError:
         return False
 
+
 @app.route('/')
 def index():
     return render_template('index.html')
@@ -92,7 +101,6 @@ def view_beneficiaries(trust_id):
     beneficiaries = conn.execute('SELECT * FROM Beneficiaries WHERE TrustID = ?', (trust_id,)).fetchall()
     # conn.close()
     return render_template('view_beneficiaries.html', trust=trust, beneficiaries=beneficiaries)
-
 
 
 @app.route('/add_hgh', methods=('GET', 'POST'))
@@ -133,6 +141,7 @@ def add_hgh():
     unique_file_id = str(uuid.uuid4())
     return render_template('hgh_list.html', current_datetime=current_datetime, unique_file_id=unique_file_id)
 
+
 @app.route('/hgh_list')
 def hgh_list():
     conn = get_db_connection()
@@ -141,6 +150,7 @@ def hgh_list():
     hghs = dictfetchall(cursor)
     # conn.close()
     return render_template('hgh_list.html', hghs=hghs)
+
 
 @app.route('/edit_hgh/<int:hgh_id>', methods=('GET', 'POST'))
 def edit_hgh(hgh_id):
@@ -182,6 +192,7 @@ def edit_hgh(hgh_id):
     current_datetime = datetime.now().strftime('%Y-%m-%dT%H:%M:%S')
     return render_template('hgh_form.html', hgh=hgh, current_datetime=current_datetime)
 
+
 @app.route('/delete_hgh/<int:hgh_id>')
 def delete_hgh(hgh_id):
     conn = get_db_connection()
@@ -190,6 +201,7 @@ def delete_hgh(hgh_id):
     # conn.close()
     flash('HGH deleted!')
     return redirect(url_for('hgh_list'))
+
 
 @app.route('/add_trust', methods=('GET', 'POST'))
 def add_trust():
@@ -253,6 +265,7 @@ def add_trust():
             # conn.close()
         return redirect(url_for('trusts'))
     return render_template('add_trust.html')
+
 
 @app.route('/edit_trust/<int:trust_id>', methods=('GET', 'POST'))
 def edit_trust(trust_id):
@@ -319,6 +332,7 @@ def edit_trust(trust_id):
     # conn.close()
     return render_template('edit_trust.html', trust=trust, mode='capture')
 
+
 @app.route('/delete_trust/<int:trust_id>')
 def delete_trust(trust_id):
     conn = get_db_connection()
@@ -326,6 +340,7 @@ def delete_trust(trust_id):
     cursor.execute('DELETE FROM Trusts WHERE TrustID = ?', (trust_id,))
     # conn.close()
     return redirect(url_for('trusts'))
+
 
 @app.route('/add_submission/<int:trust_id>', methods=('GET', 'POST'))
 def add_submission(trust_id):
@@ -369,6 +384,7 @@ def add_submission(trust_id):
     # conn.close()
     return render_template('add_submission.html', trust=trust)
 
+
 @app.route('/trusts')
 def trusts_list():
     mode = request.args.get('mode')
@@ -380,12 +396,14 @@ def trusts_list():
         cursor.execute("SELECT * FROM Trusts WHERE RecordStatus <> '0000 - Imported' ORDER BY RecordStatus DESC")
         mode_out = 'submissions'
     else:
-        cursor.execute("SELECT * FROM Trusts WHERE RecordStatus NOT IN ('9010 - SUBMITTED TO SARS') ORDER BY RecordStatus DESC")
+        cursor.execute(
+            "SELECT * FROM Trusts WHERE RecordStatus NOT IN ('9010 - SUBMITTED TO SARS') ORDER BY RecordStatus DESC")
         mode_out = 'capture'
 
     trusts = dictfetchall(cursor)
     # conn.close()
     return render_template('trusts.html', trusts=trusts, mode=mode_out)
+
 
 @app.route('/view_trust/<int:trust_id>')
 def view_trust(trust_id):
@@ -404,6 +422,7 @@ def view_trust(trust_id):
     submissions = dictfetchall(cursor)
     # conn.close()
     return render_template('view_trust.html', trust=trust, beneficiaries=beneficiaries, submissions=submissions)
+
 
 @app.route('/add_beneficiary/<int:trust_id>', methods=('GET', 'POST'))
 def add_beneficiary(trust_id):
@@ -498,6 +517,7 @@ def add_beneficiary(trust_id):
     # conn.close()
     return render_template('add_beneficiary.html', trust=trust)
 
+
 @app.route('/edit_beneficiary/<int:beneficiary_id>', methods=('GET', 'POST'))
 def edit_beneficiary(beneficiary_id):
     conn = get_db_connection()
@@ -511,6 +531,20 @@ def edit_beneficiary(beneficiary_id):
     trust_id = beneficiary['TrustID']
     cursor.execute('SELECT * FROM Trusts WHERE TrustID = ?', (trust_id,))
     trust = dictfetchone(cursor)
+
+    # Fetch TAD records
+    cursor = conn.cursor()
+    cursor.execute('SELECT * FROM BeneficiaryTAD WHERE BeneficiaryID = ?', (beneficiary_id,))
+    tad_records = cursor.fetchall()
+
+    dnt_row = conn.execute('SELECT * FROM BeneficiaryDNT WHERE BeneficiaryID = ?', (beneficiary_id,)).fetchone()
+    dnt_data = dict(dnt_row) if dnt_row else {
+        'LocalDividends': 0.00,
+        'ExemptForeignDividends': 0.00,
+        'OtherNonTaxableIncome': 0.00
+    }
+
+    tff_row = conn.execute('SELECT * FROM BeneficiaryTFF WHERE BeneficiaryID = ?', (beneficiary_id,)).fetchone()
 
     if request.method == 'POST':
         tax_reference_number = request.form.get('TaxReferenceNumber')
@@ -565,11 +599,13 @@ def edit_beneficiary(beneficiary_id):
 
         if not last_name or not first_name:
             flash('Last Name and First Name are required!')
-            return render_template('edit_beneficiary.html', beneficiary=beneficiary, trust=trust)
+            return render_template('edit_beneficiary.html', beneficiary=beneficiary, trust=trust,
+                                   tad_records=tad_records, tff_data=tff_row)
 
         if id_number and not sa_id_check(id_number, date_of_birth):
             flash('Invalid ID Number or Date of Birth mismatch!')
-            return render_template('edit_beneficiary.html', beneficiary=beneficiary, trust=trust)
+            return render_template('edit_beneficiary.html', beneficiary=beneficiary, trust=trust,
+                                   tad_records=tad_records, tff_data=tff_row)
 
         cursor.execute("""
             UPDATE Beneficiaries SET TaxReferenceNumber = ?, LastName = ?, FirstName = ?, OtherName = ?, Initials = ?, DateOfBirth = ?,
@@ -594,7 +630,8 @@ def edit_beneficiary(beneficiary_id):
         # conn.close()
         return redirect(url_for('view_trust', trust_id=trust_id))
     # conn.close()
-    return render_template('edit_beneficiary.html', beneficiary=beneficiary, trust=trust)
+    return render_template('edit_beneficiary.html', beneficiary=beneficiary, trust=trust, tad_records=tad_records, tff_data=tff_row, dnt_data=dnt_data)
+
 
 @app.route('/delete_beneficiary/<int:beneficiary_id>')
 def delete_beneficiary(beneficiary_id):
@@ -609,6 +646,7 @@ def delete_beneficiary(beneficiary_id):
     cursor.execute('DELETE FROM Beneficiaries WHERE BeneficiaryID = ?', (beneficiary_id,))
     # conn.close()
     return redirect(url_for('view_trust', trust_id=trust_id))
+
 
 @app.route('/add_dnt/<int:beneficiary_id>', methods=('GET', 'POST'))
 def add_dnt(beneficiary_id):
@@ -643,6 +681,7 @@ def add_dnt(beneficiary_id):
     # conn.close()
     return render_template('add_dnt.html', beneficiary=beneficiary, dnt=existing_dnt or {})
 
+
 @app.route('/add_tad/<int:beneficiary_id>', methods=('GET', 'POST'))
 def add_tad(beneficiary_id):
     conn = get_db_connection()
@@ -666,6 +705,7 @@ def add_tad(beneficiary_id):
         return redirect(url_for('view_trust', trust_id=beneficiary['TrustID']))
     # conn.close()
     return render_template('add_tad.html', beneficiary=beneficiary)
+
 
 @app.route('/edit_tad/<int:tad_id>', methods=('GET', 'POST'))
 def edit_tad(tad_id):
@@ -694,6 +734,7 @@ def edit_tad(tad_id):
     # conn.close()
     return render_template('edit_tad.html', tad=tad, beneficiary=beneficiary)
 
+
 @app.route('/delete_tad/<int:tad_id>')
 def delete_tad(tad_id):
     conn = get_db_connection()
@@ -714,6 +755,7 @@ def delete_tad(tad_id):
     if trust_id:
         return redirect(url_for('view_trust', trust_id=trust_id))
     return 'Trust not found', 404
+
 
 @app.route('/add_tff/<int:beneficiary_id>', methods=('GET', 'POST'))
 def add_tff(beneficiary_id):
@@ -745,7 +787,8 @@ def add_tff(beneficiary_id):
                 TotalDistributionsToTrust = ?, TotalContributionsRefundedByTrust = ?
                 WHERE BeneficiaryID = ?
             """, (total_value_of_capital_distributed, total_expenses_incurred, total_donations_to_trust,
-                  total_contributions_to_trust, total_donations_received_from_trust, total_contributions_received_from_trust,
+                  total_contributions_to_trust, total_donations_received_from_trust,
+                  total_contributions_received_from_trust,
                   total_distributions_to_trust, total_contributions_refunded_by_trust, beneficiary_id))
         else:
             cursor.execute("""
@@ -754,12 +797,14 @@ def add_tff(beneficiary_id):
                 TotalDistributionsToTrust, TotalContributionsRefundedByTrust)
                 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
             """, (beneficiary_id, total_value_of_capital_distributed, total_expenses_incurred, total_donations_to_trust,
-                  total_contributions_to_trust, total_donations_received_from_trust, total_contributions_received_from_trust,
+                  total_contributions_to_trust, total_donations_received_from_trust,
+                  total_contributions_received_from_trust,
                   total_distributions_to_trust, total_contributions_refunded_by_trust))
         # conn.close()
         return redirect(url_for('view_trust', trust_id=beneficiary['TrustID']))
     # conn.close()
     return render_template('add_tff.html', beneficiary=beneficiary, tff=existing_tff or {})
+
 
 def generate_file_content(trust_id, gh_unique_id):
     conn = get_db_connection()
@@ -887,7 +932,8 @@ def generate_file_content(trust_id, gh_unique_id):
         totalDonationsToTrust = int(sum(float(row['TotalDonationsToTrust']) for row in tff_row))
         totalContributionsToTrust = int(sum(float(row['TotalContributionsToTrust']) for row in tff_row))
         totalDonationsReceivedFromTrust = int(sum(float(row['TotalDonationsReceivedFromTrust']) for row in tff_row))
-        totalContributionsReceivedFromTrust = int(sum(float(row['TotalContributionsReceivedFromTrust']) for row in tff_row))
+        totalContributionsReceivedFromTrust = int(
+            sum(float(row['TotalContributionsReceivedFromTrust']) for row in tff_row))
         totalDistributionsToTrust = int(sum(float(row['TotalDistributionsToTrust']) for row in tff_row))
         totalContributionsRefundedByTrust = int(sum(float(row['TotalContributionsRefundedByTrust']) for row in tff_row))
 
@@ -944,11 +990,13 @@ def generate_file_content(trust_id, gh_unique_id):
     # conn.close()
     return filename, '\n'.join(lines), trust, dpb_count, tad_count, tff_count, total_amount
 
+
 @app.route('/generate_i3t_direct/<int:trust_id>')
 def generate_i3t_direct(trust_id):
     try:
         gh_unique_id = str(uuid.uuid4())
-        filename, file_content, trust, dpb_count, tad_count, tff_count, total_amount = generate_file_content(trust_id, gh_unique_id)
+        filename, file_content, trust, dpb_count, tad_count, tff_count, total_amount = generate_file_content(trust_id,
+                                                                                                             gh_unique_id)
         conn = get_db_connection()
         cursor = conn.cursor()
         cursor.execute("UPDATE Trusts SET RecordStatus = '9001 - Submitted to SARS' WHERE TrustID = ?", (trust_id,))
@@ -966,6 +1014,7 @@ def generate_i3t_direct(trust_id):
         return str(e), 404
     except Exception as e:
         return f"Error generating SARS file: {str(e)}", 500
+
 
 @app.route('/generate_sars_file/<int:trust_id>')
 def generate_sars_file(trust_id):
@@ -987,13 +1036,16 @@ def generate_sars_file(trust_id):
     except Exception as e:
         return f"Error generating SARS file: {str(e)}", 500
 
+
 def none_to_blank(value):
     return '' if value in (None, 'None', 'null', 'none', '<null>') else value
+
 
 @app.route('/export_data', methods=['GET'])
 def export_data():
     conn = get_db_connection()
-    tables = ['Beneficiaries', 'BeneficiaryDNT', 'BeneficiaryTAD', 'BeneficiaryTFF', 'HGHHeaders', 'Submissions', 'Trusts']
+    tables = ['Beneficiaries', 'BeneficiaryDNT', 'BeneficiaryTAD', 'BeneficiaryTFF', 'HGHHeaders', 'Submissions',
+              'Trusts']
     data = {}
     cursor = conn.cursor()
     for table in tables:
@@ -1009,9 +1061,11 @@ def export_data():
     response.headers['Content-Disposition'] = 'attachment; filename=backup.json'
     return response
 
+
 @app.route('/import_data', methods=['GET'])
 def import_data():
     return render_template('import_data.html')
+
 
 @app.route('/import_data', methods=['POST'])
 def import_data_post():
@@ -1210,7 +1264,9 @@ def import_data_post():
         flash('Data imported successfully')
         return redirect(url_for('index'))
 
+
 import subprocess
+
 
 @app.route('/kill_process_tree')
 def kill_process_tree():
@@ -1227,6 +1283,7 @@ def kill_process_tree():
     except Exception as e:
         flash(f'Error: {str(e)}', 'error')
     return redirect(url_for('index'))
+
 
 app.jinja_env.filters['none_to_blank'] = none_to_blank
 
