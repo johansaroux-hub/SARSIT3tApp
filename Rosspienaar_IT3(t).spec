@@ -2,10 +2,10 @@
 
 
 a = Analysis(
-    ['Rosspienaar_IT3(t).py'],
+    ['RossPienaar_IT3(t).py'],
     pathex=[],
     binaries=[],
-    datas=[('beneficial_ownership.db', '.'), ('templates', 'templates'), ('static', 'static')],
+    datas=[('templates', 'templates'), ('static', 'static')],
     hiddenimports=[],
     hookspath=[],
     hooksconfig={},
@@ -22,7 +22,7 @@ exe = EXE(
     a.binaries,
     a.datas,
     [],
-    name='Rosspienaar_IT3(t)',
+    name='RossPienaar_IT3(t)',
     debug=False,
     bootloader_ignore_signals=False,
     strip=False,

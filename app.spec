@@ -5,7 +5,7 @@ a = Analysis(
     ['app.py'],
     pathex=[],
     binaries=[],
-    datas=[('beneficial_ownership.db', '.'), ('templates', 'templates'), ('static', 'static')],
+    datas=[('templates', 'templates'), ('static', 'static')],
     hiddenimports=[],
     hookspath=[],
     hooksconfig={},
