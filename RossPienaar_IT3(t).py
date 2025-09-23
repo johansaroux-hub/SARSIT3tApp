@@ -21,25 +21,24 @@ from flask import g
 
 
 def get_db_connection():
-    if 'db' not in g:
-        conn_str = os.getenv('AZURE_SQL_CONNECTION_STRING')
-        if not conn_str:
-            raise ValueError("AZURE_SQL_CONNECTION_STRING not set")
-        params = dict(p.split('=') for p in conn_str.split(';') if p)
-        server = params.get('server')
-        database = params.get('database')
-        user = params.get('user') or params.get('user id')
-        password = params.get('password')
-        odbc_conn_str = (
-            "DRIVER={ODBC Driver 18 for SQL Server};"
-            f"SERVER={server};"
-            f"DATABASE={database};"
-            f"UID={user};"
-            f"PWD={password};"
-            "Encrypt=yes;TrustServerCertificate=no;"
-        )
-        g.db = pyodbc.connect(odbc_conn_str, autocommit=True)
-    return g.db
+    try:
+        connection_params = {
+            'Driver': '{ODBC Driver 18 for SQL Server}',
+            'Server': 'tcp:jdlsoft-sarsit3t-sql.database.windows.net,1433',
+            'Database': 'SARSIT3tDB',
+            'UID': 'jdlsoftadmin',
+            'PWD': 'f@incC66',
+            'Persist Security Info': 'False',
+            'MultipleActiveResultSets': 'False',
+            'Encrypt': 'yes',
+            'TrustServerCertificate': 'no',
+            'Connection Timeout': '30'
+        }
+        connection = pyodbc.connect(**connection_params)
+        connection.autocommit = True
+        return connection
+    except pyodbc.Error as e:
+        raise Exception(f"Database connection failed: {str(e)}")
 
 
 @app.teardown_appcontext
@@ -134,7 +133,7 @@ def add_hgh():
               sars_request_reference, test_data_indicator, data_type_supplied, channel_identifier, source_identifier,
               source_system, source_system_version, contact_person_name, contact_person_surname,
               business_telephone_number1, business_telephone_number2, cell_phone_number, contact_email))
-        # conn.close()
+        cursor.commit()
         flash('HGH added!')
         return redirect(url_for('trusts'))
     current_datetime = datetime.now().strftime('%Y-%m-%dT%H:%M:%S')
@@ -185,7 +184,7 @@ def edit_hgh(hgh_id):
               sars_request_reference, test_data_indicator, data_type_supplied, channel_identifier, source_identifier,
               source_system, source_system_version, contact_person_name, contact_person_surname,
               business_telephone_number1, business_telephone_number2, cell_phone_number, contact_email, hgh_id))
-        # conn.close()
+        cursor.commit()
         flash('HGH updated!')
         return redirect(url_for('hgh_list'))
     # conn.close()
@@ -198,7 +197,7 @@ def delete_hgh(hgh_id):
     conn = get_db_connection()
     cursor = conn.cursor()
     cursor.execute('DELETE FROM HGHHeaders WHERE ID = ?', (hgh_id,))
-    # conn.close()
+    cursor.commit()
     flash('HGH deleted!')
     return redirect(url_for('hgh_list'))
 
@@ -257,6 +256,7 @@ def add_trust():
                   postal_address_line4, postal_code,
                   contact_number, cell_number, email, submission_tax_year, period_start_date, period_end_date,
                   unique_file_id))
+            cursor.commit()
         except Exception:
             flash('Trust registration number must be unique.')
             return render_template('add_trust.html')
@@ -327,7 +327,7 @@ def edit_trust(trust_id):
               postal_address_line4, postal_code,
               contact_number, cell_number, email, submission_tax_year, period_start_date, period_end_date,
               unique_file_id, '0002 - Edited', trust_id))
-        # conn.close()
+        cursor.commit()
         return redirect(url_for('trusts_list'))
     # conn.close()
     return render_template('edit_trust.html', trust=trust, mode='capture')
@@ -338,7 +338,7 @@ def delete_trust(trust_id):
     conn = get_db_connection()
     cursor = conn.cursor()
     cursor.execute('DELETE FROM Trusts WHERE TrustID = ?', (trust_id,))
-    # conn.close()
+    cursor.commit()
     return redirect(url_for('trusts'))
 
 
@@ -374,6 +374,7 @@ def add_submission(trust_id):
                 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             """, (trust_id, submission_date, submission_type, status, software_name, software_version,
                   user_first_name, user_last_name, user_contact_number, user_email, security_token))
+            cursor.commit()
         except Exception as e:
             flash(f'Error adding submission: {str(e)}')
             return render_template('add_submission.html', trust=trust)
@@ -512,7 +513,7 @@ def add_beneficiary(trust_id):
               physical_suburb, physical_city, physical_postal_code, postal_same_as_physical, postal_address_line1,
               postal_address_line2, postal_address_line3, postal_address_line4, postal_code, contact_number,
               cell_number, email, company_income_tax_ref_no))
-        # conn.close()
+        cursor.commit()
         return redirect(url_for('view_trust', trust_id=trust_id))
     # conn.close()
     return render_template('add_beneficiary.html', trust=trust)
@@ -627,10 +628,11 @@ def edit_beneficiary(beneficiary_id):
               physical_suburb, physical_city, physical_postal_code, postal_same_as_physical, postal_address_line1,
               postal_address_line2, postal_address_line3, postal_address_line4, postal_code, contact_number,
               cell_number, email, company_income_tax_ref_no, beneficiary_id))
-        # conn.close()
+        cursor.commit()
         return redirect(url_for('view_trust', trust_id=trust_id))
     # conn.close()
-    return render_template('edit_beneficiary.html', beneficiary=beneficiary, trust=trust, tad_records=tad_records, tff_data=tff_row, dnt_data=dnt_data)
+    return render_template('edit_beneficiary.html', beneficiary=beneficiary, trust=trust, tad_records=tad_records,
+                           tff_data=tff_row, dnt_data=dnt_data)
 
 
 @app.route('/delete_beneficiary/<int:beneficiary_id>')
@@ -644,7 +646,7 @@ def delete_beneficiary(beneficiary_id):
         return 'Beneficiary not found', 404
     trust_id = trust_id_row[0]
     cursor.execute('DELETE FROM Beneficiaries WHERE BeneficiaryID = ?', (beneficiary_id,))
-    # conn.close()
+    cursor.commit()
     return redirect(url_for('view_trust', trust_id=trust_id))
 
 
@@ -676,9 +678,9 @@ def add_dnt(beneficiary_id):
                 INSERT INTO BeneficiaryDNT (BeneficiaryID, LocalDividends, ExemptForeignDividends, OtherNonTaxableIncome)
                 VALUES (?, ?, ?, ?)
             """, (beneficiary_id, local_dividends, exempt_foreign_dividends, other_non_taxable_income))
-        # conn.close()
+        cursor.commit()
         return redirect(url_for('view_trust', trust_id=beneficiary['TrustID']))
-    # conn.close()
+
     return render_template('add_dnt.html', beneficiary=beneficiary, dnt=existing_dnt or {})
 
 
@@ -701,9 +703,10 @@ def add_tad(beneficiary_id):
             INSERT INTO BeneficiaryTAD (BeneficiaryID, SourceCode, AmountSubjectToTax, ForeignTaxCredits)
             VALUES (?, ?, ?, ?)
         """, (beneficiary_id, source_code, amount_subject_to_tax, foreign_tax_credits))
-        # conn.close()
+        cursor.commit()
+
         return redirect(url_for('view_trust', trust_id=beneficiary['TrustID']))
-    # conn.close()
+
     return render_template('add_tad.html', beneficiary=beneficiary)
 
 
@@ -729,7 +732,7 @@ def edit_tad(tad_id):
             UPDATE BeneficiaryTAD SET SourceCode = ?, AmountSubjectToTax = ?, ForeignTaxCredits = ?
             WHERE TADID = ?
         """, (source_code, amount_subject_to_tax, foreign_tax_credits, tad_id))
-        # conn.close()
+        cursor.commit()
         return redirect(url_for('view_trust', trust_id=beneficiary['TrustID']))
     # conn.close()
     return render_template('edit_tad.html', tad=tad, beneficiary=beneficiary)
@@ -747,6 +750,7 @@ def delete_tad(tad_id):
     beneficiary_id = beneficiary_id_row[0]
 
     cursor.execute('DELETE FROM BeneficiaryTAD WHERE TADID = ?', (tad_id,))
+    cursor.commit()
 
     cursor.execute('SELECT TrustID FROM Beneficiaries WHERE BeneficiaryID = ?', (beneficiary_id,))
     trust_id_row = cursor.fetchone()
@@ -790,6 +794,7 @@ def add_tff(beneficiary_id):
                   total_contributions_to_trust, total_donations_received_from_trust,
                   total_contributions_received_from_trust,
                   total_distributions_to_trust, total_contributions_refunded_by_trust, beneficiary_id))
+            cursor.commit()
         else:
             cursor.execute("""
                 INSERT INTO BeneficiaryTFF (BeneficiaryID, TotalValueOfCapitalDistributed, TotalExpensesIncurred, TotalDonationsToTrust,
@@ -800,9 +805,9 @@ def add_tff(beneficiary_id):
                   total_contributions_to_trust, total_donations_received_from_trust,
                   total_contributions_received_from_trust,
                   total_distributions_to_trust, total_contributions_refunded_by_trust))
-        # conn.close()
+            cursor.commit()
         return redirect(url_for('view_trust', trust_id=beneficiary['TrustID']))
-    # conn.close()
+
     return render_template('add_tff.html', beneficiary=beneficiary, tff=existing_tff or {})
 
 
@@ -1000,7 +1005,7 @@ def generate_i3t_direct(trust_id):
         conn = get_db_connection()
         cursor = conn.cursor()
         cursor.execute("UPDATE Trusts SET RecordStatus = '9001 - Submitted to SARS' WHERE TrustID = ?", (trust_id,))
-        # conn.close()
+        cursor.commit()
 
         file_buffer = io.StringIO(file_content)
         file_buffer.seek(0)
@@ -1260,7 +1265,7 @@ def import_data_post():
                 cursor.executemany(f'INSERT INTO {table} ({columns}) VALUES ({placeholders})',
                                    [tuple(row.values()) for row in rows])
 
-        # conn.close()
+                cursor.commit()
         flash('Data imported successfully')
         return redirect(url_for('index'))
 
@@ -1288,5 +1293,5 @@ def kill_process_tree():
 app.jinja_env.filters['none_to_blank'] = none_to_blank
 
 if __name__ == '__main__':
-    threading.Timer(1.25, lambda: webbrowser.open('http://127.0.0.1:5000')).start()
+    # threading.Timer(1.25, lambda: webbrowser.open('http://127.0.0.1:5000')).start()
     app.run(debug=True)
