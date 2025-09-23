@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Error - SARS IT3(t) System</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .error-container {
+            background: white;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            max-width: 500px;
+            margin: 20px;
+        }
+        .error-code {
+            font-size: 4em;
+            font-weight: bold;
+            color: #e74c3c;
+            margin: 0;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+        .error-title {
+            font-size: 1.5em;
+            color: #2c3e50;
+            margin: 20px 0 10px 0;
+            font-weight: 300;
+        }
+        .error-message {
+            color: #7f8c8d;
+            margin: 0 0 30px 0;
+            line-height: 1.6;
+        }
+        .suggestion {
+            background: #f8f9fa;
+            border-left: 4px solid #3498db;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 4px;
+            text-align: left;
+            color: #2c3e50;
+        }
+        .btn {
+            display: inline-block;
+            padding: 12px 24px;
+            background: #3498db;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            margin: 5px;
+            transition: background 0.3s ease;
+        }
+        .btn:hover {
+            background: #2980b9;
+        }
+        .btn-secondary {
+            background: #95a5a6;
+        }
+        .btn-secondary:hover {
+            background: #7f8c8d;
+        }
+        .footer {
+            margin-top: 30px;
+            color: #bdc3c7;
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+<body>
+    <div class="error-container">
+        <div class="error-code">{{ error_code }}</div>
+        <h1 class="error-title">{{ error }}</h1>
+        {% if suggestion %}
+        <div class="suggestion">
+            <strong>Suggestion:</strong> {{ suggestion }}
+        </div>
+        {% endif %}
+        <div class="error-message">
+            {% if error_code == 404 %}
+                The page you're looking for doesn't exist or has been moved.
+            {% elif error_code == 500 %}
+                We're experiencing technical difficulties. Our team has been notified.
+            {% elif error_code == 403 %}
+                You don't have permission to access this resource.
+            {% else %}
+                An unexpected error occurred. Please try again in a few moments.
+            {% endif %}
+        </div>
+
+        <div>
+            {% if session.user_id %}
+            <a href="{{ url_for('dashboard') }}" class="btn">🏠 Dashboard</a>
+            {% else %}
+            <a href="{{ url_for('dashboard') }}" class="btn">🏠 Home</a>
+            <a href="{{ url_for('login') }}" class="btn">🔐 Login</a>
+            {% endif %}
+            <a href="{{ url_for('trusts_list') }}" class="btn btn-secondary">📋 Trusts</a>
+        </div>
+
+        <div class="footer">
+            <p>SARS IT3(t) Trust Management System | © 2025 JDLSoft</p>
+        </div>
+    </div>
+</body>
+</html>
