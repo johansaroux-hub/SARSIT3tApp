@@ -1,5 +1,6 @@
+import csv
 import subprocess
-from flask import Flask, render_template, request, redirect, url_for, flash, send_file
+from flask import Flask, render_template, request, redirect, url_for, flash, send_file, make_response
 import pyodbc
 import os
 import io
@@ -27,8 +28,6 @@ def convert_identification_type(raw_value):
 
 def sanitize(value):
     return '' if value in (None, 'None', 'none') else str(value)
-
-
 
 
 def get_db_connection():
@@ -143,7 +142,7 @@ def add_hgh():
               business_telephone_number1, business_telephone_number2, cell_phone_number, contact_email))
         cursor.commit()
         flash('HGH added!')
-        return redirect(url_for('trusts'))
+        return redirect(url_for('trust_list'))
     current_datetime = datetime.now().strftime('%Y-%m-%dT%H:%M:%S')
     unique_file_id = str(uuid.uuid4())
     return render_template('hgh_list.html', current_datetime=current_datetime, unique_file_id=unique_file_id)
@@ -245,11 +244,12 @@ def add_trust():
 
         cursor = get_db_connection()
         try:
+            print('got to the update')
             cursor.execute("""
                 INSERT INTO Trusts (TrustRegNumber, TrustName, TaxNumber, NatureOfPerson, TrustType, Residency, MastersOffice,
                 PhysicalUnitNumber, PhysicalComplex, PhysicalStreetNumber, PhysicalStreet, PhysicalSuburb, PhysicalCity, PhysicalPostalCode,
                 PostalSameAsPhysical, PostalAddressLine1, PostalAddressLine2, PostalAddressLine3, PostalAddressLine4, PostalCode,
-                ContactNumber, CellNumber, Email, SubmissionTaxYear, PeriodStartDate, PeriodEndDate, UniqueFileID)
+                ContactNumber, CellNumber, Email, SubmissionTaxYear, PeriodStartDate, PeriodEndDate, UniqueFileID, RecordStatus)
                 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             """, (trust_reg_number, trust_name, tax_number, nature_of_person, trust_type, residency, masters_office,
                   physical_unit_number, physical_complex, physical_street_number, physical_street, physical_suburb,
@@ -257,15 +257,20 @@ def add_trust():
                   postal_same_as_physical, postal_address_line1, postal_address_line2, postal_address_line3,
                   postal_address_line4, postal_code,
                   contact_number, cell_number, email, submission_tax_year, period_start_date, period_end_date,
-                  unique_file_id))
+                  unique_file_id, '0001 - Captured'))
             cursor.commit()
+
+            print('got to the update - committed')
+
+
+
         except Exception:
             flash('Trust registration number must be unique.')
             return render_template('add_trust.html')
         finally:
             print('fianlly')
-        return redirect(url_for('trusts'))
-    return render_template('add_trust.html')
+        return redirect(url_for('trust_list'))
+    return render_template('trust_list.html')
 
 
 @app.route('/edit_trust/<int:trust_id>', methods=('GET', 'POST'))
@@ -335,7 +340,7 @@ def delete_trust(trust_id):
     cursor = get_db_connection()
     cursor.execute('DELETE FROM Trusts WHERE TrustID = ?', (trust_id,))
     cursor.commit()
-    return redirect(url_for('trusts'))
+    return redirect(url_for('trust_list'))
 
 
 @app.route('/add_submission/<int:trust_id>', methods=('GET', 'POST'))
@@ -374,7 +379,7 @@ def add_submission(trust_id):
             return render_template('add_submission.html', trust=trust)
         finally:
             print('fianlly')
-        return redirect(url_for('trusts'))
+        return redirect(url_for('trust_list'))
     return render_template('add_submission.html', trust=trust)
 
 
@@ -385,11 +390,11 @@ def trusts_list():
     conn = get_db_connection()
 
     if mode == 'submissions':
-        trusts = conn.execute("SELECT * FROM Trusts WHERE RecordStatus <> '0000 - Imported' ORDER BY RecordStatus DESC")
+        trusts = conn.execute("SELECT * FROM Trusts ORDER BY RecordStatus DESC")
         mode_out = 'submissions'
     else:
         trusts = conn.execute(
-            "SELECT * FROM Trusts WHERE RecordStatus NOT IN ('9010 - SUBMITTED TO SARS') ORDER BY RecordStatus DESC")
+            "SELECT * FROM Trusts WHERE RecordStatus NOT IN ('9010 - SUBMITTED TO SARS','9010 - SUBMITTED TO SARS') ORDER BY RecordStatus DESC")
         mode_out = 'capture'
 
     return render_template('trusts.html', trusts=trusts, mode=mode_out)
@@ -397,92 +402,28 @@ def trusts_list():
 
 @app.route('/add_beneficiary/<int:trust_id>', methods=('GET', 'POST'))
 def add_beneficiary(trust_id):
-    cursor = get_db_connection()
-    cursor.execute('SELECT * FROM Trusts WHERE TrustID = ?', (trust_id,))
-    trust = dictfetchone(cursor)
+    conn = get_db_connection()  # <-- this is a Connection
+    cur = conn.execute('SELECT * FROM Trusts WHERE TrustID = ?', (trust_id,))
+    trust = dictfetchone(cur)  # <-- pass a Cursor into dictfetchone
     if trust is None:
         return 'Trust not found', 404
+
     if request.method == 'POST':
-        tax_reference_number = request.form.get('TaxReferenceNumber')
-        last_name = request.form['LastName']
-        first_name = request.form['FirstName']
-        other_name = request.form.get('OtherName')
-        initials = request.form.get('Initials')
-        date_of_birth = request.form.get('DateOfBirth')
-        id_number = request.form.get('IDNumber')
-        identification_type = request.form.get('IdentificationType')
-        passport_number = request.form.get('PassportNumber')
-        passport_country = request.form.get('PassportCountry')
-        passport_issue_date = request.form.get('PassportIssueDate')
-        company_registration_number = request.form.get('CompanyRegistrationNumber')
-        company_registered_name = request.form.get('CompanyRegisteredName')
-        nature_of_person = request.form['NatureOfPerson']
-        is_connected_person = 'IsConnectedPerson' in request.form
-        is_beneficiary = 'IsBeneficiary' in request.form
-        is_founder = 'IsFounder' in request.form
-        is_natural_person = 'IsNaturalPerson' in request.form
-        is_donor = 'IsDonor' in request.form
-        is_non_resident = 'IsNonResident' in request.form
-        is_taxable_on_distributed = 'IsTaxableOnDistributed' in request.form
-        has_non_taxable_amounts = 'HasNonTaxableAmounts' in request.form
-        has_capital_distribution = 'HasCapitalDistribution' in request.form
-        has_loans_granted = 'HasLoansGranted' in request.form
-        has_loans_from = 'HasLoansFrom' in request.form
-        made_donations = 'MadeDonations' in request.form
-        made_contributions = 'MadeContributions' in request.form
-        received_donations = 'ReceivedDonations' in request.form
-        received_contributions = 'ReceivedContributions' in request.form
-        made_distributions = 'MadeDistributions' in request.form
-        received_refunds = 'ReceivedRefunds' in request.form
-        has_right_of_use = 'HasRightOfUse' in request.form
-        physical_unit_number = request.form.get('PhysicalUnitNumber')
-        physical_complex = request.form.get('PhysicalComplex')
-        physical_street_number = request.form.get('PhysicalStreetNumber')
-        physical_street = request.form.get('PhysicalStreet')
-        physical_suburb = request.form.get('PhysicalSuburb')
-        physical_city = request.form.get('PhysicalCity')
-        physical_postal_code = request.form.get('PhysicalPostalCode')
-        postal_same_as_physical = 'PostalSameAsPhysical' in request.form
-        postal_address_line1 = request.form.get('PostalAddressLine1')
-        postal_address_line2 = request.form.get('PostalAddressLine2')
-        postal_address_line3 = request.form.get('PostalAddressLine3')
-        postal_address_line4 = request.form.get('PostalAddressLine4')
-        postal_code = request.form.get('PostalCode')
-        contact_number = request.form.get('ContactNumber')
-        cell_number = request.form.get('CellNumber')
-        email = request.form.get('Email')
-        company_income_tax_ref_no = request.form.get('CompanyIncomeTaxRefNo')
 
-        if not last_name or not first_name:
-            flash('Last Name and First Name are required!')
-            return render_template('add_beneficiary.html', trust=trust)
+        print()
 
-        if id_number and not sa_id_check(id_number, date_of_birth):
-            flash('Invalid ID Number or Date of Birth mismatch!')
-            return render_template('add_beneficiary.html', trust=trust)
+        nature_of_person = request.form.get('natureOfPerson') or '1'
 
-        cursor.execute("""
-            INSERT INTO Beneficiaries (TrustID, TaxReferenceNumber, LastName, FirstName, OtherName, Initials, DateOfBirth,
-            IDNumber, IdentificationType, PassportNumber, PassportCountry, PassportIssueDate, CompanyRegistrationNumber,
-            CompanyRegisteredName, NatureOfPerson, IsConnectedPerson, IsBeneficiary, IsFounder, IsNaturalPerson, IsDonor,
-            IsNonResident, IsTaxableOnDistributed, HasNonTaxableAmounts, HasCapitalDistribution, HasLoansGranted, HasLoansFrom,
-            MadeDonations, MadeContributions, ReceivedDonations, ReceivedContributions, MadeDistributions, ReceivedRefunds,
-            HasRightOfUse, PhysicalUnitNumber, PhysicalComplex, PhysicalStreetNumber, PhysicalStreet, PhysicalSuburb,
-            PhysicalCity, PhysicalPostalCode, PostalSameAsPhysical, PostalAddressLine1, PostalAddressLine2, PostalAddressLine3,
-            PostalAddressLine4, PostalCode, ContactNumber, CellNumber, Email, CompanyIncomeTaxRefNo)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-        """, (trust_id, tax_reference_number, last_name, first_name, other_name, initials, date_of_birth,
-              id_number, identification_type, passport_number, passport_country, passport_issue_date,
-              company_registration_number, company_registered_name, nature_of_person, is_connected_person,
-              is_beneficiary, is_founder, is_natural_person, is_donor, is_non_resident, is_taxable_on_distributed,
-              has_non_taxable_amounts, has_capital_distribution, has_loans_granted, has_loans_from, made_donations,
-              made_contributions, received_donations, received_contributions, made_distributions, received_refunds,
-              has_right_of_use, physical_unit_number, physical_complex, physical_street_number, physical_street,
-              physical_suburb, physical_city, physical_postal_code, postal_same_as_physical, postal_address_line1,
-              postal_address_line2, postal_address_line3, postal_address_line4, postal_code, contact_number,
-              cell_number, email, company_income_tax_ref_no))
-        cursor.commit()
+
+        print("about to insert beneficiary - ", request.form.get('firstName'))
+        cur.execute("""
+            INSERT INTO Beneficiaries (TrustID, LastName, FirstName, NatureOfPerson)
+            VALUES (?, ?, ?, ?)
+        """, (trust_id, request.form.get('last_name'), request.form.get('first_name'), nature_of_person))
+        cur.commit()
     return render_template('add_beneficiary.html', trust=trust)
+
+
 
 @app.route('/edit_beneficiary/<int:beneficiary_id>', methods=('GET', 'POST'))
 def edit_beneficiary(beneficiary_id):
@@ -522,17 +463,17 @@ def edit_beneficiary(beneficiary_id):
     tff_data = dictfetchone(cur_tff)  # may be None if no row
     print("Fetched TFF row:", tff_data)
 
-
     if request.method == 'POST':
         print("POST received:", request.form)
-        # Initialise variables for DNT
-        local_dividends = 0.0
-        exempt_foreign_dividends = 0.0
-        other_non_taxable = 0.0
+        print('isNaturalPerson =', request.form.get('isNaturalPerson'))
+
 
         date_of_birth = request.form.get('dateOfBirth')
         identification_type = request.form.get('identificationType', '').strip().title()
         id_number = request.form.get('idNumber')
+
+        is_natural_person = 'IsNaturalPerson' in request.form
+
 
         converted_type = convert_identification_type(identification_type)
         print("Converted identification type:", converted_type)
@@ -541,6 +482,7 @@ def edit_beneficiary(beneficiary_id):
             print("Invalid identification type")
             return render_template('edit_beneficiary.html', beneficiary=beneficiary, trust=trust,
                                    tad_records=tad_records, tff_data=tff_data, dnt_data=dnt_data)
+
 
         cursor.execute("UPDATE Beneficiaries SET IdentificationType = ? WHERE BeneficiaryID = ?",
                        (converted_type, beneficiary_id))
@@ -580,13 +522,14 @@ def edit_beneficiary(beneficiary_id):
             cursor2 = conn.execute('SELECT * FROM BeneficiaryTFF WHERE BeneficiaryID = ?', (beneficiary_id,))
             print("TFF record as per the db:", dictfetchone(cursor2))
 
-            # cursor.execute('BEGIN TRANSACTION')
+
+
             cursor.execute(
                 'UPDATE Beneficiaries SET '
                 'TaxReferenceNumber = ?, LastName = ?, FirstName = ?, OtherName = ?, Initials = ?, DateOfBirth = ?, '
                 'IdentificationType = ?, IDNumber = ?, PassportNumber = ?, PassportCountry = ?, PassportIssueDate = ?, '
                 'CompanyIncomeTaxRefNo = ?, CompanyRegistrationNumber = ?, CompanyRegisteredName = ?, NatureOfPerson = ?, '
-                'IsConnectedPerson = ?, IsBeneficiary = ?, IsFounder = ?, IsDonor = ?, IsNonResident = ?, '
+                'IsConnectedPerson = ?, IsBeneficiary = ?, IsFounder = ?, IsNaturalPerson = ?, IsDonor = ?, IsNonResident = ?, '
                 'IsTaxableOnDistributed = ?, HasNonTaxableAmounts = ?, HasCapitalDistribution = ?, MadeDonations = ?, '
                 'MadeContributions = ?, ReceivedDonations = ?, ReceivedContributions = ?, MadeDistributions = ?, '
                 'ReceivedRefunds = ?, HasRightOfUse = ?, PhysicalUnitNumber = ?, PhysicalComplex = ?, '
@@ -613,6 +556,9 @@ def edit_beneficiary(beneficiary_id):
                     1 if request.form.get('isConnectedPerson') else 0,
                     1 if request.form.get('isBeneficiary') else 0,
                     1 if request.form.get('isFounder') else 0,
+
+                    1 if request.form.get('isNaturalPerson') else 0,
+
                     1 if request.form.get('isDonor') else 0,
                     1 if request.form.get('isNonResident') else 0,
                     1 if request.form.get('isTaxableOnDistributed') else 0,
@@ -668,7 +614,8 @@ def edit_beneficiary(beneficiary_id):
                         cursor.execute(
                             'INSERT INTO BeneficiaryTAD (SectionIdentifier, RecordType, RecordStatus, UniqueNumber, RowNumber, BeneficiaryID, AmountSubjectToTax, SourceCode, ForeignTaxCredits, TrustID) '
                             'VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
-                            ('B', 'TAD', 'N', str(uuid.uuid4()), '', beneficiary_id, amt_val, sc, ft_val, beneficiary['TrustID'])
+                            ('B', 'TAD', 'N', str(uuid.uuid4()), '', beneficiary_id, amt_val, sc, ft_val,
+                             beneficiary['TrustID'])
                         )
                         print(f"Inserted TAD record: {sc}, {amt_val}, {ft_val}")
 
@@ -689,7 +636,8 @@ def edit_beneficiary(beneficiary_id):
                 cursor.execute(
                     'INSERT INTO BeneficiaryDNT (SectionIdentifier, RecordType, RecordStatus, BeneficiaryID, LocalDividends, ExemptForeignDividends, OtherNonTaxableIncome, TrustID) '
                     'VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
-                    ('B', 'DNT', 'N', beneficiary_id, local_dividends, exempt_foreign_dividends, other_non_taxable, beneficiary['TrustID'])
+                    ('B', 'DNT', 'N', beneficiary_id, local_dividends, exempt_foreign_dividends, other_non_taxable,
+                     beneficiary['TrustID'])
                 )
                 print(f"Inserted DNT record: {local_dividends}, {exempt_foreign_dividends}, {other_non_taxable}")
 
@@ -697,7 +645,8 @@ def edit_beneficiary(beneficiary_id):
             cursor.execute('DELETE FROM BeneficiaryTFF WHERE BeneficiaryID = ?', (beneficiary_id,))
             print("Deleted old TFF records")
             try:
-                total_value_of_capital_distributed = float(request.form.get('total_value_of_capital_distributed', 0.00) or 0.0)
+                total_value_of_capital_distributed = float(
+                    request.form.get('total_value_of_capital_distributed', 0.00) or 0.0)
                 total_expenses_incurred = float(request.form.get('total_expenses_incurred', 0.00) or 0.0)
                 total_donations_to_trust = float(request.form.get('donations_made', 0.00) or 0.0)
                 total_contributions_to_trust = float(request.form.get('total_value_of_contributions_made', 0.00) or 0.0)
@@ -753,17 +702,58 @@ def edit_beneficiary(beneficiary_id):
                            tff_data=tff_data, trust=trust)
 
 
+
 @app.route('/delete_beneficiary/<int:beneficiary_id>')
 def delete_beneficiary(beneficiary_id):
-    cursor = get_db_connection()
-    cursor.execute('SELECT TrustID FROM Beneficiaries WHERE BeneficiaryID = ?', (beneficiary_id,))
-    trust_id_row = cursor.fetchone()
-    if trust_id_row is None:
+    conn = get_db_connection()  # this is a Connection
+
+    # Fetch the TrustID for redirect
+    cur = conn.execute(
+        'SELECT TrustID FROM Beneficiaries WHERE BeneficiaryID = ?',
+        (beneficiary_id,)
+    )
+    row = cur.fetchone()  # now we're calling fetchone() on a Cursor
+    if row is None:
         return 'Beneficiary not found', 404
-    trust_id = trust_id_row[0]
-    cursor.execute('DELETE FROM Beneficiaries WHERE BeneficiaryID = ?', (beneficiary_id,))
-    cursor.commit()
-    return redirect(url_for('beneficiaries', trust_id=trust_id))
+
+    trust_id = row[0]  # or: dictfetchone(cur)['TrustID'] if you prefer dicts
+
+    # Delete and commit on the CONNECTION (not the cursor)
+    conn.execute('DELETE FROM Beneficiaries WHERE BeneficiaryID = ?', (beneficiary_id,))
+    conn.commit()
+
+    return redirect(url_for('view_beneficiaries', trust_id=trust_id))
+
+
+@app.route('/generate_report')
+def generate_report():
+    conn = get_db_connection()
+    cursor = conn.cursor()
+
+    # Step 2: Execute SQL query (replace with your specific query)
+    query = "SELECT trustid, trustname, recordstatus FROM trusts where recordstatus not in ('0000 - IMPORTED', '0002 - Edited')"  # Placeholder: e.g., "SELECT trust_id, beneficiary_name, transaction_date FROM trusts"
+    cursor.execute(query)
+    rows = cursor.fetchall()
+
+    # Fetch column names for CSV headers
+    columns = [desc[0] for desc in cursor.description]
+
+    # Step 3: Generate CSV report in memory
+    output = io.StringIO()
+    writer = csv.writer(output)
+
+    # Write headers
+    writer.writerow(columns)
+
+    # Write data rows
+    writer.writerows(rows)
+
+    # Step 4: Prepare response for download
+    response = make_response(output.getvalue())
+    response.headers["Content-Disposition"] = "attachment; filename=trust_report.csv"
+    response.headers["Content-Type"] = "text/csv"
+
+    return response
 
 
 @app.route('/add_dnt/<int:beneficiary_id>', methods=('GET', 'POST'))
@@ -916,32 +906,36 @@ def add_tff(beneficiary_id):
 
 
 def generate_file_content(trust_id, gh_unique_id):
-    cursor = get_db_connection()
+    conn = get_db_connection()
+    cursor = conn.cursor()
     cursor.execute('SELECT * FROM HGHHeaders ORDER BY ID DESC')
     hgh = dictfetchone(cursor)
-    if not hgh:
-        raise ValueError("No HGH header found")
 
     cursor.execute('SELECT * FROM Trusts WHERE TrustID = ?', (trust_id,))
     trust = dictfetchone(cursor)
+    trust = {k: sanitize(v) for k, v in trust.items()}
+
     if not trust:
         raise ValueError("Trust not found")
 
     cursor.execute('SELECT * FROM Beneficiaries WHERE TrustID = ?', (trust_id,))
     beneficiaries = dictfetchall(cursor)
+    beneficiaries = [{k: sanitize(v) for k, v in b.items()} for b in beneficiaries]
 
     cursor.execute('SELECT * FROM BeneficiaryTAD WHERE TrustID = ?', (trust_id,))
     tad_records = dictfetchall(cursor)
+    tad_records = [{k: sanitize(v) for k, v in b.items()} for b in tad_records]
 
-    header_date = datetime.strptime(hgh['MessageCreateDate'], '%Y-%m-%dT%H:%M:%S')
+    print()
+
+    header_date = datetime.now()
 
     lines = []
-    gh_line = (f"{hgh['SectionIdentifier']}|{hgh['HeaderType']}|{hgh['MessageCreateDate']}|{hgh['FileLayoutVersion']}|"
-               f"{gh_unique_id}|{hgh['SARSRequestReference']}|{hgh['TestDataIndicator']}|{hgh['DataTypeSupplied']}|"
-               f"{hgh['ChannelIdentifier']}|{hgh['SourceIdentifier']}|{hgh['SourceSystem']}|{hgh['SourceSystemVersion']}|"
-               f"{hgh['ContactPersonName']}|{hgh['ContactPersonSurname']}|{hgh['BusinessTelephoneNumber1']}|"
-               f"{hgh['BusinessTelephoneNumber2']}|{hgh['CellPhoneNumber']}|{hgh['ContactEmail']}")
+    gh_line = f"H|GH|{header_date.strftime('%Y-%m-%dT%H:%M:%S')}|1|{gh_unique_id}||T|I3T|HTTPS|9CD036C9-210F-40C5-91F7-82959AB269C02228AE14-53A7-4AC2-A539-A20D1D5654E6F4A52305-B91E-4435-B25E-46E38A528398D60DAB72-1C44-4490-99AF-FA572D3AFC69|GreatSoft|2024.3.1|Karin|Roux|0123428393|0606868076|0823714777|karin@rosspienaar.co.za"
+
     lines.append(gh_line)
+
+    print('gh_line = ', gh_line)
 
     dpt_line = (f"B|DPT|N|{trust['TrustRegNumber']}|{trust['TrustName']}|{trust['TaxNumber'] or ''}|"
                 f"{trust['SubmissionTaxYear']}|{trust['PeriodStartDate']}|{trust['PeriodEndDate']}|{trust['NatureOfPerson']}|"
@@ -953,6 +947,7 @@ def generate_file_content(trust_id, gh_unique_id):
                 f"{trust['PostalAddressLine4'] or ''}|{trust['PostalCode'] or ''}|{trust['ContactNumber'] or ''}|"
                 f"{trust['CellNumber'] or ''}|{trust['Email'] or ''}")
     lines.append(dpt_line)
+
 
     dpb_count = len(beneficiaries)
     tad_count = len(tad_records)
@@ -1092,6 +1087,8 @@ def generate_file_content(trust_id, gh_unique_id):
     t_line = f"T|{sequence_number - 1}|{md5_hash}|{total_amount:.2f}"
     lines.append(t_line)
 
+    print('lines =', lines)
+
     timestamp = header_date.strftime('%Y%m%dT%H%M%S')
     filename = f"I3T_1_1517179642_{gh_unique_id}_{timestamp}_B2BSFG.txt"
     return filename, '\n'.join(lines), trust, dpb_count, tad_count, tff_count, total_amount
@@ -1103,7 +1100,8 @@ def generate_i3t_direct(trust_id):
         gh_unique_id = str(uuid.uuid4())
         filename, file_content, trust, dpb_count, tad_count, tff_count, total_amount = generate_file_content(trust_id,
                                                                                                              gh_unique_id)
-        cursor = get_db_connection()
+        conn = get_db_connection()
+        cursor = conn.cursor()
         cursor.execute("UPDATE Trusts SET RecordStatus = '9001 - Submitted to SARS' WHERE TrustID = ?", (trust_id,))
         cursor.commit()
 
@@ -1168,7 +1166,6 @@ def export_data():
 @app.route('/import_data', methods=['GET'])
 def import_data():
     return render_template('import_data.html')
-
 
 
 @app.route('/kill_process_tree')
